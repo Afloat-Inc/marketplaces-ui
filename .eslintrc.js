@@ -14,7 +14,11 @@ module.exports = {
     browser: true
   },
   // Rules order is important, please avoid shuffling them
-  extends: ["plugin:vue/vue3-essential", "prettier", "plugin:storybook/recommended"],
+  extends: [
+    "plugin:vue/vue3-essential",
+    "prettier",
+    "plugin:storybook/recommended"
+  ],
   plugins: [// https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
   // required to lint *.vue files
   'vue' // https://github.com/typescript-eslint/typescript-eslint/issues/389#issuecomment-509292674
@@ -30,14 +34,41 @@ module.exports = {
     __QUASAR_SSR_SERVER__: 'readonly',
     __QUASAR_SSR_CLIENT__: 'readonly',
     __QUASAR_SSR_PWA__: 'readonly',
-    process: 'readonly',
+    process: true,
     Capacitor: 'readonly',
     chrome: 'readonly'
   },
   // add your custom rules here
   rules: {
+    // allow async-await
+    // 'generator-star-spacing': 'off',
+    // allow paren-less arrow functions
+    // 'arrow-parens': 'off',
+    // 'one-var': 'off',
+
+    // 'import/first': 'off',
+    // 'import/named': 'error',
+    // 'import/namespace': 'error',
+    // 'import/default': 'error',
+    // 'import/export': 'error',
+    // 'import/extensions': 'off',
+    // 'import/no-unresolved': 'off',
+    // 'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+    // 'no-useless-escape': 'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-  }
+  },
+  "overrides": [
+    {
+      // or whatever matches stories specified in .storybook/main.js
+      "files": ['*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
+      "rules": {
+        // example of overriding a rule
+        'storybook/hierarchy-separator': 'error',
+        // example of disabling a rule
+        'storybook/default-exports': 'off',
+      }
+    }
+  ]
 };
