@@ -1,22 +1,22 @@
-import NotFound from './Error404.vue';
+import NotFound from './Error404.vue'
 
 export default {
   title: 'Example/ Not Found',
-  component: NotFound,
-};
+  component: NotFound
+}
 
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
   components: { NotFound },
   // The story's `args` need to be mapped into the template through the `setup()` method
-  setup() {
+  setup () {
     // Story args can be spread into the returned object
-    return { ...args };
+    return { ...args }
   },
   // Then, the spread values can be accessed directly in the template
-  template: '<NotFound/>',
-});
+  template: '<NotFound/>'
+})
 
-export const Base = Template.bind({});
+export const Base = Template.bind({})
 Base.args = {
-};
+}

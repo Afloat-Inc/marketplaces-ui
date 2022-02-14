@@ -91,7 +91,7 @@ const linksList = [
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
   }
-];
+]
 
 import { defineComponent, ref } from 'vue'
 
