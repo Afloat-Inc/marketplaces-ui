@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 'use strict'
 
 var _frameworkImportPath = require('@storybook/vue');
