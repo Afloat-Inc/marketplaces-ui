@@ -4,7 +4,7 @@ q-page(class="flex flex-center")
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 import TestingVue3 from '../components/testingVue3'
 
 export default defineComponent({

@@ -21,17 +21,17 @@
         <h1>Acme</h1>
       </div>
       <div>
-        <my-button size="small" @click="$emit('logout')" label="Log out" v-if="user" />
-        <my-button size="small" @click="$emit('login')" label="Log in" v-if="!user" />
-        <my-button primary size="small" @click="$emit('createAccount')" label="Sign up" v-if="!user" />
+        <my-button v-if="user" size="small" label="Log out" @click="$emit('logout')" />
+        <my-button v-if="!user" size="small" label="Log in" @click="$emit('login')" />
+        <my-button v-if="!user" primary size="small" label="Sign up" @click="$emit('createAccount')" />
       </div>
     </div>
   </header>
 </template>
 
 <script>
-import './header.css';
-import MyButton from './Button.vue';
+import './header.css'
+import MyButton from './Button.vue'
 
 export default {
   name: 'MyHeader',
@@ -41,9 +41,12 @@ export default {
   props: {
     user: {
       type: Object,
-    },
+      default () {
+        return {}
+      }
+    }
   },
 
-  emits: ['login', 'logout', 'createAccount'],
-};
+  emits: ['login', 'logout', 'createAccount']
+}
 </script>
