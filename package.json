@@ -10,7 +10,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -34,8 +35,10 @@
     "@storybook/manager-webpack5": "^6.4.18",
     "@storybook/vue3": "^6.4.18",
     "babel-loader": "^8.2.3",
+    "cypress": "^9.5.4",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-storybook": "^0.5.6",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0",
@@ -64,6 +67,8 @@
     "yarn": ">= 1.21.1"
   },
   "lint-staged": {
-    "*.{js,vue}": ["yarn lint"]
+    "*.{js,vue}": [
+      "yarn lint"
+    ]
   }
 }

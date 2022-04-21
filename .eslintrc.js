@@ -20,6 +20,7 @@ module.exports = {
     "prettier",
     "plugin:storybook/recommended",
     "eslint:recommended",
+    "plugin:cypress/recommended"
   ],
   plugins: [
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
