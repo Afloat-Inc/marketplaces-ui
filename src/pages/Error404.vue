@@ -14,6 +14,6 @@ import { defineComponent } from 'vue'
 import TestingVue3 from '~/components/testingVue3.vue'
 export default defineComponent({
   name: 'Error404',
-  components: {TestingVue3}
+  components: { TestingVue3 }
 })
 </script>

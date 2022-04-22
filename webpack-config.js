@@ -2,7 +2,7 @@ const path = require('path')
 const ESLintPlugin = require('eslint-webpack-plugin')
 
 const options = {
-  extensions: [`js`, `vue`],
+  extensions: ['js', 'vue'],
   exclude: [
     'node_modules/',
     '.storybook'
@@ -25,6 +25,16 @@ module.exports = (cfg) => {
   cfg.plugins.push(
     new ESLintPlugin(options)
   )
+
+  cfg.module.rules.push({
+    enforce: 'pre',
+    test: /\.(js|vue)$/,
+    loader: 'eslint-loader',
+    exclude: /node_modules/,
+    options: {
+      formatter: require('eslint').CLIEngine.getFormatter('stylish')
+    }
+  })
 
   return cfg
 }

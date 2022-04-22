@@ -11,6 +11,7 @@ module.exports = {
   },
   env: {
     browser: true,
+    'cypress/globals': true
   },
   // Rules order is important, please avoid shuffling them
   extends: [
@@ -20,12 +21,14 @@ module.exports = {
     "prettier",
     "plugin:storybook/recommended",
     "eslint:recommended",
-    "plugin:cypress/recommended"
+    "plugin:cypress/recommended",
+    '@vue/standard'
   ],
   plugins: [
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
     // required to lint *.vue files
     "vue", // https://github.com/typescript-eslint/typescript-eslint/issues/389#issuecomment-509292674
+    "cypress"
     // Prettier has not been included as plugin to avoid performance impact
     // add it as an extension for your IDE
   ],
