@@ -8,6 +8,9 @@ q-page(class="flex flex-center")
   .row.full-width.justify-center
     .col-6
       chart-example.full-width
+  .row.full-width.justify-center
+    .col-6
+      table-tree-example.full-width
 </template>
 
 <script>
@@ -15,13 +18,15 @@ import { defineComponent } from 'vue'
 import TestingVue3 from '../components/testingVue3'
 import PolkadotExample from '../components/template/polkadot-example'
 import ChartExample from '../components/template/chart-example'
+import TableTreeExample from '../components/template/table-tree-example'
 
 export default defineComponent({
   name: 'PageIndex',
   components: {
     TestingVue3,
     PolkadotExample,
-    ChartExample
+    ChartExample,
+    TableTreeExample
   }
 })
 </script>
