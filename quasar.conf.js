@@ -8,6 +8,8 @@
 
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+
 const { configure } = require('quasar/wrappers')
 const path = require('path')
 
@@ -24,7 +26,8 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
       'i18n',
-      'axios'
+      'axios',
+      { path: 'ual', server: false }
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -49,7 +52,9 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      env: {
+        ...require('dotenv').config().parsed
+      },
       // transpile: false,
       // publicPath: '/',
 
@@ -98,6 +103,8 @@ module.exports = configure(function (ctx) {
               isCustomElement: tag => tag.startsWith('vue-ads')
             }
           }))
+        chain.plugin('node-polyfill-webpack-plugin')
+          .use(NodePolyfillPlugin, [{ extensions: ['js', 'vue'] }])
       }
     },
 
