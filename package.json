@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
+    "eslint-loader": "^4.0.2",
     "fs": "^0.0.1-security",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "path": "^0.12.7",

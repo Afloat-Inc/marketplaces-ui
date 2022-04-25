@@ -1,7 +1,7 @@
-/* eslint-disable no-undef */
+/* eslint-disable */
 
 'use strict'
 
-var _frameworkImportPath = require('@storybook/vue');
+const _frameworkImportPath = require('@storybook/vue');
 
 (0, _frameworkImportPath.configure)([require.context('./src', true, /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.mdx)$/), require.context('./src', true, /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.(js|jsx|ts|tsx))$/)], module, false)
