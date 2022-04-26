@@ -14,23 +14,54 @@ class PolkadotApi {
   }
 
   async connect () {
-    // Initialise the provider to connect to the local node
-    const provider = new WsProvider(this.wss)
+    try {
+      // Initialise the provider to connect to the local node
+      const provider = new WsProvider(this.wss)
 
-    // Create the API and wait until ready
-    const api = await ApiPromise.create({ provider })
+      // Create the API and wait until ready
+      const api = new ApiPromise({ provider })
+      // const api = await ApiPromise.create({ provider })
 
-    // Retrieve the chain & node information information via rpc calls
-    const [chain, nodeName, nodeVersion] = await Promise.all([
-      api.rpc.system.chain(),
-      api.rpc.system.name(),
-      api.rpc.system.version()
-    ])
+      console.log('apiPromise', api)
 
-    return {
-      chain,
-      nodeName,
-      nodeVersion
+      await new Promise((resolve, reject) => {
+        let failedCount = 0
+        api.on('connected', v => {
+          console.warn('Event detected connected', v)
+        })
+        api.on('disconnected', v => {
+          console.warn('Event detected disconnected', v)
+        })
+        api.on('error', v => {
+          console.warn('Event detected error', failedCount, v)
+          if (failedCount <= 10) {
+            failedCount++
+          } else {
+            reject(`An error ocurred trying to connect at ${this.wss}`)
+          }
+        })
+        api.on('ready', async (v) => {
+          console.warn('Event detected ready', v)
+          resolve()
+        })
+      })
+      // console.warn('status', status)
+
+      // Retrieve the chain & node information information via rpc calls
+      const [chain, nodeName, nodeVersion] = await Promise.all([
+        api.rpc.system.chain(),
+        api.rpc.system.name(),
+        api.rpc.system.version()
+      ])
+
+      return {
+        chain,
+        nodeName,
+        nodeVersion
+      }
+    } catch (e) {
+      console.error('connect polkadot Api', e)
+      throw new Error(e)
     }
   }
 

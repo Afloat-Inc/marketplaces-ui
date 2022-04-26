@@ -60,10 +60,11 @@ export default {
         showLoading()
         const api = new PolkadotApi({ wss: wssUrl.value })
         connResultPolkadot.value = await api.connect()
-        hideLoading()
       } catch (e) {
         console.error('connectPolkadot', e)
         showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
       }
     }
 
@@ -72,10 +73,11 @@ export default {
         showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
         const api = new PolkadotApi({ wss: wssUrl.value })
         accounts.value = await api.requestUsers()
-        hideLoading()
       } catch (e) {
         console.error('requestUsers', e)
         showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
       }
     }
 
