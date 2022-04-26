@@ -10,6 +10,7 @@ const { ApiPromise, WsProvider } = require('@polkadot/api')
 class PolkadotApi {
   constructor ({ wss }) {
     this.wss = wss
+    this.api = undefined
     console.log('PolkadotApi', this.wss)
   }
 
@@ -20,9 +21,10 @@ class PolkadotApi {
 
       // Create the API and wait until ready
       const api = new ApiPromise({ provider })
+      this.api = api
       // const api = await ApiPromise.create({ provider })
 
-      console.log('apiPromise', api)
+      // console.log('apiPromise', api)
 
       await new Promise((resolve, reject) => {
         let failedCount = 0
