@@ -25,7 +25,6 @@
 <script>
 import { ref, onMounted } from 'vue'
 import PolkadotApi from '~/services/polkadotApi.js'
-import { useStore } from 'vuex'
 
 // import Identicon from '@polkadot/vue-identicon'
 
@@ -38,12 +37,10 @@ export default {
     const title = ref('Polkadot template')
     const connResultPolkadot = ref(undefined)
     const accounts = ref(undefined)
-    const $store = useStore()
 
     onMounted(() => {
       try {
         console.log('env', process.env.VUE_APP_ENV)
-        console.log('ualAuthenticator', $store)
       } catch (e) {
         console.error(e)
       }
@@ -53,11 +50,6 @@ export default {
     async function connectPolkadot () {
       const api = new PolkadotApi()
       connResultPolkadot.value = await api.connect()
-
-      const authenticator = $store.$ual.authenticators[0]
-      await authenticator.init()
-      const users = await authenticator.login()
-      console.log('requestAccount', authenticator, users)
     }
 
     async function requestUsers () {

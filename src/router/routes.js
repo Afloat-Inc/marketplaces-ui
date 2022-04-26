@@ -13,7 +13,8 @@ const routes = [
     children: [
       { path: 'polkadot', name: 'polkadot-example', component: () => import('components/template/polkadot-example.vue') },
       { path: 'chart', name: 'chart-example', component: () => import('components/template/chart-example.vue') },
-      { path: 'tableTree', name: 'table-tree-example', component: () => import('components/template/table-tree-example.vue') }
+      { path: 'tableTree', name: 'table-tree-example', component: () => import('components/template/table-tree-example.vue') },
+      { path: 'ual', name: 'ual-example', component: () => import('components/template/ual-example.vue') }
     ]
   },
 
