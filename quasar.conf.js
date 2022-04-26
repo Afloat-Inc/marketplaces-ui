@@ -27,6 +27,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
+      'mixins',
       { path: 'ual', server: false }
     ],
 
@@ -126,7 +127,10 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'LocalStorage'
+      ]
     },
 
     // animations: 'all', // --- includes all animations

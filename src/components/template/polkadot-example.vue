@@ -34,7 +34,7 @@ export default {
     // Identicon
   },
   setup () {
-    const title = ref('Polkadot template')
+    const title = ref('Polkadot Example')
     const connResultPolkadot = ref(undefined)
     const accounts = ref(undefined)
 
