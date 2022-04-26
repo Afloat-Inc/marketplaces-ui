@@ -1,6 +1,11 @@
 <template lang="pug">
 .full-width
   .text-h5 {{ title }}
+    q-input(
+      label="WSS URL"
+      :rules="[val => val.length > 0 || 'Requeried field' ]"
+      v-model="wssUrl"
+    )
   .row(v-if="connResultPolkadot")
     p {{`You are connected to chain ${connResultPolkadot.chain} using ${connResultPolkadot.nodeName} v${connResultPolkadot.nodeVersion}`}}
   .row
@@ -25,7 +30,7 @@
 <script>
 import { ref, onMounted } from 'vue'
 import PolkadotApi from '~/services/polkadotApi.js'
-
+import useNotification from '~/mixins/notifications'
 // import Identicon from '@polkadot/vue-identicon'
 
 export default {
@@ -37,10 +42,12 @@ export default {
     const title = ref('Polkadot Example')
     const connResultPolkadot = ref(undefined)
     const accounts = ref(undefined)
+    const wssUrl = ref(undefined)
+    const { showNotification, showLoading, hideLoading } = useNotification()
 
     onMounted(() => {
       try {
-        console.log('env', process.env.VUE_APP_ENV)
+        wssUrl.value = 'wss://n1.hashed.systems'
       } catch (e) {
         console.error(e)
       }
@@ -48,13 +55,28 @@ export default {
     })
 
     async function connectPolkadot () {
-      const api = new PolkadotApi()
-      connResultPolkadot.value = await api.connect()
+      try {
+        connResultPolkadot.value = undefined
+        showLoading()
+        const api = new PolkadotApi({ wss: wssUrl.value })
+        connResultPolkadot.value = await api.connect()
+        hideLoading()
+      } catch (e) {
+        console.error('connectPolkadot', e)
+        showNotification({ color: 'red', message: e.message || e })
+      }
     }
 
     async function requestUsers () {
-      const api = new PolkadotApi()
-      accounts.value = await api.requestUsers()
+      try {
+        showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
+        const api = new PolkadotApi({ wss: wssUrl.value })
+        accounts.value = await api.requestUsers()
+        hideLoading()
+      } catch (e) {
+        console.error('requestUsers', e)
+        showNotification({ color: 'red', message: e.message || e })
+      }
     }
 
     return {
@@ -62,7 +84,8 @@ export default {
       requestUsers,
       connectPolkadot,
       connResultPolkadot,
-      accounts
+      accounts,
+      wssUrl
     }
   }
 }

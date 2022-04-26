@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 
 // import example from './module-example'
 import ualWallet from './ual-wallet'
+import polkadotWallet from './polkadot-wallet'
 
 /*
  * If not building with SSR mode, you can
@@ -17,7 +18,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
       // example
-      ualWallet
+      ualWallet,
+      polkadotWallet
     },
 
     // enable strict mode (adds overhead!)

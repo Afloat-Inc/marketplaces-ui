@@ -8,9 +8,14 @@ import {
 const { ApiPromise, WsProvider } = require('@polkadot/api')
 
 class PolkadotApi {
+  constructor ({ wss }) {
+    this.wss = wss
+    console.log('PolkadotApi', this.wss)
+  }
+
   async connect () {
     // Initialise the provider to connect to the local node
-    const provider = new WsProvider('wss://n1.hashed.systems')
+    const provider = new WsProvider(this.wss)
 
     // Create the API and wait until ready
     const api = await ApiPromise.create({ provider })
@@ -37,7 +42,6 @@ class PolkadotApi {
     // returns an array of { address, meta: { name, source } }
     // meta.source contains the name of the extension that provides this account
     const allAccounts = await web3Accounts()
-    console.log('allAccounts', allAccounts)
     return allAccounts
   }
 }
