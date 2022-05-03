@@ -1,52 +1,49 @@
-<template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
+<template lang="pug">
+q-layout(view="lHh Lpr lFf")
+    q-header(elevated)
+      q-toolbar
+        q-btn(
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
+          data-cy="menuLayoutBtn"
           @click="toggleLeftDrawer"
-        />
+        )
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+        q-toolbar-title Hashed Template App
 
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
+        div Quasar v{{ $q.version }}
 
-    <q-drawer
+    q-drawer(
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-    >
-      <q-list>
-        <q-item-label
+    )
+      q-list
+        q-item-label(
           header
-        >
-          Essential Links
-        </q-item-label>
+        ) Template features
+        q-item(clickable v-ripple :to="{ name: 'polkadot-example' }")
+          q-item-section Polkadot Example
+        q-item(clickable v-ripple :to="{ name: 'ual-example' }")
+          q-item-section UAL Example
+        q-item(clickable v-ripple :to="{ name: 'chart-example' }")
+          q-item-section Chart Example
+        q-item(clickable v-ripple :to="{ name: 'table-tree-example' }")
+          q-item-section Table Tree Example
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+    q-page-container
+      .row.justify-center
+        .col-10
+          .q-pa-lg
+            router-view
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+// import EssentialLink from 'components/EssentialLink.vue'
+import { defineComponent, ref } from 'vue'
 
 const linksList = [
   {
@@ -93,13 +90,11 @@ const linksList = [
   }
 ]
 
-import { defineComponent, ref } from 'vue'
-
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    // EssentialLink
   },
 
   setup () {

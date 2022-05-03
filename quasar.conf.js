@@ -8,7 +8,9 @@
 
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
-const { configure } = require('quasar/wrappers');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+
+const { configure } = require('quasar/wrappers')
 const path = require('path')
 
 module.exports = configure(function (ctx) {
@@ -25,6 +27,8 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
+      'mixins',
+      { path: 'ual', server: false }
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -43,13 +47,15 @@ module.exports = configure(function (ctx) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
     ],
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      vueRouterMode: 'history', // available values: 'hash', 'history'
+      env: {
+        ...require('dotenv').config().parsed
+      },
       // transpile: false,
       // publicPath: '/',
 
@@ -75,14 +81,26 @@ module.exports = configure(function (ctx) {
           .alias
           .set('~', path.resolve(__dirname, 'src'))
         chain.plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: [ 'js', 'vue' ] }])
+          .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
         chain.module
           .rule('pug')
           .test(/\.pug$/)
           .use('pug-plain-loader')
           .loader('pug-plain-loader')
           .end()
-      },
+        chain.module
+          .rule('vue')
+          .use('vue-loader')
+          .tap(options => ({
+            ...options,
+            compilerOptions: {
+              // treat any tag that starts with ion- as custom elements
+              isCustomElement: tag => tag.startsWith('vue-ads')
+            }
+          }))
+        chain.plugin('node-polyfill-webpack-plugin')
+          .use(NodePolyfillPlugin, [{ extensions: ['js', 'vue'] }])
+      }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -109,7 +127,11 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'LocalStorage',
+        'Loading'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -124,14 +146,14 @@ module.exports = configure(function (ctx) {
       // manualPostHydrationTrigger: true,
 
       prodPort: 3000, // The default port that the production server should use
-                      // (gets superseded if process.env.PORT is specified at runtime)
+      // (gets superseded if process.env.PORT is specified at runtime)
 
       maxAge: 1000 * 60 * 60 * 24 * 30,
-        // Tell browser when a file from the server should expire from cache (in ms)
+      // Tell browser when a file from the server should expire from cache (in ms)
 
       chainWebpackWebserver (chain) {
         chain.plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
+          .use(ESLintPlugin, [{ extensions: ['js'] }])
       },
 
       middlewares: [
@@ -149,13 +171,13 @@ module.exports = configure(function (ctx) {
       // if using workbox in InjectManifest mode
       chainWebpackCustomSW (chain) {
         chain.plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
+          .use(ESLintPlugin, [{ extensions: ['js'] }])
       },
 
       manifest: {
-        name: `Hashed template quasar vue 3`,
-        short_name: `Hashed template quasar vue 3`,
-        description: `This is a template developed by HASHED`,
+        name: 'Hashed template quasar vue 3',
+        short_name: 'Hashed template quasar vue 3',
+        description: 'This is a template developed by HASHED',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -226,14 +248,14 @@ module.exports = configure(function (ctx) {
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackMain (chain) {
         chain.plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
+          .use(ESLintPlugin, [{ extensions: ['js'] }])
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackPreload (chain) {
         chain.plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
-      },
+          .use(ESLintPlugin, [{ extensions: ['js'] }])
+      }
     }
   }
-});
+})
