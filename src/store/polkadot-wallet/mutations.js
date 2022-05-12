@@ -5,3 +5,7 @@ export function setWssURL (state, wssURL) {
 export function setAvailableAccounts (state, availableAccounts) {
   state.availableAccounts = availableAccounts
 }
+
+export function setApi (state, api) {
+  state.api = api
+}

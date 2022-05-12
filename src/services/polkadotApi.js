@@ -77,6 +77,14 @@ class PolkadotApi {
     const allAccounts = await web3Accounts()
     return allAccounts
   }
+
+  getProposals () {
+    return this.api.derive.treasury.proposals()
+  }
+
+  getAccountInfo (address) {
+    return this.api.derive.accounts.info(address)
+  }
 }
 
 export default PolkadotApi
