@@ -5,7 +5,7 @@ import {
 //   web3ListRpcProviders,
 //   web3UseRpcProvider
 } from '@polkadot/extension-dapp'
-const { ApiPromise, WsProvider } = require('@polkadot/api')
+import { ApiPromise, WsProvider } from '@polkadot/api'
 
 class PolkadotApi {
   constructor ({ wss }) {
@@ -70,7 +70,7 @@ class PolkadotApi {
   async requestUsers () {
     // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
-    const allInjected = await web3Enable('my custom template app')
+    const allInjected = await web3Enable(process.env.APP_NAME)
     console.log('allInjected', allInjected)
     // returns an array of { address, meta: { name, source } }
     // meta.source contains the name of the extension that provides this account
