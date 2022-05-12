@@ -33,7 +33,7 @@
       //-   :size="128"
       //-   :value="account.address"
       //- )
-      .text-bold {{ account.meta.name }} - {{ account.address }}
+      .text {{ account.meta.name }} - {{ account.address }}
   .q-mt-md(v-if="proposals")
     .text-h6 Proposals
     .row(v-for="proposal in proposals")
@@ -99,9 +99,16 @@ export default {
     }
 
     async function getProposals () {
-      const response = await api.value.getProposals()
-      proposals.value = response.proposals
-      console.log('getProposals', response.proposals)
+      try {
+        showLoading()
+        const response = await api.value.getProposals()
+        proposals.value = response.proposals
+        console.log('getProposals', response.proposals)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        hideLoading()
+      }
     }
 
     return {
