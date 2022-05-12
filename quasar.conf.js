@@ -27,8 +27,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
-      'mixins',
-      { path: 'ual', server: false }
+      'mixins'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

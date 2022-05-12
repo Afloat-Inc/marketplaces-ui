@@ -5,12 +5,6 @@ q-page(class="flex flex-center")
   .row.full-width.justify-center
     .col-6
       polkadot-example.full-width
-  .row.full-width.justify-center
-    .col-6
-      chart-example.full-width
-  .row.full-width.justify-center
-    .col-6
-      table-tree-example.full-width
 </template>
 
 <script>

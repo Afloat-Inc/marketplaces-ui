@@ -27,12 +27,6 @@ q-layout(view="lHh Lpr lFf")
         ) Template features
         q-item(clickable v-ripple :to="{ name: 'polkadot-example' }")
           q-item-section Polkadot Example
-        q-item(clickable v-ripple :to="{ name: 'ual-example' }")
-          q-item-section UAL Example
-        q-item(clickable v-ripple :to="{ name: 'chart-example' }")
-          q-item-section Chart Example
-        q-item(clickable v-ripple :to="{ name: 'table-tree-example' }")
-          q-item-section Table Tree Example
 
     q-page-container
       .row.justify-center
