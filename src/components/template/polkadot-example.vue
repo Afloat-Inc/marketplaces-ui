@@ -8,7 +8,7 @@
     )
   .row(v-if="connResultPolkadot")
     p {{`You are connected to chain ${connResultPolkadot.chain} using ${connResultPolkadot.nodeName} v${connResultPolkadot.nodeVersion}`}}
-  .row
+  .row.q-col-gutter-md
     .col
       q-btn.full-width(
         @click="connectPolkadot"
@@ -18,13 +18,19 @@
       q-btn.full-width(
         :disable="!api"
         @click="requestUsers"
-        label="Request users from Polkadot{js}"
+        label="Request users"
       )
     .col
       q-btn.full-width(
         :disable="!api"
         @click="getProposals"
         label="Get proposals"
+      )
+    .col
+      q-btn.full-width(
+        :disable="!api"
+        @click="showCreateProposal"
+        label="Create proposal"
       )
   .q-mt-md(v-if="accounts")
     .text-h6 Keys
@@ -38,6 +44,10 @@
     .text-h6 Proposals
     .row(v-for="proposal in proposals")
       proposal-card.q-mt-md( v-bind="proposal")
+  #modals
+    q-dialog(v-model="showingCreateProposal" persistent)
+      q-card.modalSize
+        create-proposal-form
 </template>
 
 <script>
@@ -45,12 +55,14 @@ import { ref, onMounted, computed } from 'vue'
 // import PolkadotApi from '~/services/polkadotApi.js'
 import useNotification from '~/mixins/notifications'
 import ProposalCard from '~/components/proposals/proposal-card'
+import CreateProposalForm from '~/components/proposals/create-proposal-form'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
 export default {
   name: 'PolkadotExample',
   components: {
-    ProposalCard
+    ProposalCard,
+    CreateProposalForm
   },
   setup () {
     const $store = useStore()
@@ -59,6 +71,7 @@ export default {
     const accounts = ref(undefined)
     const wssUrl = ref(undefined)
     const proposals = ref(undefined)
+    const showingCreateProposal = ref(false)
     const { showNotification, showLoading, hideLoading } = useNotification()
     const api = computed(() => $store.getters['polkadotWallet/api'])
     onMounted(() => {
@@ -111,6 +124,10 @@ export default {
       }
     }
 
+    function showCreateProposal () {
+      showingCreateProposal.value = true
+    }
+
     return {
       title,
       requestUsers,
@@ -120,7 +137,9 @@ export default {
       wssUrl,
       getProposals,
       proposals,
-      api
+      api,
+      showCreateProposal,
+      showingCreateProposal
     }
   }
 }

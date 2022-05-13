@@ -1,5 +1,5 @@
 <template lang="pug">
-q-card.full-width
+q-card.full-width.q-pa-sm
   .text Proposal Id: {{ id }}
   .text Proposer: {{ proposerNickname }}
   .text Value: {{ proposal.value }}

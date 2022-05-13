@@ -1,6 +1,7 @@
 import {
   web3Accounts,
-  web3Enable
+  web3Enable,
+  web3FromAddress
 //   web3FromAddress,
 //   web3ListRpcProviders,
 //   web3UseRpcProvider
@@ -70,8 +71,7 @@ class PolkadotApi {
   async requestUsers () {
     // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
-    const allInjected = await web3Enable(process.env.APP_NAME)
-    console.log('allInjected', allInjected)
+    await web3Enable(process.env.APP_NAME)
     // returns an array of { address, meta: { name, source } }
     // meta.source contains the name of the extension that provides this account
     const allAccounts = await web3Accounts()
@@ -84,6 +84,12 @@ class PolkadotApi {
 
   getAccountInfo (address) {
     return this.api.derive.accounts.info(address)
+  }
+
+  async submitProposal ({ proposer, beneficiary, value }) {
+    await web3Enable(process.env.APP_NAME)
+    const injector = await web3FromAddress(proposer)
+    return this.api.tx.treasury.proposeSpend(value, beneficiary).signAndSend(proposer, { signer: injector.signer })
   }
 }
 
