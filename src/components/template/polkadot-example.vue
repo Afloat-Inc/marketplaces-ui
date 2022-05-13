@@ -44,6 +44,10 @@
     .text-h6 Proposals
     .row(v-for="proposal in proposals")
       proposal-card.q-mt-md( v-bind="proposal")
+  //- .q-mt-md
+  //-   QrStream(
+  //-     @decode="onDecode"
+  //-   )
   #modals
     q-dialog(v-model="showingCreateProposal" persistent)
       q-card.modalSize
@@ -58,11 +62,16 @@ import ProposalCard from '~/components/proposals/proposal-card'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
+// import { QrcodeStream } from 'vue-qrcode-reader'
+// import QRCodeVue3 from 'qrcode-vue3'
+import { QrStream } from 'vue3-qr-reader'
+
 export default {
   name: 'PolkadotExample',
   components: {
     ProposalCard,
-    CreateProposalForm
+    CreateProposalForm,
+    QrStream
   },
   setup () {
     const $store = useStore()
@@ -128,6 +137,10 @@ export default {
       showingCreateProposal.value = true
     }
 
+    function onDecode (event) {
+      console.warn('onDecode', event)
+    }
+
     return {
       title,
       requestUsers,
@@ -139,7 +152,8 @@ export default {
       proposals,
       api,
       showCreateProposal,
-      showingCreateProposal
+      showingCreateProposal,
+      onDecode
     }
   }
 }
