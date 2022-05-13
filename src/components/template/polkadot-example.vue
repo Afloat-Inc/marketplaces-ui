@@ -62,8 +62,7 @@ import ProposalCard from '~/components/proposals/proposal-card'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
-// import { QrcodeStream } from 'vue-qrcode-reader'
-// import QRCodeVue3 from 'qrcode-vue3'
+
 import { QrStream } from 'vue3-qr-reader'
 
 export default {
