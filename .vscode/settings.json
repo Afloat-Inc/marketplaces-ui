@@ -3,5 +3,8 @@
   "vetur.validation.interpolation": false,
   "vetur.format.enable": false,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-  "vetur.experimental.templateInterpolationService": true
+  "vetur.experimental.templateInterpolationService": true,
+  "cSpell.words": [
+    "Polkadot"
+  ]
 }

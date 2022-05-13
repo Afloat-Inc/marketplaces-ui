@@ -11,7 +11,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prepare": "husky install",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "deploy": "node gh-pages-deploy.js"
   },
   "dependencies": {
     "@polkadot/api": "^8.1.1",
@@ -59,6 +60,7 @@
     "eslint-plugin-storybook": "^0.5.6",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0",
+    "execa": "^6.1.0",
     "husky": "^7.0.4",
     "lint-staged": ">=10",
     "pug": "^3.0.2",
