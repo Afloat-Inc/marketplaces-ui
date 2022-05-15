@@ -1,6 +1,28 @@
 import { Notify, useQuasar, QSpinnerFacebook } from 'quasar'
 
-export default function () {
+export default {
+  data () {
+    return {
+      notifications: undefined
+    }
+  },
+  beforeMount () {
+    this.notifications = useNotifications()
+  },
+  methods: {
+    showNotification (params) {
+      this.notifications.showNotification(params)
+    },
+    showLoading (params) {
+      this.notifications.showLoading(params)
+    },
+    hideLoading () {
+      this.notifications.hideLoading()
+    }
+  }
+}
+
+export function useNotifications () {
   const $q = useQuasar()
 
   function showNotification ({ message, color = 'green', icon = 'fas fa-times' }) {
@@ -10,7 +32,7 @@ export default function () {
       position: 'bottom',
       timeout: 4000,
       actions: [
-        { icon, color: 'white', handler: () => { /* ... */ } }
+        { icon: 'notification_important', color: 'white', handler: () => { /* ... */ } }
       ]
     })
   }

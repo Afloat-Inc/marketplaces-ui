@@ -19,11 +19,11 @@
     "@polkadot/extension-dapp": "^0.43.1",
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.13.6",
+    "@smontero/nbv-ur-codec": "^1.0.1",
     "axios": "^0.21.1",
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
     "eslint-loader": "^4.0.2",
-    "fs": "^0.0.1-security",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "path": "^0.12.7",
     "primeicons": "^5.0.0",
@@ -69,6 +69,9 @@
     "stylus": "^0.56.0",
     "stylus-loader": "^6.2.0",
     "vue-loader": "^16.8.3"
+  },
+  "browser": {
+    "fs": false
   },
   "browserslist": [
     "last 10 Chrome versions",

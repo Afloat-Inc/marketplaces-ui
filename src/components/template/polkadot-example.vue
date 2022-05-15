@@ -32,6 +32,11 @@
         @click="showCreateProposal"
         label="Create proposal"
       )
+    .col
+      q-btn.full-width(
+        @click="importXpubWallet"
+        label="Import XPUB Wallet"
+      )
   .q-mt-md(v-if="accounts")
     .text-h6 Keys
     .row(v-for="account in accounts")
@@ -44,33 +49,29 @@
     .text-h6 Proposals
     .row(v-for="proposal in proposals")
       proposal-card.q-mt-md( v-bind="proposal")
-  //- .q-mt-md
-  //-   QrStream(
-  //-     @decode="onDecode"
-  //-   )
   #modals
     q-dialog(v-model="showingCreateProposal" persistent)
       q-card.modalSize
         create-proposal-form
+    qr-decode-xpub(ref="qrDecodeXpub" @keyDecoded="onDecode")
 </template>
 
 <script>
 import { ref, onMounted, computed } from 'vue'
 // import PolkadotApi from '~/services/polkadotApi.js'
-import useNotification from '~/mixins/notifications'
+import { useNotifications } from '~/mixins/notifications'
 import ProposalCard from '~/components/proposals/proposal-card'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
+import QrDecodeXpub from '~/components/decode/qr-decode-xpub'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
-
-import { QrStream } from 'vue3-qr-reader'
 
 export default {
   name: 'PolkadotExample',
   components: {
     ProposalCard,
     CreateProposalForm,
-    QrStream
+    QrDecodeXpub
   },
   setup () {
     const $store = useStore()
@@ -80,8 +81,9 @@ export default {
     const wssUrl = ref(undefined)
     const proposals = ref(undefined)
     const showingCreateProposal = ref(false)
-    const { showNotification, showLoading, hideLoading } = useNotification()
+    const { showNotification, showLoading, hideLoading } = useNotifications()
     const api = computed(() => $store.getters['polkadotWallet/api'])
+    const qrDecodeXpub = ref(null)
     onMounted(() => {
       try {
         wssUrl.value = 'wss://n1.hashed.systems'
@@ -140,6 +142,10 @@ export default {
       console.warn('onDecode', event)
     }
 
+    function importXpubWallet (event) {
+      qrDecodeXpub.value.openDialog()
+    }
+
     return {
       title,
       requestUsers,
@@ -152,7 +158,9 @@ export default {
       api,
       showCreateProposal,
       showingCreateProposal,
-      onDecode
+      onDecode,
+      importXpubWallet,
+      qrDecodeXpub
     }
   }
 }
