@@ -5,6 +5,7 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "vetur.experimental.templateInterpolationService": true,
   "cSpell.words": [
-    "Polkadot"
+    "Polkadot",
+    "xpub"
   ]
 }

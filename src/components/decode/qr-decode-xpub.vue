@@ -2,15 +2,16 @@
 q-dialog(v-model="open")
   q-card.q-pa-md
     .text-h5 QR Decode
+    .text-body2 Please Scan your xpub from Blue Wallet
     .row.justify-center.q-mt-md
         q-spinner-pie(
             color="primary"
-            size="20em"
+            size="10em"
             v-if="isDecrypting"
         )
         QrStream(
-            @decode="onQrDetected"
-            v-else
+          @decode="onQrDetected"
+          v-else
         )
 </template>
 
@@ -33,14 +34,17 @@ export default {
     openDialog () {
       this.open = true
     },
+    hideDialog () {
+      this.open = false
+    },
     async onQrDetected (xpub) {
       try {
         console.log('on onQrDetected', xpub)
         this.isDecrypting = true
-        const decoder = new Decoder()
         const result = await new Promise((resolve, reject) => {
           setTimeout(() => {
             try {
+              const decoder = new Decoder()
               const r = decoder.decodeXPub(xpub)
               resolve(r)
             } catch (e) {
@@ -49,6 +53,7 @@ export default {
           }, 1000)
         })
         console.log('xpub decoded', result)
+        this.$emit('xpubDecoded', result)
       } catch (e) {
         this.showNotification({
           message: e.message || e,

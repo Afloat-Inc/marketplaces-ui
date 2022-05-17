@@ -23,6 +23,12 @@
     .col
       q-btn.full-width(
         :disable="!api"
+        @click="login"
+        label="Login"
+      )
+    .col
+      q-btn.full-width(
+        :disable="!api"
         @click="getProposals"
         label="Get proposals"
       )
@@ -53,7 +59,10 @@
     q-dialog(v-model="showingCreateProposal" persistent)
       q-card.modalSize
         create-proposal-form
-    qr-decode-xpub(ref="qrDecodeXpub" @keyDecoded="onDecode")
+    q-dialog(v-model="showingSetIdentity" persistent)
+      q-card.modalSize
+        set-identity-form(:xpubKey="xpubDecoded")
+    qr-decode-xpub(ref="qrDecodeXpub" @xpubDecoded="onDecode")
 </template>
 
 <script>
@@ -62,15 +71,18 @@ import { ref, onMounted, computed } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import ProposalCard from '~/components/proposals/proposal-card'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
+import SetIdentityForm from '~/components/identity/set-identity-form'
 import QrDecodeXpub from '~/components/decode/qr-decode-xpub'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
+// import TestBtn from '@jmgayosso/test-btn'
 
 export default {
   name: 'PolkadotExample',
   components: {
     ProposalCard,
     CreateProposalForm,
+    SetIdentityForm,
     QrDecodeXpub
   },
   setup () {
@@ -81,6 +93,8 @@ export default {
     const wssUrl = ref(undefined)
     const proposals = ref(undefined)
     const showingCreateProposal = ref(false)
+    const showingSetIdentity = ref(false)
+    const xpubDecoded = ref(false)
     const { showNotification, showLoading, hideLoading } = useNotifications()
     const api = computed(() => $store.getters['polkadotWallet/api'])
     const qrDecodeXpub = ref(null)
@@ -121,6 +135,20 @@ export default {
       }
     }
 
+    async function login () {
+      try {
+        showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
+        // const api = new PolkadotApi({ wss: wssUrl.value })
+        const e = await api.value.login({ address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX' })
+        console.log('login', e)
+      } catch (e) {
+        console.error('requestUsers', e)
+        showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
+      }
+    }
+
     async function getProposals () {
       try {
         showLoading()
@@ -139,6 +167,9 @@ export default {
     }
 
     function onDecode (event) {
+      qrDecodeXpub.value.hideDialog()
+      xpubDecoded.value = event.xpubKey
+      showingSetIdentity.value = true
       console.warn('onDecode', event)
     }
 
@@ -160,7 +191,10 @@ export default {
       showingCreateProposal,
       onDecode,
       importXpubWallet,
-      qrDecodeXpub
+      qrDecodeXpub,
+      login,
+      showingSetIdentity,
+      xpubDecoded
     }
   }
 }
