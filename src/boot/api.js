@@ -1,14 +1,17 @@
 /* eslint-disable dot-notation */
 import PolkadotApi from '~/services/polkadotApi.js'
-import { TreasuryApi } from '~/services/polkadot-pallets'
-console.log('env', process.APP_NAME)
+import { TreasuryApi, NbvStorageApi } from '~/services/polkadot-pallets'
+
 export default async ({ app, store }) => {
   const api = new PolkadotApi()
-  api.connect()
+  await api.connect()
   console.log('PolkadotApiCreated', api)
   const treasuryApi = new TreasuryApi(api)
+  const nbvStorageApi = new NbvStorageApi(api)
   store['$polkadotApi'] = api
   store['$treasuryApi'] = treasuryApi
+  store['$nbvStorageApi'] = nbvStorageApi
   app.provide('$polkadotApi', api)
-  app.provide('$treasuryApi', api)
+  app.provide('$treasuryApi', treasuryApi)
+  app.provide('$nbvStorageApi', nbvStorageApi)
 }

@@ -10,30 +10,43 @@ import {
 class BasePolkadotApi {
   constructor (polkadotApi) {
     this.polkadotApi = polkadotApi
-    console.log('BasePolkadotApi Created')
   }
 
-  async setSigner (signerAddress) {
+  /**
+   * @name setSigner
+   * @description Set signer from web3FromAddress using web 3 plugin
+   * @param {String} user User address
+   */
+  async setSigner (user) {
     // Enable web3 plugin
     await web3Enable(process.env.APP_NAME)
     // Get injector to call a Extrinsic
-    const injector = await web3FromAddress(signerAddress)
+    const injector = await web3FromAddress(user)
     // Set signer
     this.polkadotApi.api.setSigner(injector.signer)
   }
 
+  /**
+   * @description Return available accounts from web3Accounts
+   * @returns {Array}
+   * [{ address, meta: { genesisHash, name, source }, type }]
+   */
   async requestUsers () {
-    // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
     await web3Enable(process.env.APP_NAME)
-    // returns an array of { address, meta: { name, source } }
     // meta.source contains the name of the extension that provides this account
     const allAccounts = await web3Accounts()
     return allAccounts
   }
 
-  getAccountInfo (address) {
-    return this.polkadotApi.api.derive.accounts.info(address)
+  /**
+   * @description Get user details info
+   * @param {*} user User address
+   * @returns { Object }
+   * { identity }
+   */
+  getAccountInfo (user) {
+    return this.polkadotApi.api.derive.accounts.info(user)
   }
 }
 

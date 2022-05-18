@@ -12,9 +12,13 @@ class PolkadotApi {
   constructor (wss) {
     this.wss = wss || process.env.WSS
     this.api = undefined
-    // console.log('PolkadotApiCreated', this.wss)
   }
 
+  /**
+   * @description Connect to WSS server and get api
+   * @returns {Object}
+   * { chain, nodeName, nodeVersion }
+   */
   async connect () {
     try {
       // Initialize the provider to connect to the local node
@@ -70,6 +74,9 @@ class PolkadotApi {
     }
   }
 
+  /**
+   * TODO sign message
+   */
   async login ({ address }) {
     // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
@@ -79,17 +86,21 @@ class PolkadotApi {
     const injector = await web3FromAddress(address)
     const message = stringToU8a('this is a test')
     this.api.sign(address, { signer: injector.signer })
+    // this.api.query
     // this.api.setSigner(injector.signer)
     // injector.signer.signRaw(message)
     // this.api.sign(undefined, address, { signer: injector.signer })
     console.log('login user', injector, message, this.api)
   }
 
+  /**
+  * @description Return available accounts from web3Accounts
+  * @returns {Array}
+  * [{ address, meta: { genesisHash, name, source }, type }]
+  */
   async requestUsers () {
-    // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
     await web3Enable(process.env.APP_NAME)
-    // returns an array of { address, meta: { name, source } }
     // meta.source contains the name of the extension that provides this account
     const allAccounts = await web3Accounts()
     return allAccounts
