@@ -5,17 +5,36 @@ q-layout(view="lHh Lpr lFf")
         q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
           accounts-menu(:accounts="accounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        q-btn.pageBtn(
-          no-caps
-          label="XPUB"
-          flat
-        )
-        q-btn(
-          class="pageBtn"
-          no-caps
-          label="Vaults"
-          flat
-        )
+        //- q-btn.pageBtn(
+        //-   no-caps
+        //-   label="XPUB"
+        //-   flat
+        //-   to="/"
+        //- )
+        //- q-btn(
+        //-   class="pageBtn"
+        //-   no-caps
+        //-   label="Vaults"
+        //-   flat
+        //-   to="/examples"
+        //- )
+        .row.q-gutter-x-sm
+          q-item(
+            clickable
+            to="/"
+            active-class="activeRouter"
+            dense
+          )
+            q-item-section
+              q-item-label Vault
+          q-item(
+            clickable
+            to="/examples"
+            active-class="activeRouter"
+            dense
+          )
+            q-item-section
+              q-item-label Examples
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
@@ -103,6 +122,8 @@ export default defineComponent({
   background-color: rgba(0,0,0,.05)
 
 .pageBtn:hover
+
+.activeRouter
   color: $primary !important
   background-color: white !important
 </style>
