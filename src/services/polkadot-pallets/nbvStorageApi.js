@@ -48,7 +48,7 @@ class NbvStorageApi extends BasePolkadotApi {
    */
   async submitXPUB ({ user, XPUB }) {
     // Enable web3 plugin and set Signer
-    await this.setSigner(user)
+    await this.setWeb3Signer(user)
     // Call Extrinsic
     return this.polkadotApi.api.tx.nbvStorage.submitXPUB(user, XPUB).signAndSend(user)
   }

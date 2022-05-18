@@ -17,7 +17,7 @@ class BasePolkadotApi {
    * @description Set signer from web3FromAddress using web 3 plugin
    * @param {String} user User address
    */
-  async setSigner (user) {
+  async setWeb3Signer (user) {
     // Enable web3 plugin
     await web3Enable(process.env.APP_NAME)
     // Get injector to call a Extrinsic

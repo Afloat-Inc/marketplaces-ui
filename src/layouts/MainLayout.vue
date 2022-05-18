@@ -33,7 +33,7 @@ q-layout(view="lHh Lpr lFf")
     q-page-container
       .row.justify-center
         .col-10
-          .q-pa-lg
+          .q-px-lg.q-pa-lg
             router-view
 </template>
 

@@ -13,7 +13,7 @@ class TreasuryApi extends BasePolkadotApi {
 
   async submitProposal ({ proposer, beneficiary, value }) {
     // Enable web3 plugin and set Signer
-    await this.setSigner(proposer)
+    await this.setWeb3Signer(proposer)
     // Call Extrinsic
     return this.polkadotApi.api.tx.treasury.proposeSpend(value, beneficiary).signAndSend(proposer)
     // return this.api.tx.treasury.proposeSpend(value, beneficiary).signAndSend(proposer, { signer: injector.signer })

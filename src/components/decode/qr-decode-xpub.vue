@@ -2,7 +2,7 @@
 q-dialog(v-model="open")
   q-card.q-pa-md
     .text-h5 QR Decode
-    .text-body2 Please Scan your xpub from Blue Wallet
+    .text-body2.text-weight-light Please Scan your xpub from Blue Wallet
     .row.justify-center.q-mt-md
         q-spinner-pie(
             color="primary"
