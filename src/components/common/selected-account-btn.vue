@@ -3,7 +3,7 @@
   q-item
     //-   .row.q-gutter-x-sm.items-center
     q-item-section
-        q-avatar(v-if="selectedAccount" color="secondary" text-color="white" size="sm") {{ selectedAccount.meta.name.substring(0, 1) }}
+        q-avatar(v-if="selectedAccount" color="secondary" text-color="white" size="sm") {{ selectedAccount.meta.name.substring(0, 2).toUpperCase() }}
     q-item-section.title-section
         q-item-label.text-body2.text-white(v-if="!selectedAccount") Choose an account
         q-item-label.title-section.text-body2.text-white(v-else) {{ selectedAccount.meta.name }}

@@ -3,15 +3,55 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    name: 'root',
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      {
+        path: '',
+        name: 'home',
+        component: () => import('pages/Index.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Home', icon: 'home' }
+          ]
+        }
+      },
+      {
+        path: 'vaults',
+        name: 'vaultsList',
+        component: () => import('pages/vaults/vault-list.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Vaults', icon: 'storage' }
+          ]
+        }
+      },
+      {
+        path: 'vaults/details',
+        name: 'vaultDetails',
+        component: () => import('pages/vaults/vault-details.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Vaults', icon: 'storage', to: { name: 'vaultsList' } },
+            { name: 'Details', icon: 'summarize' }
+          ]
+        }
+      }
     ]
   },
   {
     path: '/examples',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'polkadot', name: 'polkadot-example', component: () => import('components/template/polkadot-example.vue') }
+      {
+        path: 'polkadot',
+        name: 'polkadot-example',
+        component: () => import('components/template/polkadot-example.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Examples', icon: 'home' }
+          ]
+        }
+      }
     ]
   },
 

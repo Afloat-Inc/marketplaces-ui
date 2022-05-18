@@ -5,32 +5,21 @@ q-layout(view="lHh Lpr lFf")
         q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
           accounts-menu(:accounts="accounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        //- q-btn.pageBtn(
-        //-   no-caps
-        //-   label="XPUB"
-        //-   flat
-        //-   to="/"
-        //- )
-        //- q-btn(
-        //-   class="pageBtn"
-        //-   no-caps
-        //-   label="Vaults"
-        //-   flat
-        //-   to="/examples"
-        //- )
         .row.q-gutter-x-sm
-          q-item(
+          q-item.routerItems(
             clickable
-            to="/"
+            :to="{ name: 'vaultsList'}"
             active-class="activeRouter"
+            :class="{ 'activeRouter': isActive('Vaults')}"
             dense
           )
             q-item-section
-              q-item-label Vault
-          q-item(
+              q-item-label Vaults
+          q-item.routerItems(
             clickable
-            to="/examples"
+            :to="{ name: 'polkadot-example'}"
             active-class="activeRouter"
+            :class="{ 'activeRouter': isActive('Examples')}"
             dense
           )
             q-item-section
@@ -39,10 +28,9 @@ q-layout(view="lHh Lpr lFf")
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(label="Home" icon="home")
-          q-breadcrumbs-el.q-ml-md(label="Xpub" icon="keys")
+          q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
 
-    q-page-container.main-bg
+    q-page-container
       .row.justify-center
         .col-10
           .q-pa-lg
@@ -50,9 +38,10 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 export default defineComponent({
   name: 'MainLayout',
@@ -65,9 +54,12 @@ export default defineComponent({
   setup () {
     const { showNotification, showLoading, hideLoading } = useNotifications()
     const $store = useStore()
+    const $route = useRoute()
     const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const accounts = ref(undefined)
+    const breadcrumbList = ref(undefined)
+    watchEffect(() => updateBreadcrumbs($route))
 
     onMounted(async () => {
       try {
@@ -104,26 +96,46 @@ export default defineComponent({
       }
     }
 
-    async function onSelectAccount (account) {
+    function onSelectAccount (account) {
       $store.commit('polkadotWallet/setSelectedAccount', account)
+    }
+
+    function updateBreadcrumbs (v) {
+      breadcrumbList.value = v.meta.breadcrumb
+    }
+
+    function isActive (module) {
+      if (module && breadcrumbList.value.length > 0) {
+        const fund = breadcrumbList.value.find(v => v.name === module)
+        return !!fund
+      }
+      return false
     }
 
     return {
       accounts,
       onSelectAccount,
-      selectedAccount
+      selectedAccount,
+      breadcrumbList,
+      isActive
     }
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.main-bg
-  background-color: rgba(0,0,0,.05)
 
-.pageBtn:hover
+.routerItems
+  border-radius: 5px
+
+.routerItems:hover
+  background-color: $secondary
+  color: white
 
 .activeRouter
-  color: $primary !important
-  background-color: white !important
+  color: $primary
+  background-color: white
+
+.hasLink
+  color: $light
 </style>

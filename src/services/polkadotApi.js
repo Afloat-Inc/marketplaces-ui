@@ -12,7 +12,7 @@ class PolkadotApi {
   constructor ({ wss }) {
     this.wss = wss
     this.api = undefined
-    console.log('PolkadotApi', this.wss)
+    // console.log('PolkadotApi', this.wss)
   }
 
   async connect () {
@@ -57,7 +57,7 @@ class PolkadotApi {
         api.rpc.system.version()
       ])
 
-      console.log('api', api)
+      // console.log('api', api)
 
       return {
         chain,
