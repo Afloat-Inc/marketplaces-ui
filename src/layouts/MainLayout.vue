@@ -1,34 +1,29 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
-    q-header(elevated)
+    q-header
       q-toolbar
-        q-btn(
+        q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(:selectedAccount="selectedAccount")
+          accounts-menu(:accounts="accounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+        q-btn.pageBtn(
+          no-caps
+          label="XPUB"
           flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          data-cy="menuLayoutBtn"
-          @click="toggleLeftDrawer"
         )
+        q-btn(
+          class="pageBtn"
+          no-caps
+          label="Vaults"
+          flat
+        )
+        //- q-toolbar-title.q-ml-md Hashed Template App
+        //- div Quasar v{{ $q.version }}
+      q-toolbar(class="bg-white text-primary")
+        q-breadcrumbs(active-color="primary" style="font-size: 16px")
+          q-breadcrumbs-el.q-ml-md(label="Home" icon="home")
+          q-breadcrumbs-el.q-ml-md(label="Xpub" icon="keys")
 
-        q-toolbar-title Hashed Template App
-
-        div Quasar v{{ $q.version }}
-
-    q-drawer(
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    )
-      q-list
-        q-item-label(
-          header
-        ) Template features
-        q-item(clickable v-ripple :to="{ name: 'polkadot-example' }")
-          q-item-section Polkadot Example
-
-    q-page-container
+    q-page-container.main-bg
       .row.justify-center
         .col-10
           .q-pa-lg
@@ -36,71 +31,78 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script>
-// import EssentialLink from 'components/EssentialLink.vue'
-import { defineComponent, ref } from 'vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useNotifications } from '~/mixins/notifications'
+import { useStore } from 'vuex'
+import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    // EssentialLink
+    AccountsMenu,
+    SelectedAccountBtn
   },
 
   setup () {
-    const leftDrawerOpen = ref(false)
+    const { showNotification, showLoading, hideLoading } = useNotifications()
+    const $store = useStore()
+    const api = $store.$polkadotApi
+    const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
+    const accounts = ref(undefined)
+
+    onMounted(async () => {
+      try {
+        await connectPolkadot()
+        requestUsers()
+      } catch (e) {
+        console.error(e)
+        showNotification({ color: 'red', message: e.message || e })
+      }
+    })
+
+    async function connectPolkadot () {
+      try {
+        showLoading()
+        api.connect()
+      } catch (e) {
+        console.error('connectPolkadot', e)
+        showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
+      }
+    }
+
+    async function requestUsers () {
+      try {
+        showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
+        accounts.value = await api.requestUsers()
+        $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
+      } catch (e) {
+        console.error('requestUsers', e)
+        showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
+      }
+    }
+
+    async function onSelectAccount (account) {
+      $store.commit('polkadotWallet/setSelectedAccount', account)
+    }
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      accounts,
+      onSelectAccount,
+      selectedAccount
     }
   }
 })
 </script>
+
+<style lang="sass" scoped>
+.main-bg
+  background-color: rgba(0,0,0,.05)
+
+.pageBtn:hover
+  color: $primary !important
+  background-color: white !important
+</style>

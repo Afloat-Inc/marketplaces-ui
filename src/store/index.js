@@ -2,8 +2,8 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 
 // import example from './module-example'
-import ualWallet from './ual-wallet'
-import polkadotWallet from './polkadot-wallet'
+import ualWallet from './ualWallet'
+import polkadotWallet from './polkadotWallet'
 
 /*
  * If not building with SSR mode, you can
