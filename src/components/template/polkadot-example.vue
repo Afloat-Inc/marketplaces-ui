@@ -9,26 +9,24 @@
   .row(v-if="connResultPolkadot")
     p {{`You are connected to chain ${connResultPolkadot.chain} using ${connResultPolkadot.nodeName} v${connResultPolkadot.nodeVersion}`}}
   .row.q-col-gutter-md
+    //- .col
+    //-   q-btn.full-width(
+    //-     @click="connectPolkadot"
+    //-     label="Connect to polkadot"
+    //-   )
     .col
       q-btn.full-width(
-        @click="connectPolkadot"
-        label="Connect to polkadot"
-      )
-    .col
-      q-btn.full-width(
-        :disable="!api"
         @click="requestUsers"
         label="Request users"
       )
-    .col
-      q-btn.full-width(
-        :disable="!api"
-        @click="login"
-        label="Login"
+    //- .col
+    //-   q-btn.full-width(
+    //-     :disable="!api"
+    //-     @click="login"
+    //-     label="Login"
       )
     .col
       q-btn.full-width(
-        :disable="!api"
         @click="getProposals"
         label="Get proposals"
       )
@@ -66,7 +64,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 // import PolkadotApi from '~/services/polkadotApi.js'
 import { useNotifications } from '~/mixins/notifications'
 import ProposalCard from '~/components/proposals/proposal-card'
@@ -96,7 +94,8 @@ export default {
     const showingSetIdentity = ref(false)
     const xpubDecoded = ref(false)
     const { showNotification, showLoading, hideLoading } = useNotifications()
-    const api = computed(() => $store.getters['polkadotWallet/api'])
+    const api = $store.$polkadotApi
+    const $treasuryApi = $store.$treasuryApi
     const qrDecodeXpub = ref(null)
     onMounted(() => {
       try {
@@ -107,26 +106,11 @@ export default {
       // console.log('onMounted', Identicon)
     })
 
-    async function connectPolkadot () {
-      try {
-        connResultPolkadot.value = undefined
-        showLoading()
-        // api.value = new PolkadotApi({ wss: wssUrl.value })
-        connResultPolkadot.value = await $store.dispatch('polkadotWallet/connectToServer', wssUrl.value)
-      } catch (e) {
-        console.error('connectPolkadot', e)
-        // api.value = undefined
-        showNotification({ color: 'red', message: e.message || e })
-      } finally {
-        hideLoading()
-      }
-    }
-
     async function requestUsers () {
       try {
         showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
         // const api = new PolkadotApi({ wss: wssUrl.value })
-        accounts.value = await api.value.requestUsers()
+        accounts.value = await api.requestUsers()
       } catch (e) {
         console.error('requestUsers', e)
         showNotification({ color: 'red', message: e.message || e })
@@ -152,7 +136,8 @@ export default {
     async function getProposals () {
       try {
         showLoading()
-        const response = await api.value.getProposals()
+        // const response = await api.value.getProposals()
+        const response = await $treasuryApi.getProposals()
         proposals.value = response.proposals
         console.log('getProposals', response.proposals)
       } catch (e) {
@@ -180,7 +165,6 @@ export default {
     return {
       title,
       requestUsers,
-      connectPolkadot,
       connResultPolkadot,
       accounts,
       wssUrl,

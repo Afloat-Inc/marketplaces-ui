@@ -24,6 +24,7 @@ export default {
   components: {
     QrStream
   },
+  emits: ['xpubDecoded'],
   data () {
     return {
       open: false,

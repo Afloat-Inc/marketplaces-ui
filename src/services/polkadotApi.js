@@ -9,10 +9,10 @@ import {
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { stringToU8a } from '@polkadot/util'
 class PolkadotApi {
-  constructor ({ wss }) {
-    this.wss = wss
+  constructor (wss) {
+    this.wss = wss || process.env.WSS
     this.api = undefined
-    // console.log('PolkadotApi', this.wss)
+    // console.log('PolkadotApiCreated', this.wss)
   }
 
   async connect () {
@@ -70,16 +70,6 @@ class PolkadotApi {
     }
   }
 
-  async requestUsers () {
-    // returns an array of all the injected sources
-    // (this needs to be called first, before other requests)
-    await web3Enable(process.env.APP_NAME)
-    // returns an array of { address, meta: { name, source } }
-    // meta.source contains the name of the extension that provides this account
-    const allAccounts = await web3Accounts()
-    return allAccounts
-  }
-
   async login ({ address }) {
     // returns an array of all the injected sources
     // (this needs to be called first, before other requests)
@@ -89,26 +79,20 @@ class PolkadotApi {
     const injector = await web3FromAddress(address)
     const message = stringToU8a('this is a test')
     this.api.sign(address, { signer: injector.signer })
+    // this.api.setSigner(injector.signer)
     // injector.signer.signRaw(message)
     // this.api.sign(undefined, address, { signer: injector.signer })
     console.log('login user', injector, message, this.api)
   }
 
-  getProposals () {
-    return this.api.derive.treasury.proposals()
-  }
-
-  getAccountInfo (address) {
-    return this.api.derive.accounts.info(address)
-  }
-
-  async submitProposal ({ proposer, beneficiary, value }) {
-    // Enable web3 plugin
+  async requestUsers () {
+    // returns an array of all the injected sources
+    // (this needs to be called first, before other requests)
     await web3Enable(process.env.APP_NAME)
-    // Get injector to call a Extrinsic
-    const injector = await web3FromAddress(proposer)
-    // Call Extrinsics
-    return this.api.tx.treasury.proposeSpend(value, beneficiary).signAndSend(proposer, { signer: injector.signer })
+    // returns an array of { address, meta: { name, source } }
+    // meta.source contains the name of the extension that provides this account
+    const allAccounts = await web3Accounts()
+    return allAccounts
   }
 }
 

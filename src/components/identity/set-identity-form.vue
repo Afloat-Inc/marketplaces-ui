@@ -43,7 +43,10 @@
 export default {
   name: 'SetIdentityForm',
   props: {
-    xpubKey: String
+    xpubKey: {
+      type: String,
+      default: undefined
+    }
   }
 }
 </script>

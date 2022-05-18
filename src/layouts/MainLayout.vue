@@ -17,13 +17,13 @@ q-layout(view="lHh Lpr lFf")
               q-item-label Vaults
           q-item.routerItems(
             clickable
-            :to="{ name: 'polkadot-example'}"
+            :to="{ name: 'xpub'}"
             active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('Examples')}"
+            :class="{ 'activeRouter': isActive('Xpub')}"
             dense
           )
             q-item-section
-              q-item-label Examples
+              q-item-label Xpub
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
@@ -43,6 +43,7 @@ import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
+// import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
 
@@ -74,7 +75,11 @@ export default defineComponent({
     async function connectPolkadot () {
       try {
         showLoading()
-        api.connect()
+        // await api.connect()
+        // const treasuryApi = new TreasuryApi(api)
+        // eslint-disable-next-line dot-notation
+        // $store['$treasuryApi'] = treasuryApi
+        console.log('Store', $store)
       } catch (e) {
         console.error('connectPolkadot', e)
         showNotification({ color: 'red', message: e.message || e })

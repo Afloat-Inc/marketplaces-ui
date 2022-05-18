@@ -21,6 +21,7 @@ export default {
       default: () => {}
     }
   },
+  emits: ['selectAccount'],
   methods: {
     isSelected (account) {
       // bg-primary text-white

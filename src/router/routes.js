@@ -15,6 +15,18 @@ const routes = [
           ]
         }
       },
+      // XPubs
+      {
+        path: 'xpub',
+        name: 'xpub',
+        component: () => import('pages/xpub/manage-xpub.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Xpub', icon: 'key' }
+          ]
+        }
+      },
+      // Vaults
       {
         path: 'vaults',
         name: 'vaultsList',
@@ -38,22 +50,22 @@ const routes = [
       }
     ]
   },
-  {
-    path: '/examples',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: 'polkadot',
-        name: 'polkadot-example',
-        component: () => import('components/template/polkadot-example.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Examples', icon: 'home' }
-          ]
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/examples',
+  //   component: () => import('layouts/MainLayout.vue'),
+  //   children: [
+  //     {
+  //       path: 'polkadot',
+  //       name: 'polkadot-example',
+  //       component: () => import('components/template/polkadot-example.vue'),
+  //       meta: {
+  //         breadcrumb: [
+  //           { name: 'Examples', icon: 'home' }
+  //         ]
+  //       }
+  //     }
+  //   ]
+  // },
 
   // Always leave this as last one,
   // but you can also remove it

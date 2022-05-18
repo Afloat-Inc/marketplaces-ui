@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import { Notify, QSpinnerFacebook } from 'quasar'
 export default {
   name: 'CreateProposalForm',
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['api'])
+    // ...mapGetters('polkadotWallet', ['api'])
   },
   methods: {
     async submitProposal () {
@@ -84,7 +84,7 @@ export default {
         this.showLoading({
           message: 'Waiting for polkadot js response'
         })
-        const r = await this.api.submitProposal({
+        const r = await this.$store.$treasuryApi.submitProposal({
           proposer: this.proposer,
           beneficiary: this.beneficiary,
           value: this.value
