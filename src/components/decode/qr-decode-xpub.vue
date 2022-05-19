@@ -1,15 +1,22 @@
 <template lang="pug">
 q-dialog(v-model="open")
   q-card.q-pa-md
-    .text-h5 QR Decode
-    .text-body2.text-weight-light Please Scan your xpub from Blue Wallet
     .row.justify-center.q-mt-md
+      #error-permissions(v-if="!hasCameraPermission")
+        .text-h5.text-negative.text-center Permission not granted
+        .row.justify-center
+          q-icon(name="video_camera_front" size="8em" color="primary")
+        .text-body2.text-weight-light.text-center Please allow camera permission to scan your XPUB
+      #granted-permissions(v-else)
+        .text-h5.q-mb-sm QR Decode
+        .text-body2.text-weight-light Please Scan your XPUB from Blue Wallet
         q-spinner-puff(
-            color="primary"
-            size="10em"
-            v-if="isDecrypting"
+          color="primary"
+          size="10em"
+          v-if="isDecrypting"
         )
-        QrStream(
+        QrStream.qrContainer(
+          ref="qrReader"
           @decode="onQrDetected"
           v-else
         )
@@ -28,8 +35,25 @@ export default {
   data () {
     return {
       open: false,
-      isDecrypting: false
+      isDecrypting: false,
+      hasCameraPermission: false
     }
+  },
+  watch: {
+    async open (v) {
+      await this.$nextTick()
+      if (v) {
+        const { state } = await navigator.permissions.query({ name: 'camera' })
+        if (state === 'granted') {
+          this.hasCameraPermission = true
+        } else this.hasCameraPermission = false
+        // console.log('response ref', permissions, this.$refs.qrReader.camera)
+      }
+    }
+  },
+  async mounted () {
+    // const r = await navigator.mediaDevices.getUserMedia({ video: true })
+    // console.log('response permissions', r)
   },
   methods: {
     openDialog () {
@@ -68,3 +92,9 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.qrContainer
+  width: auto
+  height: auto
+</style>
