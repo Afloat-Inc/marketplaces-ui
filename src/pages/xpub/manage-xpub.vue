@@ -29,40 +29,63 @@ export default {
   },
   data () {
     return {
-      userXpub: undefined
+      userXpub: undefined,
+      xpubUnsub: undefined
     }
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
     userHasXpub () {
       return !!this.userXpub
-      // xpub.isEmpty ? undefined : xpub.value
     }
   },
   watch: {
     async selectedAccount () {
-      this.getXpub()
+      await this.unsubscribeToXPUB()
+      this.subscribeToXPUB()
     }
   },
   mounted () {
-    this.getXpub()
+    this.subscribeToXPUB()
+  },
+  beforeUnmount () {
+    this.unsubscribeToXPUB()
   },
   methods: {
-    async getXpub () {
+    async subscribeToXPUB () {
       try {
         this.showLoading()
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            console.warn('sleeping')
-            resolve()
-          }, 2000)
-        })
+        this.xpubUnsub = await this.$store.$nbvStorageApi.getXpubByUserSubscription(
+          this.selectedAccount.address,
+          this.getXpub
+        )
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async unsubscribeToXPUB () {
+      try {
+        this.showLoading()
+        await this.xpubUnsub()
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async getXpub (xpubId) {
+      try {
+        this.showLoading()
         this.userXpub = undefined
-        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
+        // const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value
-        } else this.userXpub = undefined
+        }
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -73,11 +96,11 @@ export default {
     async setXpub (payload) {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        await this.$store.$nbvStorageApi.submitXPUB({
+        const response = await this.$store.$nbvStorageApi.submitXPUB({
           user: this.selectedAccount.address,
           XPUB: payload.XPUB
         })
-        await this.getXpub()
+        console.log('setXpub', response)
         this.showNotification({ message: 'Your XPUB was added' })
       } catch (e) {
         console.error('error', e)
@@ -90,7 +113,6 @@ export default {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.removeXpub({ user: this.selectedAccount.address })
-        await this.getXpub()
         this.showNotification({ message: 'Your XPUB was removed' })
       } catch (e) {
         console.error('error', e)

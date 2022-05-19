@@ -29,6 +29,16 @@ class NbvStorageApi extends BasePolkadotApi {
     return this.polkadotApi.api.query.nbvStorage.xpubs(id)
   }
 
+  async getXpubByUserSubscription (user, trigger) {
+    const sub = await this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, e => {
+      if (trigger) {
+        console.warn('triggered subscription', e)
+        trigger(e)
+      }
+    })
+    return sub
+  }
+
   /**
    * @name getVaultsByUser
    * @description Get all vaults where user is owner or cosigner
