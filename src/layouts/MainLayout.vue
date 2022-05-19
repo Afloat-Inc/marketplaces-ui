@@ -19,11 +19,11 @@ q-layout(view="lHh Lpr lFf")
             clickable
             :to="{ name: 'xpub'}"
             active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('Xpub')}"
+            :class="{ 'activeRouter': isActive('XPUB')}"
             dense
           )
             q-item-section
-              q-item-label Xpub
+              q-item-label XPUB
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
@@ -34,7 +34,8 @@ q-layout(view="lHh Lpr lFf")
       .row.justify-center
         .col-10
           .q-px-lg.q-pa-lg
-            router-view
+            not-accounts(v-if="!selectedAccount")
+            router-view(v-else)
 </template>
 
 <script>
@@ -43,13 +44,15 @@ import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
+import NotAccounts from '~/pages/NotAccounts.vue'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
     AccountsMenu,
-    SelectedAccountBtn
+    SelectedAccountBtn,
+    NotAccounts
   },
 
   setup () {
@@ -75,11 +78,6 @@ export default defineComponent({
     async function connectPolkadot () {
       try {
         showLoading()
-        // await api.connect()
-        // const treasuryApi = new TreasuryApi(api)
-        // eslint-disable-next-line dot-notation
-        // $store['$treasuryApi'] = treasuryApi
-        console.log('Store', $store)
       } catch (e) {
         console.error('connectPolkadot', e)
         showNotification({ color: 'red', message: e.message || e })

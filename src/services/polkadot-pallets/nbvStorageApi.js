@@ -15,7 +15,7 @@ class NbvStorageApi extends BasePolkadotApi {
    * { id, xpub }
    */
   getXpubByUser (user) {
-    return this.polkadotApi.api.derive.nbvStorage.xpub(user)
+    return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user)
   }
 
   /**
@@ -26,7 +26,7 @@ class NbvStorageApi extends BasePolkadotApi {
    * { id, xpub }
    */
   getXpubById (id) {
-    return this.polkadotApi.api.derive.nbvStorage.xpub(id)
+    return this.polkadotApi.api.query.nbvStorage.xpubs(id)
   }
 
   /**
@@ -50,7 +50,21 @@ class NbvStorageApi extends BasePolkadotApi {
     // Enable web3 plugin and set Signer
     await this.setWeb3Signer(user)
     // Call Extrinsic
-    return this.polkadotApi.api.tx.nbvStorage.submitXPUB(user, XPUB).signAndSend(user)
+    return this.polkadotApi.api.tx.nbvStorage.setXpub(XPUB).signAndSend(user)
+  }
+
+  /**
+   * @name submitXPUB
+   * @description Set XPUB for a user
+   * @param {String} user user address
+   * @returns undefined
+   */
+  async removeXpub ({ user }) {
+    // Enable web3 plugin and set Signer
+    await this.setWeb3Signer(user)
+    console.log('removeXpub', this.polkadotApi.api)
+    // Call Extrinsic
+    return this.polkadotApi.api.tx.nbvStorage.removeXpub().signAndSend(user)
   }
 }
 

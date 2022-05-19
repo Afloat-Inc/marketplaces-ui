@@ -22,7 +22,7 @@ const routes = [
         component: () => import('pages/xpub/manage-xpub.vue'),
         meta: {
           breadcrumb: [
-            { name: 'Xpub', icon: 'key' }
+            { name: 'XPUB', icon: 'key' }
           ]
         }
       },
@@ -41,6 +41,17 @@ const routes = [
         path: 'vaults/details',
         name: 'vaultDetails',
         component: () => import('pages/vaults/vault-details.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Vaults', icon: 'storage', to: { name: 'vaultsList' } },
+            { name: 'Details', icon: 'summarize' }
+          ]
+        }
+      },
+      {
+        path: 'not-accounts',
+        name: 'notAccounts',
+        component: () => import('pages/NotAccounts.vue'),
         meta: {
           breadcrumb: [
             { name: 'Vaults', icon: 'storage', to: { name: 'vaultsList' } },

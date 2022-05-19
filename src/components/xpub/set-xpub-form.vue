@@ -5,7 +5,7 @@
         q-input(
             v-model="fullXpub"
             placeholder="Paste or write your XPUB"
-            label="Xpub"
+            label="XPUB"
             stack-label
             outlined
         )
@@ -18,6 +18,7 @@
       label="Set XPUB"
       color="primary"
       no-caps
+      @click="setXpub"
     )
     #modals
         qr-decode-xpub(ref="qrDecodeXpub" @xpubDecoded="onDecode")
@@ -26,10 +27,17 @@
 <script>
 import QrDecodeXpub from '~/components/decode/qr-decode-xpub'
 export default {
-  name: 'EtXpubForm',
+  name: 'SetXpubForm',
   components: {
     QrDecodeXpub
   },
+  props: {
+    userAddress: {
+      type: String,
+      default: undefined
+    }
+  },
+  emits: ['submitted'],
   data () {
     return {
       fullXpub: undefined
@@ -44,6 +52,11 @@ export default {
     onDecode (xpub) {
       this.toggleQRScanner(false)
       this.fullXpub = xpub.fullXpub
+    },
+    setXpub () {
+      this.$emit('submitted', {
+        XPUB: this.fullXpub
+      })
     }
   }
 }
