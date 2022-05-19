@@ -7,6 +7,11 @@ import {
 } from '@polkadot/extension-dapp'
 
 class BasePolkadotApi {
+  /**
+   * Class constructor
+   * @param {PolkadotApi} polkadotApi Instance from PolkadotApi class
+   * @param {String} palletName Pallet Name
+   */
   constructor (polkadotApi, palletName) {
     this.polkadotApi = polkadotApi
     this.palletName = palletName
@@ -26,6 +31,14 @@ class BasePolkadotApi {
     this.polkadotApi.api.setSigner(injector.signer)
   }
 
+  /**
+   * @name callTx
+   * @description Call a TX from polkadot api for a specific pallet
+   * @param {String} extrinsicName Extrinsic function name to call
+   * @param {String} signer User address to sign transaction
+   * @param {*} params Params for extrinsic function
+   * @returns tx response from polkadot api
+   */
   async callTx (extrinsicName, signer, params) {
     await this.setWeb3Signer(signer)
     if (params) {
@@ -34,6 +47,14 @@ class BasePolkadotApi {
     return this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer)
   }
 
+  /**
+   * @name exQuery
+   * @description Execute a query or query subscription from polkadot api
+   * @param {String} queryName Query name to execute
+   * @param {*} params Params for query execution
+   * @param {*} subTrigger Function handler to query subscription
+   * @returns Query response or unsubscribe function from polkadot api
+   */
   async exQuery (queryName, params, subTrigger) {
     return this.polkadotApi.api.query[this.palletName][queryName](params, subTrigger)
   }
