@@ -4,6 +4,7 @@ class NbvStorageApi extends BasePolkadotApi {
   constructor (polkadotApi) {
     super(polkadotApi)
     this.polkadotApi = polkadotApi
+    this.tx = this.polkadotApi.api.tx.nbvStorage
     console.log('NbvStorageApi created')
   }
 
@@ -11,32 +12,24 @@ class NbvStorageApi extends BasePolkadotApi {
    * @name getXpubByUser
    * @description Get Xpub by user
    * @param {String} user User address
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    * { id, xpub }
    */
-  getXpubByUser (user) {
-    return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user)
+  getXpubByUser (user, subTrigger) {
+    return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
   }
 
   /**
    * @name getXpubByUser
    * @description Get Xpub by user
-   * @param {String} id Xpub id
+   * @param {String} xpubId Xpub id
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    * { id, xpub }
    */
-  getXpubById (id) {
-    return this.polkadotApi.api.query.nbvStorage.xpubs(id)
-  }
-
-  async getXpubByUserSubscription (user, trigger) {
-    const sub = await this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, e => {
-      if (trigger) {
-        console.warn('triggered subscription', e)
-        trigger(e)
-      }
-    })
-    return sub
+  getXpubById (xpubId, subTrigger) {
+    return this.polkadotApi.api.query.nbvStorage.xpubs(xpubId, subTrigger)
   }
 
   /**
@@ -60,7 +53,8 @@ class NbvStorageApi extends BasePolkadotApi {
     // Enable web3 plugin and set Signer
     await this.setWeb3Signer(user)
     // Call Extrinsic
-    return this.polkadotApi.api.tx.nbvStorage.setXpub(XPUB).signAndSend(user)
+    return this.tx.setXpub(XPUB).signAndSend(user)
+    // this.tx['setXpub'](user. ..params).
   }
 
   /**

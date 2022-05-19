@@ -55,9 +55,11 @@ export default {
     async subscribeToXPUB () {
       try {
         this.showLoading()
-        this.xpubUnsub = await this.$store.$nbvStorageApi.getXpubByUserSubscription(
+        this.xpubUnsub = await this.$store.$nbvStorageApi.getXpubByUser(
           this.selectedAccount.address,
-          this.getXpub
+          e => {
+            this.getXpub(e)
+          }
         )
       } catch (e) {
         console.error('error', e)
