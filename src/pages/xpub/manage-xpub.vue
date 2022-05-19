@@ -96,11 +96,11 @@ export default {
     async setXpub (payload) {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        const response = await this.$store.$nbvStorageApi.submitXPUB({
+        await this.$store.$nbvStorageApi.submitXPUB({
           user: this.selectedAccount.address,
           XPUB: payload.XPUB
         })
-        console.log('setXpub', response)
+        // console.log('setXpub', response)
         this.showNotification({ message: 'Your XPUB was added' })
         this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
