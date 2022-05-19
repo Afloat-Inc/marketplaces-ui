@@ -2,10 +2,7 @@ import BasePolkadotApi from '~/services/basePolkadotApi'
 
 class NbvStorageApi extends BasePolkadotApi {
   constructor (polkadotApi) {
-    super(polkadotApi)
-    this.polkadotApi = polkadotApi
-    this.tx = this.polkadotApi.api.tx.nbvStorage
-    console.log('NbvStorageApi created')
+    super(polkadotApi, 'nbvStorage')
   }
 
   /**
@@ -17,7 +14,8 @@ class NbvStorageApi extends BasePolkadotApi {
    * { id, xpub }
    */
   getXpubByUser (user, subTrigger) {
-    return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
+    // return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
+    return this.exQuery('xpubsByOwner', user, subTrigger)
   }
 
   /**
@@ -29,7 +27,8 @@ class NbvStorageApi extends BasePolkadotApi {
    * { id, xpub }
    */
   getXpubById (xpubId, subTrigger) {
-    return this.polkadotApi.api.query.nbvStorage.xpubs(xpubId, subTrigger)
+    // return this.polkadotApi.api.query.nbvStorage.xpubs(xpubId, subTrigger)
+    return this.exQuery('xpubs', xpubId, subTrigger)
   }
 
   /**
@@ -50,11 +49,8 @@ class NbvStorageApi extends BasePolkadotApi {
    * @returns undefined
    */
   async submitXPUB ({ user, XPUB }) {
-    // Enable web3 plugin and set Signer
-    await this.setWeb3Signer(user)
     // Call Extrinsic
-    return this.tx.setXpub(XPUB).signAndSend(user)
-    // this.tx['setXpub'](user. ..params).
+    return this.callTx('setXpub', user, XPUB)
   }
 
   /**
@@ -64,11 +60,8 @@ class NbvStorageApi extends BasePolkadotApi {
    * @returns undefined
    */
   async removeXpub ({ user }) {
-    // Enable web3 plugin and set Signer
-    await this.setWeb3Signer(user)
-    console.log('removeXpub', this.polkadotApi.api)
     // Call Extrinsic
-    return this.polkadotApi.api.tx.nbvStorage.removeXpub().signAndSend(user)
+    return this.callTx('removeXpub', user)
   }
 }
 

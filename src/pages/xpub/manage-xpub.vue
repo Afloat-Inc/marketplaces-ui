@@ -83,7 +83,6 @@ export default {
       try {
         this.showLoading()
         this.userXpub = undefined
-        // const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value

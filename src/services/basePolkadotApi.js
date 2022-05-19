@@ -2,14 +2,14 @@ import {
   web3Accounts,
   web3Enable,
   web3FromAddress
-  //   web3FromAddress,
   //   web3ListRpcProviders,
   //   web3UseRpcProvider
 } from '@polkadot/extension-dapp'
 
 class BasePolkadotApi {
-  constructor (polkadotApi) {
+  constructor (polkadotApi, palletName) {
     this.polkadotApi = polkadotApi
+    this.palletName = palletName
   }
 
   /**
@@ -24,6 +24,18 @@ class BasePolkadotApi {
     const injector = await web3FromAddress(user)
     // Set signer
     this.polkadotApi.api.setSigner(injector.signer)
+  }
+
+  async callTx (extrinsicName, signer, params) {
+    await this.setWeb3Signer(signer)
+    if (params) {
+      return this.polkadotApi.api.tx[this.palletName][extrinsicName](params).signAndSend(signer)
+    }
+    return this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer)
+  }
+
+  async exQuery (queryName, params, subTrigger) {
+    return this.polkadotApi.api.query[this.palletName][queryName](params, subTrigger)
   }
 
   /**
