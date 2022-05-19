@@ -10,7 +10,7 @@
             outlined
         )
             template(v-slot:append)
-                q-icon.cursor-pointer(name="qr_code_scanner" @click="toggleQRScanner(true)")
+                q-icon.icon-btn(name="qr_code_scanner" @click="toggleQRScanner(true)")
                     q-tooltip Scan your XPUB
       .col
         .text-body2 {{ $t('general.lorem')  }}
@@ -61,3 +61,8 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.icon-btn:hover
+  color: $primary
+</style>

@@ -102,11 +102,11 @@ export default {
         })
         console.log('setXpub', response)
         this.showNotification({ message: 'Your XPUB was added' })
+        this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
         console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
-      } finally {
         this.hideLoading()
+        this.showNotification({ message: e.message || e, color: 'negative' })
       }
     },
     async removeXpub () {
@@ -114,11 +114,11 @@ export default {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.removeXpub({ user: this.selectedAccount.address })
         this.showNotification({ message: 'Your XPUB was removed' })
+        this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
         console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
-      } finally {
         this.hideLoading()
+        this.showNotification({ message: e.message || e, color: 'negative' })
       }
     }
   }
