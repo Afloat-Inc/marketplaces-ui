@@ -11,7 +11,8 @@ export default {
   },
   forms: {
     errors: {
-      required: 'This field is required'
+      required: 'This field is required',
+      isNotValidXpub: 'This is not a valid XPUB'
     }
   }
 }

@@ -4,7 +4,7 @@ q-dialog(v-model="open")
     .text-h5 QR Decode
     .text-body2.text-weight-light Please Scan your xpub from Blue Wallet
     .row.justify-center.q-mt-md
-        q-spinner-pie(
+        q-spinner-puff(
             color="primary"
             size="10em"
             v-if="isDecrypting"

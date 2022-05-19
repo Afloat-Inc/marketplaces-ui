@@ -9,14 +9,14 @@
               label="XPUB"
               stack-label
               outlined
-              :rules="[rules.required]"
+              :rules="[rules.required, rules.isValidFullXpub]"
           )
               template(v-slot:append)
                   q-icon.icon-btn(name="qr_code_scanner" @click="toggleQRScanner(true)")
                       q-tooltip Scan your XPUB
       .col
         .text-body2 {{ $t('general.lorem')  }}
-    q-btn(
+    q-btn.q-mt-sm(
       label="Set XPUB"
       color="primary"
       no-caps

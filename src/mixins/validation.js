@@ -11,7 +11,9 @@ export const validation = {
         // isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || this.$t('forms.errors.accountNotAvailable', { account }),
         isInteger: val => Number.isInteger(parseInt(val)) || this.$t('forms.errors.integer'),
         positiveInteger: val => parseInt(val) > 0 || this.$t('forms.errors.positiveInteger'),
-        required: val => !!val || this.$t('forms.errors.required')
+        required: val => !!val || this.$t('forms.errors.required'),
+        isValidXPub: val => /([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub'),
+        isValidFullXpub: val => /(\[[0-Z]{8}\/[0-9]{1,2}(')(\/)[0-9]{1,2}(')\/[0-9]{1,2}(')\/[0-9](')(]){1,30})([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub')
       }
     }
   },
