@@ -40,7 +40,7 @@ export default {
     }
   },
   watch: {
-    async selectedAccount () {
+    selectedAccount () {
       // await this.unsubscribeToXPUB()
       // this.subscribeToXPUB()
       this.getXpub()

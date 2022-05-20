@@ -45,10 +45,14 @@ class BasePolkadotApi {
     let unsub
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
-      if (params) {
-        unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
-      } else {
-        unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+      try {
+        if (params) {
+          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+        } else {
+          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+        }
+      } catch (e) {
+        reject(e)
       }
     })
   }
@@ -63,6 +67,18 @@ class BasePolkadotApi {
    */
   async exQuery (queryName, params, subTrigger) {
     return this.polkadotApi.api.query[this.palletName][queryName](params, subTrigger)
+  }
+
+  /**
+   * @name exMultiQuery
+   * @description Execute a query or query subscription from polkadot api
+   * @param {String} queryName Query name to execute
+   * @param {Array} params Params for query execution, Params [Array]
+   * @param {*} subTrigger Function handler to query subscription
+   * @returns Query response or unsubscribe function from polkadot api
+   */
+  async exMultiQuery (queryName, params, subTrigger) {
+    return this.polkadotApi.api.query[this.palletName][queryName].multi(params, subTrigger)
   }
 
   /**

@@ -43,8 +43,10 @@ class NbvStorageApi extends BasePolkadotApi {
     // return this.polkadotApi.api.derive.nbvStorage.vaults(user)
   }
 
-  getVaults ({ user, subTrigger }) {
-    return this.exQuery('vaults', user, subTrigger)
+  getVaultsById ({ Ids, subTrigger }) {
+    console.log('getVaultsById', Ids)
+    // return this.exQuery('vaults', Ids, subTrigger)
+    return this.exMultiQuery('vaults', Ids, subTrigger)
     // return this.polkadotApi.api.derive.nbvStorage.vaults(user)
   }
 

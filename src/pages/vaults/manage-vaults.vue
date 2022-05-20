@@ -1,6 +1,10 @@
 <template lang="pug">
 #container
-  .text-h5 Vault List
+  .text-h5.q-mb-md Manage Vaults
+  q-item(v-for="vault in vaultList")
+    q-item-section
+      p {{ vault.owner }}
+      p {{ vault.description }}
   .row.q-gutter-sm
     q-btn(
       label="create vault"
@@ -17,9 +21,19 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'VaultList',
+  name: 'ManageVaults',
+  data () {
+    return {
+      vaultList: []
+    }
+  },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount'])
+  },
+  watch: {
+    selectedAccount () {
+      this.getVaults()
+    }
   },
   async mounted () {
     this.getVaults()
@@ -28,14 +42,17 @@ export default {
     async getVaults () {
       try {
         this.showLoading()
-        const r = await this.$store.$nbvStorageApi.getVaultsByUser({
+        const vaultsId = await this.$store.$nbvStorageApi.getVaultsByUser({
           user: this.selectedAccount.address
         })
-        const r2 = await this.$store.$nbvStorageApi.getVaults({
-          user: '0x6065f2ed7f84b6b3da6b297e740623cf5150e82bac9f6c5687239646e1e9b5e1'
-        })
-        console.log('vaults r', r)
-        console.log('vaults r2', r2.value.toHuman())
+        console.log('vaultsId', vaultsId.toJSON())
+        if (!vaultsId.isEmpty) {
+          const vaults = await this.$store.$nbvStorageApi.getVaultsById({
+            Ids: vaultsId.toJSON()
+          })
+          this.vaultList = vaults.map(v => v.toHuman())
+          console.log('vaults', vaults, this.vaultList)
+        } else this.vaultList = []
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

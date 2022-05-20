@@ -8,7 +8,7 @@ q-layout(view="lHh Lpr lFf")
         .row.q-gutter-x-sm
           q-item.routerItems(
             clickable
-            :to="{ name: 'vaultsList'}"
+            :to="{ name: 'manageVaults'}"
             active-class="activeRouter"
             :class="{ 'activeRouter': isActive('Vaults')}"
             dense
@@ -17,7 +17,7 @@ q-layout(view="lHh Lpr lFf")
               q-item-label Vaults
           q-item.routerItems(
             clickable
-            :to="{ name: 'xpub'}"
+            :to="{ name: 'manageXpub'}"
             active-class="activeRouter"
             :class="{ 'activeRouter': isActive('XPUB')}"
             dense
