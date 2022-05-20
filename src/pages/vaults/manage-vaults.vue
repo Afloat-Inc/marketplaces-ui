@@ -1,10 +1,7 @@
 <template lang="pug">
 #container
   .text-h5.q-mb-md Manage Vaults
-  q-item(v-for="vault in vaultList")
-    q-item-section
-      p {{ vault.owner }}
-      p {{ vault.description }}
+  vault-list.q-my-md(:vaults="vaultList")
   .row.q-gutter-sm
     q-btn(
       label="create vault"
@@ -19,9 +16,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import VaultList from '~/pages/vaults/vault-list.vue'
 
 export default {
   name: 'ManageVaults',
+  components: { VaultList },
   data () {
     return {
       vaultList: []
