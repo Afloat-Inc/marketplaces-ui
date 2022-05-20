@@ -38,8 +38,25 @@ class NbvStorageApi extends BasePolkadotApi {
    * @returns {Array} list vaults array
    * [{ id, name }]
    */
-  getVaultsByUser (user) {
-    return this.polkadotApi.api.derive.nbvStorage.vaults(user)
+  getVaultsByUser ({ user, subTrigger }) {
+    return this.exQuery('vaultsBySigner', user, subTrigger)
+    // return this.polkadotApi.api.derive.nbvStorage.vaults(user)
+  }
+
+  getVaults ({ user, subTrigger }) {
+    return this.exQuery('vaults', user, subTrigger)
+    // return this.polkadotApi.api.derive.nbvStorage.vaults(user)
+  }
+
+  /**
+   * @name createVault
+   * @description Create a new vault
+   * @param {String} user user address
+   * @returns undefined
+   */
+  async createVault ({ threshold, description, cosigners, user }) {
+    // Call Extrinsic
+    return this.callTx('createVault', user, [threshold, description, cosigners])
   }
 
   /**
@@ -50,7 +67,7 @@ class NbvStorageApi extends BasePolkadotApi {
    */
   async submitXPUB ({ user, XPUB }) {
     // Call Extrinsic
-    return this.callTx('setXpub', user, XPUB)
+    return this.callTx('setXpub', user, [XPUB])
   }
 
   /**

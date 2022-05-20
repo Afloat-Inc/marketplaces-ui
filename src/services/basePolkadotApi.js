@@ -33,7 +33,7 @@ class BasePolkadotApi {
 
   /**
    * @name callTx
-   * @description Call a TX from polkadot api for a specific pallet
+   * @description Call a TX from polkadot api for a specific pallet and handler response subscription
    * @param {String} extrinsicName Extrinsic function name to call
    * @param {String} signer User address to sign transaction
    * @param {*} params Params for extrinsic function
@@ -41,10 +41,16 @@ class BasePolkadotApi {
    */
   async callTx (extrinsicName, signer, params) {
     await this.setWeb3Signer(signer)
-    if (params) {
-      return this.polkadotApi.api.tx[this.palletName][extrinsicName](params).signAndSend(signer)
-    }
-    return this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer)
+    console.log('callTx params', params)
+    let unsub
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
+      if (params) {
+        unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+      } else {
+        unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+      }
+    })
   }
 
   /**
@@ -60,6 +66,60 @@ class BasePolkadotApi {
   }
 
   /**
+   * @name handlerTXResponse
+   * @description Function to resolve a promise evaluating Extrinsic state event
+   * @param {*} e Event from transaction subscription
+   * @param {*} resolve Resolve Function
+   * @param {*} reject Reject Function
+   * @param {*} unsub Unsubscribe Function
+   */
+  async handlerTXResponse (e, resolve, reject, unsub) {
+    const { events = [], status } = e
+    console.log('events', events)
+    console.log('status', status)
+    if (status.isFinalized || status.isInBlock) {
+      // console.log(`Transaction included at blockHash ${status.asFinalized}`)
+
+      // Loop through Vec<EventRecord> to display all events
+      events.forEach(({ phase, event: { data, method, section } }) => {
+        console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
+      })
+
+      events.filter(({ event: { section } }) => section === 'system').forEach(({ event: { method, data } }) => {
+        if (method === 'ExtrinsicFailed') {
+          // txFailedCb(result);
+          console.log('ExtrinsicFailed', data)
+          const [dispatchError] = data
+          let errorInfo
+
+          console.log('ExtrinsicFailed error', data)
+          // decode the error
+          if (dispatchError.isModule) {
+            const decoded = data.registry.findMetaError(dispatchError.asModule)
+            errorInfo = `${decoded.section}.${decoded.name}`
+          } else {
+            // Other, CannotLookup, BadOrigin, no extra info
+            errorInfo = dispatchError.toString()
+          }
+
+          // console.error('errorInfo', errorInfo)
+          console.log('unsub', unsub)
+          unsub()
+          reject(`Extrinsic failed: ${errorInfo}`)
+          // const mod = data[0].asModule
+        } else if (method === 'ExtrinsicSuccess') {
+          console.log('ExtrinsicSuccess', data)
+          console.log('unsub', unsub)
+          unsub()
+          resolve(data)
+          // txSuccessCb(result);
+        }
+      })
+    }
+  }
+
+  /**
+   * @name requestUsers
    * @description Return available accounts from web3Accounts
    * @returns {Array}
    * [{ address, meta: { genesisHash, name, source }, type }]
@@ -73,6 +133,7 @@ class BasePolkadotApi {
   }
 
   /**
+   * @name getAccountInfo
    * @description Get user details info
    * @param {*} user User address
    * @returns { Object }

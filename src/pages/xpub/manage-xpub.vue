@@ -5,7 +5,7 @@
   q-card(v-if="userHasXpub")
     q-item
       q-item-section
-        .one-line {{ userXpub }}
+        .one-line {{ userXpub.toHuman() }}
       q-item-section(avatar)
         q-icon.icon-btn(
           v-ripple
@@ -41,15 +41,17 @@ export default {
   },
   watch: {
     async selectedAccount () {
-      await this.unsubscribeToXPUB()
-      this.subscribeToXPUB()
+      // await this.unsubscribeToXPUB()
+      // this.subscribeToXPUB()
+      this.getXpub()
     }
   },
   mounted () {
-    this.subscribeToXPUB()
+    this.getXpub()
+    // this.subscribeToXPUB()
   },
   beforeUnmount () {
-    this.unsubscribeToXPUB()
+    // this.unsubscribeToXPUB()
   },
   methods: {
     async subscribeToXPUB () {
@@ -79,10 +81,11 @@ export default {
         this.hideLoading()
       }
     },
-    async getXpub (xpubId) {
+    async getXpub () {
       try {
         this.showLoading()
         this.userXpub = undefined
+        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value
@@ -103,11 +106,13 @@ export default {
         })
         // console.log('setXpub', response)
         this.showNotification({ message: 'Your XPUB was added' })
-        this.showLoading({ message: this.$t('general.waitingSub') })
+        this.getXpub()
+        // this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
         console.error('error', e)
-        this.hideLoading()
         this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     },
     async removeXpub () {
@@ -115,11 +120,13 @@ export default {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.removeXpub({ user: this.selectedAccount.address })
         this.showNotification({ message: 'Your XPUB was removed' })
-        this.showLoading({ message: this.$t('general.waitingSub') })
+        // this.showLoading({ message: this.$t('general.waitingSub') })
+        this.getXpub()
       } catch (e) {
         console.error('error', e)
-        this.hideLoading()
         this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     }
   }

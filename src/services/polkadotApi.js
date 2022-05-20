@@ -27,6 +27,7 @@ class PolkadotApi {
       // Create the API and wait until ready
       const api = new ApiPromise({ provider })
       this.api = api
+      console.log('api', api)
       // const api = await ApiPromise.create({ provider })
 
       // console.log('apiPromise', api)

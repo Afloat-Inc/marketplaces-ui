@@ -10,16 +10,17 @@ q-dialog(v-model="open")
       #granted-permissions(v-else)
         .text-h5.q-mb-sm QR Decode
         .text-body2.text-weight-light Please Scan your XPUB from Blue Wallet
-        q-spinner-puff(
-          color="primary"
-          size="10em"
-          v-if="isDecrypting"
-        )
-        QrStream.qrContainer(
-          ref="qrReader"
-          @decode="onQrDetected"
-          v-else
-        )
+        .row.justify-center.q-mt-sm
+          q-spinner-puff(
+            color="primary"
+            size="10em"
+            v-if="isDecrypting"
+          )
+          QrStream.qrContainer(
+            ref="qrReader"
+            @decode="onQrDetected"
+            v-else
+          )
 </template>
 
 <script>
