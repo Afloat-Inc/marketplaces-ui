@@ -1,6 +1,15 @@
 <template lang="pug">
 #container
-  .text-h5 Vault Details
+  .row.justify-between.q-mb-md
+    .text-h5 Vault Details
+    q-btn(
+      label="Delete vault"
+      color="negative"
+      icon="delete"
+      no-caps
+      outline
+      @click="removeVault"
+    )
   .text-body2 VaultId: {{ vaultId }}
   .text-body2 Owner: {{ owner }}
   .text-body2 Description: {{ description }}
@@ -8,6 +17,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'VaultDetails',
   data () {
@@ -16,6 +27,16 @@ export default {
       owner: undefined,
       description: undefined,
       threshold: undefined
+    }
+  },
+  computed: {
+    ...mapGetters('polkadotWallet', ['selectedAccount'])
+  },
+  watch: {
+    selectedAccount () {
+      this.$router.replace({
+        name: 'manageVaults'
+      })
     }
   },
   mounted () {
@@ -28,6 +49,25 @@ export default {
     this.description = vault?.description
     this.threshold = vault?.threshold
     // this.$route.meta.breadcrumb[1].name = 'Detailsss'
+  },
+  methods: {
+    async removeVault () {
+      try {
+        this.showLoading()
+        await this.$store.$nbvStorageApi.removeVault({
+          id: this.vaultId,
+          user: this.selectedAccount.address
+        })
+        this.$router.replace({
+          name: 'manageVaults'
+        })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    }
   }
 }
 </script>

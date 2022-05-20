@@ -1,8 +1,8 @@
 <template lang="pug">
 #container
-  .row.justify-between
-    .text-h5.q-mb-md Manage Vaults
-    q-btn.q-mt-sm(
+  .row.justify-between.q-mb-md
+    .text-h5 Manage Vaults
+    q-btn(
       label="Create vault"
       color="primary"
       icon="add"
@@ -11,15 +11,10 @@
       @click="isShowingCreateVault = true"
     )
   vault-list.q-my-md(:vaults="vaultList")
-  .row.q-gutter-sm
-    q-btn(
-      label="go to details"
-      :to="{ name: 'vaultDetails' }"
-    )
   #modals
     q-dialog(v-model="isShowingCreateVault" persistent)
-        q-card.modalSize
-          create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
+      q-card.modalSize
+        create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
 </template>
 
 <script>

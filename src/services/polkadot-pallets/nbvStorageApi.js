@@ -35,14 +35,22 @@ class NbvStorageApi extends BasePolkadotApi {
    * @name getVaultsByUser
    * @description Get all vaults where user is owner or cosigner
    * @param {String} user User address
-   * @returns {Array} list vaults array
-   * [{ id, name }]
+   * @returns {Array} array of vaults Id
+   * [{ id }]
    */
   getVaultsByUser ({ user, subTrigger }) {
     return this.exQuery('vaultsBySigner', user, subTrigger)
     // return this.polkadotApi.api.derive.nbvStorage.vaults(user)
   }
 
+  /**
+   * @name getVaultsById
+   * @description Get an array of vaults details
+   * @param {String} Ids Array of vaults id
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Array} list vaults array
+   * [{ id, description, descriptor, owner, cosigners }]
+   */
   getVaultsById ({ Ids, subTrigger }) {
     // return this.exQuery('vaults', Ids, subTrigger)
     return this.exMultiQuery('vaults', Ids, subTrigger)
@@ -58,6 +66,17 @@ class NbvStorageApi extends BasePolkadotApi {
   async createVault ({ threshold, description, cosigners, user }) {
     // Call Extrinsic
     return this.callTx('createVault', user, [threshold, description, cosigners])
+  }
+
+  /**
+  * @name removeVault
+  * @description Remove a vault
+  * @param {String} id Vault id
+  * @returns undefined
+  */
+  async removeVault ({ id, user }) {
+    // Call Extrinsic
+    return this.callTx('removeVault', user, [id])
   }
 
   /**
