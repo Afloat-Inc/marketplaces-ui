@@ -7,7 +7,9 @@ import {
 //   web3UseRpcProvider
 } from '@polkadot/extension-dapp'
 import { ApiPromise, WsProvider } from '@polkadot/api'
-import { stringToU8a } from '@polkadot/util'
+import { decodeAddress, encodeAddress } from '@polkadot/keyring'
+import { stringToU8a, isHex, hexToU8a } from '@polkadot/util'
+
 class PolkadotApi {
   constructor (wss) {
     this.wss = wss || process.env.WSS
@@ -105,6 +107,19 @@ class PolkadotApi {
     // meta.source contains the name of the extension that provides this account
     const allAccounts = await web3Accounts()
     return allAccounts
+  }
+
+  isValidPolkadotAddress (address) {
+    try {
+      encodeAddress(
+        isHex(address)
+          ? hexToU8a(address)
+          : decodeAddress(address)
+      )
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }
 

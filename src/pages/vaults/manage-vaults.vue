@@ -1,29 +1,39 @@
 <template lang="pug">
 #container
-  .text-h5.q-mb-md Manage Vaults
+  .row.justify-between
+    .text-h5.q-mb-md Manage Vaults
+    q-btn.q-mt-sm(
+      label="Create vault"
+      color="primary"
+      icon="add"
+      no-caps
+      outline
+      @click="isShowingCreateVault = true"
+    )
   vault-list.q-my-md(:vaults="vaultList")
   .row.q-gutter-sm
-    q-btn(
-      label="create vault"
-      color="primary"
-      @click="createNewVault"
-    )
     q-btn(
       label="go to details"
       :to="{ name: 'vaultDetails' }"
     )
+  #modals
+    q-dialog(v-model="isShowingCreateVault" persistent)
+        q-card.modalSize
+          create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import VaultList from '~/pages/vaults/vault-list.vue'
+import VaultList from '~/components/vaults/vault-list.vue'
+import CreateVaultForm from '~/components/vaults/create-vault-form.vue'
 
 export default {
   name: 'ManageVaults',
-  components: { VaultList },
+  components: { VaultList, CreateVaultForm },
   data () {
     return {
-      vaultList: []
+      vaultList: [],
+      isShowingCreateVault: false
     }
   },
   computed: {
@@ -44,12 +54,16 @@ export default {
         const vaultsId = await this.$store.$nbvStorageApi.getVaultsByUser({
           user: this.selectedAccount.address
         })
-        console.log('vaultsId', vaultsId.toJSON())
         if (!vaultsId.isEmpty) {
-          const vaults = await this.$store.$nbvStorageApi.getVaultsById({
-            Ids: vaultsId.toJSON()
+          const Ids = vaultsId.toJSON()
+          // console.log('vaultsId', Ids)
+          const vaults = await this.$store.$nbvStorageApi.getVaultsById({ Ids })
+          this.vaultList = vaults.map((v, i) => {
+            return {
+              ...v.toHuman(),
+              vaultId: Ids[i]
+            }
           })
-          this.vaultList = vaults.map(v => v.toHuman())
           console.log('vaults', vaults, this.vaultList)
         } else this.vaultList = []
       } catch (e) {
@@ -59,15 +73,17 @@ export default {
         this.hideLoading()
       }
     },
-    async createNewVault () {
+    async createNewVault (data) {
       try {
         this.showLoading()
+        console.log('createNewVault', data)
         await this.$store.$nbvStorageApi.createVault({
-          threshold: 2,
-          description: 'This is just a test',
-          cosigners: ['5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'],
+          ...data,
           user: this.selectedAccount.address
         })
+        this.isShowingCreateVault = false
+        this.showNotification({ message: 'Vault created' })
+        this.getVaults()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

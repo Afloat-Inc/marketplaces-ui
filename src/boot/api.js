@@ -2,11 +2,6 @@
 import PolkadotApi from '~/services/polkadotApi.js'
 import { TreasuryApi, NbvStorageApi } from '~/services/polkadot-pallets'
 
-function subQuery () {
-  console.log('subQuery arguments', arguments)
-  // console.log('subQuery function to call', func)
-}
-
 export default async ({ app, store }) => {
   const api = new PolkadotApi()
   await api.connect()
@@ -16,8 +11,8 @@ export default async ({ app, store }) => {
   store['$polkadotApi'] = api
   store['$treasuryApi'] = treasuryApi
   store['$nbvStorageApi'] = nbvStorageApi
-  store['$subQuery'] = subQuery
   app.provide('$polkadotApi', api)
   app.provide('$treasuryApi', treasuryApi)
   app.provide('$nbvStorageApi', nbvStorageApi)
+  // app.provide('$isValidAddressPolkadotAddress', isValidAddressPolkadotAddress)
 }

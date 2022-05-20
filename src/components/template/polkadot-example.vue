@@ -59,7 +59,7 @@
         create-proposal-form
     q-dialog(v-model="showingSetIdentity" persistent)
       q-card.modalSize
-        set-identity-form(:xpubKey="xpubDecoded")
+        // set-identity-form(:xpubKey="xpubDecoded")
     qr-decode-xpub(ref="qrDecodeXpub" @xpubDecoded="onDecode")
 </template>
 
@@ -69,7 +69,6 @@ import { ref, onMounted } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import ProposalCard from '~/components/proposals/proposal-card'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
-import SetIdentityForm from '~/components/identity/set-identity-form'
 import QrDecodeXpub from '~/components/decode/qr-decode-xpub'
 // import Identicon from '@polkadot/vue-identicon'
 import { useStore } from 'vuex'
@@ -80,7 +79,6 @@ export default {
   components: {
     ProposalCard,
     CreateProposalForm,
-    SetIdentityForm,
     QrDecodeXpub
   },
   setup () {

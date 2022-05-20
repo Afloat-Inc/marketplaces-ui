@@ -40,6 +40,7 @@ const routes = [
       {
         path: 'vaults/details',
         name: 'vaultDetails',
+        props: true,
         component: () => import('pages/vaults/vault-details.vue'),
         meta: {
           breadcrumb: [
