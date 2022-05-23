@@ -63,7 +63,6 @@ import { AccountItem } from '~/components/common'
 import CreateProposalForm from '~/components/proposals/create-proposal-form'
 import { Encoder } from '@smontero/nbv-ur-codec'
 import axios from 'axios'
-
 export default {
   name: 'VaultDetails',
   components: { AccountItem, CreateProposalForm },
@@ -133,8 +132,9 @@ export default {
       try {
         this.showLoading()
         if (!this.vaultQR) {
+          // console.log('vaultQR', process.env.BDK_SERVICES_URL, BDK_SERVICES_URL)
           const http = axios.create({
-            baseURL: 'https://bdk.hashed.systems',
+            baseURL: process.env.BDK_SERVICES_URL,
             headers: {
               'Content-Type': 'application/json'
             }

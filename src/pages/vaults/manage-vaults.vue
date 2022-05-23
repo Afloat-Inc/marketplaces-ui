@@ -59,7 +59,7 @@ export default {
               vaultId: Ids[i]
             }
           })
-          console.log('vaults', vaults, this.vaultList)
+          // console.log('vaults', vaults, this.vaultList)
         } else this.vaultList = []
       } catch (e) {
         console.error('error', e)
@@ -71,7 +71,7 @@ export default {
     async createNewVault (data) {
       try {
         this.showLoading()
-        console.log('createNewVault', data)
+        // console.log('createNewVault', data)
         await this.$store.$nbvStorageApi.createVault({
           ...data,
           user: this.selectedAccount.address
