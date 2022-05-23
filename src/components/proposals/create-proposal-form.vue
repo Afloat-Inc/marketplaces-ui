@@ -14,7 +14,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
           outlined
           label="Recipient address"
           v-model="recipientAddress"
-          :rules="[rules.required]"
+          :rules="[rules.required, rules.isValidMainetBTC]"
         )
       .col
         .text-body2 {{ $t('general.lorem')  }}
@@ -22,7 +22,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       .col-7
         q-input(
           outlined
-          label="Amount in Satoshis"
+          label="Amount in Satoshi"
           v-model="amountInSats"
           :rules="[rules.required, rules.positiveInteger]"
         )

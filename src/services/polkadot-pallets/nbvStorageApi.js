@@ -91,14 +91,29 @@ class NbvStorageApi extends BasePolkadotApi {
   }
 
   /**
-   * @name submitXPUB
-   * @description Set XPUB for a user
+   * @name removeXpub
+   * @description Remove XPUB for a user
    * @param {String} user user address
    * @returns undefined
    */
   async removeXpub ({ user }) {
     // Call Extrinsic
     return this.callTx('removeXpub', user)
+  }
+
+  /**
+   * @name createProposal
+   * @description Create new proposal for a vault
+   * @param {String} signer user address to sign
+   * @param {String} vaultId vault Id
+   * @param {String} recipientAddress user address to receive BTC
+   * @param {String} satoshiAmount Satoshi amount
+   * @returns undefined
+   */
+  async createProposal ({ vaultId, recipientAddress, satoshiAmount, signer }) {
+    // Call Extrinsic
+    const params = [vaultId, recipientAddress, satoshiAmount]
+    return this.callTx('propose', signer, params)
   }
 }
 

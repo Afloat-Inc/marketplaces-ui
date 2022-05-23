@@ -4,7 +4,7 @@ q-layout(view="lHh Lpr lFf")
       q-toolbar
         q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
-          accounts-menu(:accounts="accounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
         .row.q-gutter-x-sm
           q-item.routerItems(
             clickable
@@ -61,6 +61,7 @@ export default defineComponent({
     const $route = useRoute()
     const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
+    const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const accounts = ref(undefined)
     const breadcrumbList = ref(undefined)
     watchEffect(() => updateBreadcrumbs($route))
@@ -90,6 +91,7 @@ export default defineComponent({
       try {
         showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
         accounts.value = await api.requestUsers()
+        $store.commit('polkadotWallet/setAvailableAccounts', accounts.value)
         $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
       } catch (e) {
         console.error('requestUsers', e)
@@ -116,7 +118,7 @@ export default defineComponent({
     }
 
     return {
-      accounts,
+      availableAccounts,
       onSelectAccount,
       selectedAccount,
       breadcrumbList,

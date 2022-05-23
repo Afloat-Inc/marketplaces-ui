@@ -45,13 +45,12 @@
       color="secondary"
       no-caps
       outline
-      v-if="iAmOwner"
       @click="isShowingCreateProposal = true"
     )
   #modals
     q-dialog(v-model="isShowingCreateProposal" persistent)
       q-card.modalSize
-        create-proposal-form
+        create-proposal-form(@submittedForm="createNewProposal")
     q-dialog(v-model="isShowingVaultQR")
       q-card.modalQrSize
         .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm Descriptor QR
@@ -132,6 +131,7 @@ export default {
     },
     async exportVault () {
       try {
+        this.showLoading()
         if (!this.vaultQR) {
           const http = axios.create({
             baseURL: 'https://bdk.hashed.systems',
@@ -145,13 +145,32 @@ export default {
           // console.log('descr', data)
           const encoder = new Encoder()
           // console.log('data to export', data)
-          const result = encoder.vaultToQRCode(data, 'Test Vault')
+          const result = encoder.vaultToQRCode(data, this.description)
           this.vaultQR = result
         }
         this.isShowingVaultQR = true
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async createNewProposal (payload) {
+      try {
+        this.showLoading()
+        await this.$store.$nbvStorageApi.createProposal({
+          vaultId: this.vaultId,
+          signer: this.selectedAccount.address,
+          recipientAddress: payload.recipientAddress,
+          satoshiAmount: payload.amountInSats
+        })
+        this.isShowingCreateProposal = false
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     }
   }

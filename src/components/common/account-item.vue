@@ -8,6 +8,7 @@ q-card(:flat="flat")
 
 <script>
 import AccountIcon from '~/components/common/account-icon.vue'
+import { mapGetters } from 'vuex'
 export default {
   name: 'AccountItem',
   components: { AccountIcon },
@@ -27,10 +28,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('polkadotWallet', ['availableAccounts']),
     displayName () {
       if (this.accountInfo) {
         const identity = this.accountInfo?.identity
-        return (identity.display) ? identity.display : this.address
+        const localDisplay = this.availableAccounts.find(v => v.address === this.address)
+        // console.log('localDisplay', localDisplay)
+        return (identity.display) ? identity.display : localDisplay?.meta?.name || this.address
       } return undefined
     }
   },

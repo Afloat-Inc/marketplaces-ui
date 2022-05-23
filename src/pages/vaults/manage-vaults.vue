@@ -12,7 +12,7 @@
     )
   vault-list.q-my-md(:vaults="vaultList")
   #modals
-    q-dialog(v-model="isShowingCreateVault" ©)
+    q-dialog(v-model="isShowingCreateVault")
       q-card.modalSize
         create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
 </template>
