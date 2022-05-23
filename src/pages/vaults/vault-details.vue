@@ -37,17 +37,37 @@
       .text-body2 {{ threshold }}
   //- .text-subtitle2.q-mt-md Descriptors
   //- .text-body2 {{ outputDescriptor }}
+  .text-subtitle2.q-mt-md Proposals
+  #proposals
+    q-btn(
+      label="Create proposal"
+      icon="add"
+      color="secondary"
+      no-caps
+      outline
+      v-if="iAmOwner"
+      @click="isShowingCreateProposal = true"
+    )
+  #modals
+    q-dialog(v-model="isShowingCreateProposal" persistent)
+      q-card.modalSize
+        create-proposal-form
+    q-dialog(v-model="isShowingVaultQR")
+      q-card.modalQrSize
+        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm Descriptor QR
+        div.qrContainer(v-html="vaultQR")
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { AccountItem } from '~/components/common'
+import CreateProposalForm from '~/components/proposals/create-proposal-form'
 import { Encoder } from '@smontero/nbv-ur-codec'
 import axios from 'axios'
 
 export default {
   name: 'VaultDetails',
-  components: { AccountItem },
+  components: { AccountItem, CreateProposalForm },
   data () {
     return {
       vaultId: undefined,
@@ -56,7 +76,10 @@ export default {
       changeDescriptor: undefined,
       outputDescriptor: undefined,
       threshold: undefined,
-      cosigners: undefined
+      cosigners: undefined,
+      isShowingCreateProposal: false,
+      isShowingVaultQR: false,
+      vaultQR: undefined
     }
   },
   computed: {
@@ -109,25 +132,23 @@ export default {
     },
     async exportVault () {
       try {
-        const http = axios.create({
-          baseURL: 'https://bdk.hashed.systems',
-          headers: {
-            'Content-Type': 'application/json'
-          // 'x-api-key': `${process.env.WEBSERVICES_API_KEY}`
-          }
-        })
-        const descr = await http.post('/get_multisig', {
-          descriptor: this.outputDescriptor
-        })
-        console.log('descr', descr)
-        const encoder = new Encoder()
-        const data = {
-          threshold: Number.parseInt(this.threshold),
-          cosigners: this.cosigners
+        if (!this.vaultQR) {
+          const http = axios.create({
+            baseURL: 'https://bdk.hashed.systems',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          const { data } = await http.post('/get_multisig', {
+            descriptor: this.outputDescriptor
+          })
+          // console.log('descr', data)
+          const encoder = new Encoder()
+          // console.log('data to export', data)
+          const result = encoder.vaultToQRCode(data, 'Test Vault')
+          this.vaultQR = result
         }
-        console.log('data to export', data)
-        const result = encoder.vaultToQRCode(data, 'Test Vault')
-        console.log('vault export', result)
+        this.isShowingVaultQR = true
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -136,3 +157,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.qrContainer
+  width: '200px'
+  height : '200px'
+</style>

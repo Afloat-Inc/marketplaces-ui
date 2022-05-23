@@ -35,7 +35,6 @@ export default {
         `<circle cx=${cx} cy=${cy} fill="${fill}" r=${r} />`
       ).join('')
       const size = this.size || '10px'
-      console.log('size', size)
       this.svgHtml = `<svg height=${size} viewBox='0 0 64 64' width=${size}>${circles}</svg>`
     }
   }
