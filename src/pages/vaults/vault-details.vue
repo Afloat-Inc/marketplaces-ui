@@ -2,31 +2,60 @@
 #container
   .row.justify-between.q-mb-md
     .text-h5 Vault Details
-    q-btn(
-      label="Delete vault"
-      color="negative"
-      icon="delete"
-      no-caps
-      outline
-      @click="removeVault"
-    )
-  .text-body2 VaultId: {{ vaultId }}
-  .text-body2 Owner: {{ owner }}
-  .text-body2 Description: {{ description }}
-  .text-body2 Threshold: {{ threshold }}
+    .row.q-gutter-x-sm
+      q-btn(
+        label="Export descriptor"
+        color="secondary"
+        icon="qr_code"
+        no-caps
+        outline
+        @click="exportVault"
+        v-if="outputDescriptor"
+      )
+      q-btn(
+        label="Delete vault"
+        color="negative"
+        icon="delete"
+        no-caps
+        outline
+        @click="removeVault"
+      )
+  .text-subtitle2.q-mt-md VaultId
+  .text-body2 {{ vaultId }}
+  .text-subtitle2.q-mt-md Owner
+  account-item(:address="owner")
+  .text-subtitle2.q-mt-md Cosigners
+  .q-gutter-sm(v-for="cosigner in cosigners")
+    account-item.q-mt-md(:address="cosigner")
+  .row
+    .col
+      .text-subtitle2.q-mt-md Description
+      .text-body2 {{ description }}
+    .col
+      .text-subtitle2.q-mt-md Threshold
+      .text-body2 {{ threshold }}
+  //- .text-subtitle2.q-mt-md Descriptors
+  //- .text-body2 {{ outputDescriptor }}
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { AccountItem } from '~/components/common'
+import { Encoder } from '@smontero/nbv-ur-codec'
+import axios from 'axios'
 
 export default {
   name: 'VaultDetails',
+  components: { AccountItem },
   data () {
     return {
       vaultId: undefined,
       owner: undefined,
       description: undefined,
-      threshold: undefined
+      changeDescriptor: undefined,
+      outputDescriptor: undefined,
+      threshold: undefined,
+      cosigners: undefined
     }
   },
   computed: {
@@ -40,17 +69,23 @@ export default {
     }
   },
   mounted () {
-    console.log('vaultDetails', this.$router, this.$route)
+    // console.log('vaultDetails', this.$router, this.$route)
     const vault = this.$route.params
     if (!vault || !vault.owner) this.$router.replace({ name: 'manageVaults' })
-    console.log('vault', vault)
-    this.vaultId = vault.vaultId
-    this.owner = vault.owner
-    this.description = vault?.description
-    this.threshold = vault?.threshold
+    // console.log('vault', vault)
+    this.loadDetails(vault)
     // this.$route.meta.breadcrumb[1].name = 'Detailsss'
   },
   methods: {
+    async loadDetails (vault) {
+      this.vaultId = vault.vaultId
+      this.owner = vault.owner
+      this.description = vault?.description
+      this.threshold = vault?.threshold
+      this.cosigners = vault?.cosigners
+      this.outputDescriptor = vault?.outputDescriptor
+      this.changeDescriptor = vault?.changeDescriptor
+    },
     async removeVault () {
       try {
         this.showLoading()
@@ -66,6 +101,32 @@ export default {
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
+      }
+    },
+    async exportVault () {
+      try {
+        const http = axios.create({
+          baseURL: 'https://bdk.hashed.systems',
+          headers: {
+            'Content-Type': 'application/json'
+          // 'x-api-key': `${process.env.WEBSERVICES_API_KEY}`
+          }
+        })
+        const descr = await http.post('/get_multisig', {
+          descriptor: this.outputDescriptor
+        })
+        console.log('descr', descr)
+        const encoder = new Encoder()
+        const data = {
+          threshold: Number.parseInt(this.threshold),
+          cosigners: this.cosigners
+        }
+        console.log('data to export', data)
+        const result = encoder.vaultToQRCode(data, 'Test Vault')
+        console.log('vault export', result)
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
       }
     }
   }

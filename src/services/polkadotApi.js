@@ -121,6 +121,17 @@ class PolkadotApi {
       return false
     }
   }
+
+  /**
+   * @name getAccountInfo
+   * @description Get user details info
+   * @param {*} user User address
+   * @returns { Object }
+   * { identity }
+   */
+  getAccountInfo (user) {
+    return this.api.derive.accounts.info(user)
+  }
 }
 
 export default PolkadotApi

@@ -78,7 +78,7 @@ export default {
         })
         this.isShowingCreateVault = false
         this.showNotification({ message: 'Vault created' })
-        this.getVaults()
+        await this.getVaults()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

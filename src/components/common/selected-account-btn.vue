@@ -2,8 +2,8 @@
 .q-pa-xs(flat class="bg-primary")
   q-item
     //-   .row.q-gutter-x-sm.items-center
-    q-item-section
-        q-avatar(v-if="selectedAccount" color="secondary" text-color="white" size="sm") {{ selectedAccount.meta.name.substring(0, 2).toUpperCase() }}
+    q-item-section.vertical-middle(v-if="selectedAccount")
+      account-icon.vertical-middle(:address="selectedAccount.address" size="2.5em")
     q-item-section.title-section
         q-item-label.text-body2.text-white(v-if="!selectedAccount") Choose an account
         q-item-label.title-section.text-body2.text-white(v-else) {{ selectedAccount.meta.name }}
@@ -13,8 +13,10 @@
 </template>
 
 <script>
+import AccountIcon from '~/components/common/account-icon.vue'
 export default {
   name: 'SelectedAccountBtn',
+  components: { AccountIcon },
   props: {
     selectedAccount: {
       type: Object,
