@@ -19,6 +19,7 @@
         no-caps
         outline
         @click="removeVault"
+        v-if="iAmOwner"
       )
   .text-subtitle2.q-mt-md VaultId
   .text-body2 {{ vaultId }}
@@ -59,7 +60,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    ...mapGetters('polkadotWallet', ['selectedAccount']),
+    iAmOwner () {
+      return this.selectedAccount.address === this.owner
+    }
   },
   watch: {
     selectedAccount () {
