@@ -1,106 +1,146 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
-    q-header(elevated)
+    q-header
       q-toolbar
-        q-btn(
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          data-cy="menuLayoutBtn"
-          @click="toggleLeftDrawer"
-        )
-
-        q-toolbar-title Hashed Template App
-
-        div Quasar v{{ $q.version }}
-
-    q-drawer(
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    )
-      q-list
-        q-item-label(
-          header
-        ) Template features
-        q-item(clickable v-ripple :to="{ name: 'polkadot-example' }")
-          q-item-section Polkadot Example
+        q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(:selectedAccount="selectedAccount")
+          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+        .row.q-gutter-x-sm
+          q-item.routerItems(
+            clickable
+            :to="{ name: 'manageVaults'}"
+            active-class="activeRouter"
+            :class="{ 'activeRouter': isActive('Vaults')}"
+            dense
+          )
+            q-item-section
+              q-item-label Vaults
+          q-item.routerItems(
+            clickable
+            :to="{ name: 'manageXpub'}"
+            active-class="activeRouter"
+            :class="{ 'activeRouter': isActive('XPUB')}"
+            dense
+          )
+            q-item-section
+              q-item-label XPUB
+        //- q-toolbar-title.q-ml-md Hashed Template App
+        //- div Quasar v{{ $q.version }}
+      q-toolbar(class="bg-white text-primary")
+        q-breadcrumbs(active-color="primary" style="font-size: 16px")
+          q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
 
     q-page-container
       .row.justify-center
         .col-10
-          .q-pa-lg
-            router-view
+          .q-px-lg.q-pa-lg
+            not-accounts(v-if="!selectedAccount")
+            router-view(v-else)
 </template>
 
 <script>
-// import EssentialLink from 'components/EssentialLink.vue'
-import { defineComponent, ref } from 'vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
+import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
+import { useNotifications } from '~/mixins/notifications'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
+import NotAccounts from '~/pages/NotAccounts.vue'
+// import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    // EssentialLink
+    AccountsMenu,
+    SelectedAccountBtn,
+    NotAccounts
   },
 
   setup () {
-    const leftDrawerOpen = ref(false)
+    const { showNotification, showLoading, hideLoading } = useNotifications()
+    const $store = useStore()
+    const $route = useRoute()
+    const api = $store.$polkadotApi
+    const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
+    const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
+    const accounts = ref(undefined)
+    const breadcrumbList = ref(undefined)
+    watchEffect(() => updateBreadcrumbs($route))
+
+    onMounted(async () => {
+      try {
+        await connectPolkadot()
+        requestUsers()
+      } catch (e) {
+        console.error(e)
+        showNotification({ color: 'red', message: e.message || e })
+      }
+    })
+
+    async function connectPolkadot () {
+      try {
+        showLoading()
+      } catch (e) {
+        console.error('connectPolkadot', e)
+        showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
+      }
+    }
+
+    async function requestUsers () {
+      try {
+        showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
+        accounts.value = await api.requestUsers()
+        $store.commit('polkadotWallet/setAvailableAccounts', accounts.value)
+        $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
+      } catch (e) {
+        console.error('requestUsers', e)
+        showNotification({ color: 'red', message: e.message || e })
+      } finally {
+        hideLoading()
+      }
+    }
+
+    function onSelectAccount (account) {
+      $store.commit('polkadotWallet/setSelectedAccount', account)
+    }
+
+    function updateBreadcrumbs (v) {
+      breadcrumbList.value = v.meta.breadcrumb
+    }
+
+    function isActive (module) {
+      if (module && breadcrumbList.value.length > 0) {
+        const fund = breadcrumbList.value.find(v => v.name === module)
+        return !!fund
+      }
+      return false
+    }
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      availableAccounts,
+      onSelectAccount,
+      selectedAccount,
+      breadcrumbList,
+      isActive
     }
   }
 })
 </script>
+
+<style lang="sass" scoped>
+
+.routerItems
+  border-radius: 5px
+
+.routerItems:hover
+  background-color: $secondary
+  color: white
+
+.activeRouter
+  color: $primary
+  background-color: white
+
+.hasLink
+  color: $light
+</style>

@@ -8,7 +8,7 @@ q-card.full-width.q-pa-sm
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 export default {
   name: 'ProposalCard',
   props: {
@@ -32,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['api']),
+    // ...mapGetters('polkadotWallet', ['api']),
     proposerNickname () {
       return (this.proposerInfo && this.proposerInfo.identity && this.proposerInfo.identity.display) ? this.proposerInfo.identity.display : this.proposal.proposer
     },
@@ -50,7 +50,7 @@ export default {
     },
     async getAccountInfo (address) {
       try {
-        const r = await this.api.getAccountInfo(address)
+        const r = await this.$store.$treasuryApi.getAccountInfo(address)
         return r
       } catch (e) {
         console.error(e)

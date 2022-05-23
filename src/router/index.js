@@ -26,5 +26,12 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.MODE === 'ssr' ? undefined : process.env.VUE_ROUTER_BASE)
   })
 
+  Router.beforeEach(async (to, from, next) => {
+    // console.log('beforeEach', to)
+    if (to.name === 'home') {
+      next({ name: 'manageVaults' })
+    } else next()
+  })
+
   return Router
 })
