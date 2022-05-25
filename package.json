@@ -1,8 +1,8 @@
 {
-  "name": "hashed-template-quasar-vue3",
+  "name": "hashed-afloat-client",
   "version": "0.0.1",
   "description": "This is a template developed by HASHED",
-  "productName": "Hashed Template",
+  "productName": "Hashed Afloat Client",
   "author": "Jose Maria <josemgo.9.11@gmail.com",
   "private": true,
   "scripts": {

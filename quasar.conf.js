@@ -175,8 +175,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Hashed template quasar vue 3',
-        short_name: 'Hashed template quasar vue 3',
+        name: 'Hashed Afloat Client',
+        short_name: 'Hashed Afloat Client',
         description: 'This is a template developed by HASHED',
         display: 'standalone',
         orientation: 'portrait',

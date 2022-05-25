@@ -28,9 +28,7 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('beforeEach', to)
-    if (to.name === 'home') {
-      next({ name: 'manageVaults' })
-    } else next()
+    next()
   })
 
   return Router

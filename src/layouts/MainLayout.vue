@@ -8,22 +8,32 @@ q-layout(view="lHh Lpr lFf")
         .row.q-gutter-x-sm
           q-item.routerItems(
             clickable
-            :to="{ name: 'manageVaults'}"
+            :to="{ name: 'home'}"
+            exact
             active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('Vaults')}"
+            :class="{ 'activeRouter': isActive('Home')}"
             dense
           )
             q-item-section
-              q-item-label Vaults
+              q-item-label Home
           q-item.routerItems(
             clickable
-            :to="{ name: 'manageXpub'}"
+            :to="{ name: 'marketplace'}"
             active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('XPUB')}"
+            :class="{ 'activeRouter': isActive('Marketplace')}"
             dense
           )
             q-item-section
-              q-item-label XPUB
+              q-item-label Marketplace
+          //- q-item.routerItems(
+          //-   clickable
+          //-   :to="{ name: 'manageXpub'}"
+          //-   active-class="activeRouter"
+          //-   :class="{ 'activeRouter': isActive('XPUB')}"
+          //-   dense
+          //- )
+          //-   q-item-section
+          //-     q-item-label XPUB
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
