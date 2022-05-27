@@ -1,11 +1,3 @@
-import {
-  web3Accounts,
-  web3Enable,
-  web3FromAddress
-  //   web3ListRpcProviders,
-  //   web3UseRpcProvider
-} from '@polkadot/extension-dapp'
-
 class BasePolkadotApi {
   /**
    * Class constructor
@@ -18,20 +10,6 @@ class BasePolkadotApi {
   }
 
   /**
-   * @name setSigner
-   * @description Set signer from web3FromAddress using web 3 plugin
-   * @param {String} user User address
-   */
-  async setWeb3Signer (user) {
-    // Enable web3 plugin
-    await web3Enable(process.env.APP_NAME)
-    // Get injector to call a Extrinsic
-    const injector = await web3FromAddress(user)
-    // Set signer
-    this.polkadotApi.api.setSigner(injector.signer)
-  }
-
-  /**
    * @name callTx
    * @description Call a TX from polkadot api for a specific pallet and handler response subscription
    * @param {String} extrinsicName Extrinsic function name to call
@@ -40,7 +18,7 @@ class BasePolkadotApi {
    * @returns tx response from polkadot api
    */
   async callTx (extrinsicName, signer, params) {
-    await this.setWeb3Signer(signer)
+    await this.polkadotApi.setWeb3Signer(signer)
     console.log('callTx params', params)
     let unsub
     // eslint-disable-next-line no-async-promise-executor
@@ -140,12 +118,8 @@ class BasePolkadotApi {
    * @returns {Array}
    * [{ address, meta: { genesisHash, name, source }, type }]
    */
-  async requestUsers () {
-    // (this needs to be called first, before other requests)
-    await web3Enable(process.env.APP_NAME)
-    // meta.source contains the name of the extension that provides this account
-    const allAccounts = await web3Accounts()
-    return allAccounts
+  requestUsers () {
+    return this.polkadotApi.requestUsers()
   }
 
   /**
@@ -156,7 +130,40 @@ class BasePolkadotApi {
    * { identity }
    */
   getAccountInfo (user) {
-    return this.polkadotApi.api.derive.accounts.info(user)
+    return this.polkadotApi.getAccountInfo(user)
+  }
+
+  /**
+   * @name isValidPolkadotAddress
+   * @description Return a boolean to indicate if is a valid polkadot address
+   * @param {String} address polkadot Address
+   * @returns Boolean
+   */
+  isValidPolkadotAddress (address) {
+    return this.polkadotApi.isValidPolkadotAddress(address)
+  }
+
+  /**
+   * @name signMessage
+   * @description Sign a message
+   * @param {String} message Message to sign
+   * @param {String} signer User address
+   * @returns Object
+   */
+  async signMessage (message, signer) {
+    return this.polkadotApi.signMessage(message, signer)
+  }
+
+  /**
+   * @name verifyMessage
+   * @description Verify a message
+   * @param {String} message Message to verify
+   * @param {String} signature Signature from signMessage result
+   * @param {String} signer User Address
+   * @returns Object
+   */
+  async verifyMessage (message, signature, signer) {
+    return this.polkadotApi.verifyMessage(message, signature, signer)
   }
 }
 

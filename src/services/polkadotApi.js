@@ -2,13 +2,11 @@ import {
   web3Accounts,
   web3Enable,
   web3FromAddress
-//   web3FromAddress,
-//   web3ListRpcProviders,
-//   web3UseRpcProvider
 } from '@polkadot/extension-dapp'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { decodeAddress, encodeAddress } from '@polkadot/keyring'
-import { stringToU8a, isHex, hexToU8a } from '@polkadot/util'
+import { isHex, hexToU8a, u8aToHex, u8aWrapBytes } from '@polkadot/util'
+import { signatureVerify } from '@polkadot/util-crypto'
 
 class PolkadotApi {
   constructor (wss) {
@@ -78,25 +76,42 @@ class PolkadotApi {
   }
 
   /**
-   * TODO sign message
+   * @name signMessage
+   * @description Sign a message
+   * @param {String} message Message to sign
+   * @param {String} signer User address
+   * @returns Object
    */
-  async login ({ address }) {
-    // returns an array of all the injected sources
-    // (this needs to be called first, before other requests)
+  async signMessage (message, signer) {
+    // Get signer
     await web3Enable(process.env.APP_NAME)
-    // returns an array of { address, meta: { name, source } }
-    // meta.source contains the name of the extension that provides this account
-    const injector = await web3FromAddress(address)
-    const message = stringToU8a('this is a test')
-    this.api.sign(address, { signer: injector.signer })
-    // this.api.query
-    // this.api.setSigner(injector.signer)
-    // injector.signer.signRaw(message)
-    // this.api.sign(undefined, address, { signer: injector.signer })
-    console.log('login user', injector, message, this.api)
+    const injector = await web3FromAddress(signer)
+
+    // Create Message
+    const wrapped = u8aWrapBytes(message)
+
+    // Sign Message
+    return injector.signer.signRaw({
+      address: signer,
+      data: u8aToHex(wrapped),
+      type: 'bytes'
+    })
   }
 
   /**
+   * @name verifyMessage
+   * @description Verify a message
+   * @param {String} message Message to verify
+   * @param {String} signature Signature from signMessage result
+   * @param {String} signer User Address
+   * @returns Object
+   */
+  async verifyMessage (message, signature, signer) {
+    return signatureVerify(message, signature, signer)
+  }
+
+  /**
+  * @name requestUsers
   * @description Return available accounts from web3Accounts
   * @returns {Array}
   * [{ address, meta: { genesisHash, name, source }, type }]
@@ -105,10 +120,15 @@ class PolkadotApi {
     // (this needs to be called first, before other requests)
     await web3Enable(process.env.APP_NAME)
     // meta.source contains the name of the extension that provides this account
-    const allAccounts = await web3Accounts()
-    return allAccounts
+    return web3Accounts()
   }
 
+  /**
+   * @name isValidPolkadotAddress
+   * @description Return a boolean to indicate if is a valid polkadot address
+   * @param {String} address polkadot Address
+   * @returns Boolean
+   */
   isValidPolkadotAddress (address) {
     try {
       encodeAddress(
@@ -131,6 +151,20 @@ class PolkadotApi {
    */
   getAccountInfo (user) {
     return this.api.derive.accounts.info(user)
+  }
+
+  /**
+   * @name setSigner
+   * @description Set signer from web3FromAddress using web 3 plugin
+   * @param {String} user User address
+   */
+  async setWeb3Signer (user) {
+    // Enable web3 plugin
+    await web3Enable(process.env.APP_NAME)
+    // Get injector to call a Extrinsic
+    const injector = await web3FromAddress(user)
+    // Set signer
+    this.api.setSigner(injector.signer)
   }
 }
 

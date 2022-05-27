@@ -25,15 +25,13 @@ q-layout(view="lHh Lpr lFf")
           )
             q-item-section
               q-item-label Marketplace
-          //- q-item.routerItems(
-          //-   clickable
-          //-   :to="{ name: 'manageXpub'}"
-          //-   active-class="activeRouter"
-          //-   :class="{ 'activeRouter': isActive('XPUB')}"
-          //-   dense
-          //- )
-          //-   q-item-section
-          //-     q-item-label XPUB
+          q-item.routerItems(
+            clickable
+            dense
+            @click="signAndVerifyMessage"
+          )
+            q-item-section
+              q-item-label Sign and Verify Message
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
@@ -127,12 +125,32 @@ export default defineComponent({
       return false
     }
 
+    async function signAndVerifyMessage () {
+      try {
+        showLoading()
+        const message = 'Test To Sign'
+        const response = await $store.$nbvStorageApi.signMessage(message, selectedAccount.value.address)
+        console.log('signMessage', response)
+        const response2 = await $store.$nbvStorageApi.verifyMessage(message, response.signature, selectedAccount.value.address)
+        console.log('verifyMessage', response2)
+        if (response2.isValid) {
+          showNotification({ message: 'Message Signed and Verified' })
+        }
+      } catch (e) {
+        console.error('error', e)
+        showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        hideLoading()
+      }
+    }
+
     return {
       availableAccounts,
       onSelectAccount,
       selectedAccount,
       breadcrumbList,
-      isActive
+      isActive,
+      signAndVerifyMessage
     }
   }
 })
