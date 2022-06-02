@@ -1,11 +1,10 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
-    q-header
-      q-toolbar
-        q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        .row.q-gutter-x-sm
+    q-header()
+      q-toolbar(class="bg-white text-primary")
+        q-toolbar-title
+          Logo(includeSubtitle)
+        .row.q-gutter-md
           q-item.routerItems(
             clickable
             :to="{ name: 'home'}"
@@ -32,18 +31,20 @@ q-layout(view="lHh Lpr lFf")
           )
             q-item-section
               q-item-label Sign and Verify Message
-        //- q-toolbar-title.q-ml-md Hashed Template App
-        //- div Quasar v{{ $q.version }}
-      q-toolbar(class="bg-white text-primary")
-        q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
-
+          q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
+            selected-account-btn(:selectedAccount="selectedAccount")
+            accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+      //- q-toolbar(class="bg-white text-primary")
+      //-   q-breadcrumbs(active-color="primary" style="font-size: 16px")
+      //-     q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
     q-page-container
       .row.justify-center
         .col-10
           .q-px-lg.q-pa-lg
             not-accounts(v-if="!selectedAccount")
             router-view(v-else)
+    q-footer
+      custom-footer.atBottom
 </template>
 
 <script>
@@ -53,14 +54,18 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
+import CustomFooter from '~/components/footer/custom-footer.vue'
+import Logo from '~/components/common/logo.vue'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
+    CustomFooter,
     AccountsMenu,
     SelectedAccountBtn,
-    NotAccounts
+    NotAccounts,
+    Logo
   },
 
   setup () {
@@ -162,13 +167,24 @@ export default defineComponent({
   border-radius: 5px
 
 .routerItems:hover
-  background-color: $secondary
-  color: white
+  color: $primary
+
+.q-btn .q-focus-helper
+  display: none
 
 .activeRouter
   color: $primary
   background-color: white
+  border-bottom: 4px solid $secondary
+  border-radius: 0px
 
 .hasLink
   color: $light
+.header-custom
+  padding: 1em 1em 0
+  background: $white
+  border-bottom: 1px solid #ccc
+
+.rightAlign
+  justify-content: flex-end
 </style>
