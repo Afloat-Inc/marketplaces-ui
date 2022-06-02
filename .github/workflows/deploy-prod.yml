@@ -43,7 +43,7 @@ jobs:
 
       # Build App
       - name: Build app
-        run: yarn build
+        run: quasar build
         env:
             APP_NAME: 'Hashed Afloat Client'
             WSS: 'wss://n1.hashed.systems'
