@@ -31,6 +31,7 @@ q-layout(view="lHh Lpr lFf")
           )
             q-item-section
               q-item-label Sign and Verify Message
+          hr
           q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
             selected-account-btn(:selectedAccount="selectedAccount")
             accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
@@ -165,15 +166,12 @@ export default defineComponent({
 
 .routerItems
   border-radius: 5px
+  color: $black
 
 .routerItems:hover
-  color: $primary
-
-.q-btn .q-focus-helper
-  display: none
-
+  color: $dark
 .activeRouter
-  color: $primary
+  color: $black
   background-color: white
   border-bottom: 4px solid $secondary
   border-radius: 0px
@@ -187,4 +185,10 @@ export default defineComponent({
 
 .rightAlign
   justify-content: flex-end
+hr
+  border:         none
+  border-left:    1px solid hsla(200, 10%, 50%,100)
+  height:         2.5vh
+  margin-top:     2.4rem
+  width:          1px
 </style>
