@@ -1,7 +1,7 @@
 <template lang="pug">
 q-menu(fit auto-close)
     q-list
-        q-item(clickable v-for="account in accounts" @click="selectAccount(account)" :class="[isSelected(account) ? 'bg-primary text-white text-bold' : 'text-primary']")
+        q-item(clickable v-for="account in accounts" @click="selectAccount(account)" :class="[isSelected(account) ? 'bg-grey-3 text-primary text-bold' : 'text-primary']")
           q-item-section(avatar)
             account-icon(:address="account.address" size="1.8em")
           q-item-section
