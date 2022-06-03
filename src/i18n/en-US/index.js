@@ -4,6 +4,11 @@
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
+  common: {
+    buttons: {
+      confirm: 'Confirm'
+    }
+  },
   general: {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     loremShort: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
