@@ -37,6 +37,7 @@
 import TInput from '~/components/common/input/t-input.vue'
 import CreateMarketplaceForm from '~/components/marketplace/create-marketplace-form'
 import MarketplaceList from '~/components/marketplace/marketplace-list'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Marketplace',
@@ -52,21 +53,27 @@ export default {
       allMarketplaces: [
         {
           id: '0',
-          label: "Chema's marketplace"
+          label: "Chema's marketplace",
+          administrator: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
         },
         {
           id: '1',
-          label: "Abel's marketplace"
+          label: "Abel's marketplace",
+          administrator: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
         },
         {
           id: '2',
-          label: "Erick's marketplace"
+          label: "Erick's marketplace",
+          administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
         }
       ],
       modals: {
         isShowingAddMarketplace: false
       }
     }
+  },
+  computed: {
+    ...mapGetters('polkadotWallet', ['selectedAccount'])
   },
   methods: {
     createMarketplace (marketplace) {
@@ -76,7 +83,8 @@ export default {
         this.modals.isShowingAddMarketplace = false
         this.myMarketplaces.push({
           ...marketplace,
-          id: this.myMarketplaces.length
+          id: this.myMarketplaces.length.toString(),
+          administrator: this.selectedAccount.address
         })
         this.showNotification({ message: 'Marketplace created successfully' })
       } catch (e) {
