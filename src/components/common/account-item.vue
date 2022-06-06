@@ -1,5 +1,5 @@
 <template lang="pug">
-q-card(:flat="flat")
+q-card(:flat="flat" :bordered="bordered")
   q-item
     q-item-section(avatar)
       account-icon(:address="address" size="2em")
@@ -18,6 +18,10 @@ export default {
       default: undefined
     },
     flat: {
+      type: Boolean,
+      default: false
+    },
+    bordered: {
       type: Boolean,
       default: false
     }
