@@ -1,19 +1,25 @@
 <template lang="pug">
-q-card(:flat="flat")
+q-card(:flat="flat" :class="{'inherit': inherit}")
   q-item
     q-item-section(avatar)
       account-icon(:address="address" size="2em")
-    q-item-section
-      .text-body2(:class="displayNameClass") {{ displayName }}
+    q-item-section {{ displayName }}
 </template>
 
 <script>
 import AccountIcon from '~/components/common/account-icon.vue'
 import { mapGetters } from 'vuex'
+
+/**
+ * Component used to show user info (using polkadot address)
+ */
 export default {
   name: 'AccountItem',
   components: { AccountIcon },
   props: {
+    /**
+     * Polkadot user address
+     */
     address: {
       type: String,
       default: undefined
@@ -22,9 +28,9 @@ export default {
       type: Boolean,
       default: false
     },
-    displayNameClass: {
-      type: String,
-      default: ''
+    inherit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -38,7 +44,6 @@ export default {
       if (this.accountInfo) {
         const identity = this.accountInfo?.identity
         const localDisplay = this.availableAccounts.find(v => v.address === this.address)
-        // console.log('localDisplay', localDisplay)
         return (identity.display) ? identity.display : localDisplay?.meta?.name || this.address
       } return undefined
     }
@@ -49,7 +54,9 @@ export default {
     }
   },
   beforeMount () {
-    if (this.address) this.getAccountInfo()
+    if (this.address) {
+      this.getAccountInfo()
+    }
   },
   methods: {
     async getAccountInfo () {
@@ -63,3 +70,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.inherit
+  background-color: inherit
+</style>

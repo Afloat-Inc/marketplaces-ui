@@ -15,10 +15,22 @@ const routes = [
           ]
         }
       },
+      // Marketplace
       {
         path: '/marketplace',
         name: 'marketplace',
         component: () => import('pages/marketplace/index.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Marketplace', icon: 'storefront' }
+          ]
+        }
+      },
+      {
+        path: '/marketplace/enrollment',
+        name: 'marketplace-enrollment',
+        props: true,
+        component: () => import('pages/marketplace/enrollment.vue'),
         meta: {
           breadcrumb: [
             { name: 'Marketplace', icon: 'storefront' }

@@ -1,7 +1,7 @@
 <template lang="pug">
 #container
   //- Header
-  .row.justify-between
+  .row.justify-between.items-center
     .text-h6 Marketplace
     q-btn(
       label="Add Marketplace"
@@ -105,6 +105,11 @@ export default {
     },
     onSelectMarketplace (marketplace) {
       console.log('onSelectMarketplace', marketplace)
+      this.$router.push({
+        name: 'marketplace-enrollment',
+        // params: marketplace,
+        query: { marketId: marketplace.id }
+      })
     }
   }
 }
