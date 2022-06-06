@@ -50,7 +50,21 @@ export default {
     return {
       tab: 'myMarketplaces',
       myMarketplaces: [],
-      allMarketplaces: [
+      allMarketplaces: [],
+      modals: {
+        isShowingAddMarketplace: false
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('polkadotWallet', ['selectedAccount'])
+  },
+  mounted () {
+    this.getAllMarketplace()
+  },
+  methods: {
+    getAllMarketplace () {
+      this.allMarketplaces = [
         {
           id: '0',
           label: "Chema's marketplace",
@@ -66,16 +80,8 @@ export default {
           label: "Erick's marketplace",
           administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
         }
-      ],
-      modals: {
-        isShowingAddMarketplace: false
-      }
-    }
-  },
-  computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
-  },
-  methods: {
+      ]
+    },
     createMarketplace (marketplace) {
       try {
         this.showLoading()
