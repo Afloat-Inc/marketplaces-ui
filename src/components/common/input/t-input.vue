@@ -32,7 +32,7 @@ export default {
      * @default ''
      * @required
      */
-    value: {
+    modelValue: {
       type: String,
       default: '',
       required: true
@@ -178,7 +178,7 @@ export default {
   emits: ['update:modelValue'],
   data () {
     return {
-      content: this.value
+      content: this.modelValue
     }
   },
   watch: {
