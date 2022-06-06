@@ -44,8 +44,8 @@ q-layout(view="lHh Lpr lFf")
           .q-px-lg.q-pa-lg
             not-accounts(v-if="!selectedAccount")
             router-view(v-else)
-    q-footer
-      custom-footer.atBottom
+    //- q-footer
+    custom-footer.atBottom
 </template>
 
 <script>

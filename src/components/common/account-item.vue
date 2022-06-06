@@ -3,7 +3,8 @@ q-card(:flat="flat")
   q-item
     q-item-section(avatar)
       account-icon(:address="address" size="2em")
-    q-item-section {{ displayName }}
+    q-item-section
+      .text-body2(:class="displayNameClass") {{ displayName }}
 </template>
 
 <script>
@@ -20,6 +21,10 @@ export default {
     flat: {
       type: Boolean,
       default: false
+    },
+    displayNameClass: {
+      type: String,
+      default: ''
     }
   },
   data () {

@@ -15,6 +15,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
           label="Recipient address"
           v-model="recipientAddress"
           :rules="[rules.required, rules.isValidMainetBTC]"
+          autofocus
         )
       .col
         .text-body2 {{ $t('general.lorem')  }}
