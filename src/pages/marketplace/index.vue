@@ -86,6 +86,9 @@ export default {
           id: this.myMarketplaces.length.toString(),
           administrator: this.selectedAccount.address
         })
+        if (this.tab !== 'myMarketplaces') {
+          this.tab = 'myMarketplaces'
+        }
         this.showNotification({ message: 'Marketplace created successfully' })
       } catch (e) {
         console.error('error', e)
