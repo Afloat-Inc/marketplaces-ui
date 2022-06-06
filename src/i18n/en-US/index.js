@@ -24,7 +24,8 @@ export default {
       lessOrEqualThan: 'The value must be less than or equal to {value}',
       containAtLeastCosigners: 'This field must contain at least {value} cosigners address',
       containLessThanCosigners: 'This field must contain at less than {value} cosigners address',
-      isNotValidMainetBTC: 'This field must contain a valid mainet BTC address'
+      isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
+      fileRequired: 'This field is required'
     }
   }
 }

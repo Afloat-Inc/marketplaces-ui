@@ -6,7 +6,7 @@ div
     v-model="content"
     :placeholder="placeholder"
     :debounce="debounce"
-    :type="type"
+    :type="typeProp"
     :autofocus="autofocus"
     :dense='dense'
     :rules="rules"
@@ -25,7 +25,156 @@ export default {
     prop: 'value',
     event: 'update'
   },
-  props: ['value', 'label', 'dense', 'color', 'debounce', 'rules', 'placeholder', 'type', 'autogrow', 'autofocus', 'mask', 'fillMask', 'hint', 'inputFormatting'],
+  props: {
+    /**
+     * The value of the input
+     * @type {String}
+     * @default ''
+     * @required
+     */
+    value: {
+      type: String,
+      default: '',
+      required: true
+    },
+    /**
+     * The label of the input
+     * @type {String}
+     * @default 'empty string'
+     * @required
+     */
+    label: {
+      type: String,
+      default: ''
+    },
+    /**
+     * The rules of the input
+     * @type {Array}
+     * @default []
+     * @required
+     */
+    rules: {
+      type: Array,
+      default: () => []
+    },
+    /**
+     * The hint of the input
+     * @type {String}
+     * @default ''
+     * @required
+     */
+    hint: {
+      type: String,
+      default: ''
+    },
+    /**
+     * The placeholder of the input
+     * @type {String}
+     * @default ''
+     * @required
+     */
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    /**
+     * The type of the input
+     * @type {String}
+     * @default 'text'
+     * @required
+     */
+    type: {
+      type: String,
+      default: 'text'
+    },
+    /**
+     * The debounce of the input
+     * @type {Number}
+     * @default 0
+     * @required
+     */
+    debounce: {
+      type: Number,
+      default: 0
+    },
+    /**
+     * The autofocus of the input
+     * @type {Boolean}
+     * @default false
+     * @required
+     */
+    autofocus: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * The dense of the input
+     * @type {Boolean}
+     * @default false
+     * @required
+     */
+    dense: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * The autogrow of the input
+     * @type {Boolean}
+     * @default false
+     * @required
+     */
+    autogrow: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * The mask of the input
+     * @type {String}
+     * @default ''
+     * @required
+     */
+    mask: {
+      type: String,
+      default: ''
+    },
+    /**
+     * The fill mask of the input
+     * @type {Boolean}
+     * @default false
+     * @required
+     */
+    fillMask: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * The color of the input
+     * @type {String}
+     * @default ''
+     */
+    color: {
+      type: String,
+      default: ''
+    },
+    /**
+     * The type of the input
+     * @type {String}
+     * @default 'text'
+     */
+    typeProp: {
+      type: String,
+      default: 'text'
+    },
+    /**
+     * InputFormatting
+     * @type {Boolean}
+     * @default false
+     */
+    inputFormatting: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['update:modelValue'],
   data () {
     return {
@@ -52,12 +201,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-.q-field--outlined .q-field__control
-  border-width: 0.8px
-  border-color: rgba(209,213,219,1)
-  background-color: #FFF
-  border-radius: 10px
+<style lang="sass" scoped>
 .q-field__marginal
   font-size:16px
 .colorTailwind
