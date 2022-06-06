@@ -26,6 +26,17 @@ const routes = [
         }
       },
       {
+        path: '/marketplace/:id',
+        name: 'marketplace-detail',
+        component: () => import('pages/marketplace/details/details-market.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Marketplace', icon: 'storefront' },
+            { name: 'Detail', icon: 'info' }
+          ]
+        }
+      },
+      {
         path: 'not-accounts',
         name: 'notAccounts',
         component: () => import('pages/NotAccounts.vue'),
