@@ -21,7 +21,7 @@
         )
         t-file(
           class="q-my-md"
-          v-model="form.file"
+          v-model="form.files"
           label="File"
           :rules="[rules.required]"
           )
@@ -44,6 +44,7 @@ export default {
       required: true
     }
   },
+  emits: ['submit'],
   data () {
     return {
       form: {
@@ -59,11 +60,7 @@ export default {
   methods: {
     onSubmit () {
       this.$refs.applyForm.validate().then(() => {
-        console.log('Sending form')
-        this.showNotification({
-          message: 'Application sent',
-          color: 'green'
-        })
+        this.$emit('submit', this.form)
       })
     }
   }
