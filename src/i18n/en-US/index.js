@@ -27,5 +27,13 @@ export default {
       isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
       fileRequired: 'This field is required'
     }
+  },
+  pages: {
+    marketplace: {
+      details: {
+        participantsTitle: 'Participants'
+
+      }
+    }
   }
 }
