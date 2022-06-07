@@ -32,6 +32,10 @@ export default {
   name: 'MarketInfo',
   components: { AccountItem },
   props: {
+    /**
+     * This props contains the market information to display [Required]
+     * @type {Object}
+     */
     market: {
       type: Object,
       required: true

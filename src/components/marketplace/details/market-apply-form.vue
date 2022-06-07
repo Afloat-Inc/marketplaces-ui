@@ -39,6 +39,10 @@ export default {
   components: { AccountItem, TFile },
   mixins: [validation],
   props: {
+    /**
+     * This props contains the market information to display [Required]
+     * @type {Object}
+     */
     market: {
       type: Object,
       required: true
