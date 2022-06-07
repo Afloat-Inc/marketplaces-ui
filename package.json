@@ -12,7 +12,8 @@
     "build-storybook": "build-storybook",
     "prepare": "husky install",
     "cypress:open": "cypress open",
-    "deploy": "node gh-pages-deploy.js"
+    "deploy": "node gh-pages-deploy.js",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
     "@jmgayosso/test-btn": "^1.0.1",
@@ -54,6 +55,7 @@
     "@storybook/builder-webpack5": "^6.5.7",
     "@storybook/jest": "^0.0.10",
     "@storybook/manager-webpack5": "^6.5.7",
+    "@storybook/test-runner": "^0.1.1",
     "@storybook/testing-library": "^0.0.11",
     "@storybook/vue3": "^6.5.7",
     "@vue/eslint-config-standard": "6.0.0",
@@ -71,6 +73,7 @@
     "eslint-webpack-plugin": "^2.4.0",
     "execa": "^6.1.0",
     "husky": "^7.0.4",
+    "jest": "27",
     "lint-staged": ">=10",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
