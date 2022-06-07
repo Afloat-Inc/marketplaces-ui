@@ -9,6 +9,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     )
     .text-h4.q-mb-lg Create new marketplace
     t-input(
+      testid="label_input"
       label="Label"
       v-model="label"
       :rules="[rules.required]"
@@ -16,11 +17,12 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       autofocus
     )
     q-btn.float-right.q-mb-md(
-        label="Create marketplace"
-        color="primary"
-        size="md"
-        type="submit"
-        no-caps
+      data-testid="submit_btn"
+      label="Create marketplace"
+      color="primary"
+      size="md"
+      type="submit"
+      no-caps
     )
 </template>
 

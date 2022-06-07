@@ -14,6 +14,7 @@ div
     :mask="mask"
     :fill-mask="fillMask"
     :hint='hint'
+    :data-testid="testid"
   )
     slot(name='append' class="centerIcon")
 </template>
@@ -44,6 +45,11 @@ export default {
      * @required
      */
     label: {
+      type: String,
+      default: ''
+    },
+    // eslint-disable-next-line vue/prop-name-casing
+    testid: {
       type: String,
       default: ''
     },

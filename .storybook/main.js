@@ -23,5 +23,9 @@ module.exports = {
     //   threads: false
     // }))
     return cfg;
-  }
+  },
+  env: (config) => ({
+    ...config,
+    WSS: 'this is a test'
+  })
 };
