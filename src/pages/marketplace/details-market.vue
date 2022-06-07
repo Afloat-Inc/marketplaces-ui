@@ -7,28 +7,33 @@
         :market="market"
         @submit="onSubmitApplyForm"
       )
-      market-info-card(v-if="isEnrolled && !isAdmin" :market="market")
-      .container(v-if="isEnrolled && isAdmin")
-        //- Tabs
-        q-tabs.q-mt-lg(
-          v-model="tab"
-          :breakpoint="0"
-          no-caps
-          align="justify"
-          active-class="text-primary text-weight-bolder"
-          class="bg-white text-grey-5"
-        )
-          q-tab(name="market-info" label="Market informmation")
-          q-tab(name="enrollment" label="Enrollment requests")
+      //- Tabs
+      q-tabs.q-mt-lg(
+        v-model="tab"
+        v-if="isAdmin"
+        :breakpoint="0"
+        no-caps
+        align="justify"
+        active-class="text-primary text-weight-bolder"
+        class="bg-white text-grey-5"
+      )
+        q-tab(name="market-info" label="Market informmation")
+        q-tab(name="enrollment" label="Enrollment requests")
 
-        q-tab-panels(v-model="tab")
-          q-tab-panel(name="market-info")
-            market-info-card(:market="market")
-          q-tab-panel(name="enrollment")
-            Enrollment()
+      q-tab-panels(v-model="tab")
+        q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
+          market-info-card(:market="market")
+        q-tab-panel(name="enrollment" v-if="isAdmin")
+          enrollment
     .col-4
+      .text-h6 {{$t('pages.marketplace.details.participantsTitle')}}
       .row.q-gutter-md
-        account-item.no-shadow(v-for="address in addresses" :address="address.address" bordered)
+        account-item.no-shadow(
+          v-for="address in addresses"
+          :address="address.address"
+          bordered
+          shortDisplay
+        )
 </template>
 
 <script>
@@ -61,7 +66,7 @@ export default {
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
     isEnrolled () {
-      return this.addresses.find(add => {
+      return !!this.addresses.find(add => {
         return add.address === this.selectedAccount.address
       })
     },
