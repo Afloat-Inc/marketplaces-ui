@@ -37,7 +37,7 @@
 import TInput from '~/components/common/input/t-input.vue'
 import CreateMarketplaceForm from '~/components/marketplace/create-marketplace-form'
 import MarketplaceList from '~/components/marketplace/marketplace-list'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Marketplace',
@@ -63,7 +63,6 @@ export default {
     this.getAllMarketplace()
   },
   methods: {
-    ...mapMutations('marketplace', ['setSelectedMarketplace']),
     getAllMarketplace () {
       this.allMarketplaces = [
         {
@@ -113,7 +112,6 @@ export default {
       console.log('onSelectMarketplace', marketplace)
       this.$router.push({
         name: 'marketplace-details',
-        // params: marketplace,
         query: { marketId: marketplace.id }
       })
     }
