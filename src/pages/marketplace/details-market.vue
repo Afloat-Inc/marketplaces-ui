@@ -72,7 +72,7 @@ export default {
   },
   async beforeMount () {
     this.syncParams()
-    this.getAllMarketplace()
+    await this.getAllMarketplace()
     this.market = this.getMarketplaceInfo()
     const response = await this.getAddresses()
     this.addresses = response
@@ -91,45 +91,32 @@ export default {
         return market.id === this.idMarket
       })
     },
-    getAllMarketplace () {
-      this.allMarketplaces = [
-        {
-          id: '0',
-          label: "Chema's marketplace",
-          administrator: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
-        },
-        {
-          id: '1',
-          label: "Abel's marketplace",
-          administrator: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
-        },
-        {
-          id: '2',
-          label: "Erick's marketplace",
-          administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
-        },
-        {
-          id: '3',
-          label: "Alejandro's marketplace",
-          administrator: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-        }
-      ]
+    async getAllMarketplace () {
+      try {
+        this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces()
+        console.log('allMarketplaces', this.allMarketplaces)
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      }
     },
-    getAddresses () {
-      return [
-        {
-          address: '5DU84E1JYAhftyimxYd1MUaQ82GBKxNVFhDJSUSGU1ULpg1C'
-        },
-        {
-          address: '5CZo4UL6tCS7jsXybRV1kzRZV9uKLy2yzCfQBmbQLx1x4Nce'
-        },
-        {
-          address: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-        }
-      ]
+    async getAddresses () {
+      return await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.idMarket })
     },
-    onSubmitApplyForm (form) {
+    async onSubmitApplyForm (form) {
       console.log('form to apply: ', form)
+      try {
+        const response = await this.$store.$marketplaceApi.applyForMarket({
+          user: this.selectedAccount.address,
+          marketId: this.idMarket,
+          notes: form.notes,
+          files: form.files
+        })
+        this.showNotification({ message: response.message, color: 'positive' })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      }
     }
   }
 
