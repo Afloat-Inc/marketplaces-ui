@@ -14,6 +14,7 @@ div
     :mask="mask"
     :fill-mask="fillMask"
     :hint='hint'
+    :data-testid="testid"
   )
     slot(name='append' class="centerIcon")
 </template>
@@ -44,6 +45,11 @@ export default {
      * @required
      */
     label: {
+      type: String,
+      default: ''
+    },
+    // eslint-disable-next-line vue/prop-name-casing
+    testid: {
       type: String,
       default: ''
     },
@@ -201,10 +207,10 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .q-field__marginal
-  font-size:16px
+  font-size: 16px
+
 .colorTailwind
   color: #374157
-
 </style>
