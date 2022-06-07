@@ -29,7 +29,7 @@
 <script>
 import AccountItem from '~/components/common/account-item.vue'
 export default {
-  name: 'MarketInfo',
+  name: 'MarketInfoCard',
   components: { AccountItem },
   props: {
     /**
