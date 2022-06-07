@@ -45,3 +45,7 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+#container
+  min-height: 35vh
+</style>
