@@ -27,10 +27,10 @@ const routes = [
         }
       },
       {
-        path: '/marketplace/:id',
-        name: 'marketplace-detail',
+        path: '/marketplace/details',
+        name: 'marketplace-details',
         props: true,
-        component: () => import('pages/marketplace/details/details-market.vue'),
+        component: () => import('pages/marketplace/details-market.vue'),
         meta: {
           breadcrumb: [
             { name: 'Marketplace', icon: 'storefront' },
