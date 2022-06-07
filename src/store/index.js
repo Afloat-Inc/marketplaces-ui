@@ -2,7 +2,6 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 
 import polkadotWallet from './polkadotWallet'
-import marketplace from './marketplace'
 
 /*
  * If not building with SSR mode, you can
@@ -16,8 +15,7 @@ import marketplace from './marketplace'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      polkadotWallet,
-      marketplace
+      polkadotWallet
     },
 
     // enable strict mode (adds overhead!)
