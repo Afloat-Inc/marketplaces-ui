@@ -32,7 +32,7 @@
 import { mapGetters } from 'vuex'
 import AccountItem from '~/components/common/account-item.vue'
 import MarketInfo from '~/components/marketplace/details/market-info.vue'
-import MarketApply from '~/components/marketplace/details/market-apply.vue'
+import MarketApply from '~/components/marketplace/details/market-apply-form.vue'
 export default {
   name: 'DetailsMarket',
   components: {

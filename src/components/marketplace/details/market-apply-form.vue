@@ -35,7 +35,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import { validation } from '~/mixins/validation'
 import TFile from '~/components/common/ipfs/ipfs-multi-input.vue'
 export default {
-  name: 'MarketInfo',
+  name: 'MarketApplyForm',
   components: { AccountItem, TFile },
   mixins: [validation],
   props: {
