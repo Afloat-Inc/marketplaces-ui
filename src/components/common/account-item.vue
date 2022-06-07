@@ -39,6 +39,10 @@ export default {
     inherit: {
       type: Boolean,
       default: false
+    },
+    shortDisplay: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -52,7 +56,7 @@ export default {
       if (this.accountInfo) {
         const identity = this.accountInfo?.identity
         const localDisplay = this.availableAccounts.find(v => v.address === this.address)
-        return (identity.display) ? identity.display : localDisplay?.meta?.name || this.address
+        return (identity.display) ? identity.display : localDisplay?.meta?.name || this.getAddress(this.address)
       } return undefined
     }
   },
@@ -74,6 +78,12 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    getAddress (address) {
+      if (this.shortDisplay) {
+        return address.substr(0, 4) + '...' + address.substr(-5)
+      }
+      return address
     }
   }
 }
