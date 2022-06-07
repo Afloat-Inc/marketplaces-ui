@@ -63,7 +63,10 @@ api.connect().then(() => {
 // ];
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: {
+    argTypesRegex: "^on[A-Z].*",
+    handles: ['@submittedForm']
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,

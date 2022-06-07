@@ -1,12 +1,11 @@
+/* eslint-disable no-useless-call */
 import CreateMarketplaceForm from '../../../components/marketplace/create-marketplace-form.vue'
 import { action } from '@storybook/addon-actions'
 
 export default {
   title: 'Marketplace/CreateMarketplaceForm',
-  component: CreateMarketplaceForm,
+  component: CreateMarketplaceForm
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
-  argTypes: {
-  }
 }
 
 // More on component templates: https://storybook.js.org/docs/vue/writing-stories/introduction#using-args
@@ -21,8 +20,7 @@ const Template = (args) => ({
   template: '<CreateMarketplaceForm v-bind="args" @submittedForm="submitAction"/>',
   methods: {
     submitAction (e) {
-      console.log('submitAction', e)
-      action('click')
+      action('submittedForm').call(null, e)
     }
   }
 })
