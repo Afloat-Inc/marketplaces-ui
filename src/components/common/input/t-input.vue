@@ -201,10 +201,10 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .q-field__marginal
-  font-size:16px
+  font-size: 16px
+
 .colorTailwind
   color: #374157
-
 </style>

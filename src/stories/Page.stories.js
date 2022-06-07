@@ -4,6 +4,7 @@ import * as HeaderStories from './Header.stories'
 export default {
   title: 'Example/Page',
   component: MyPage
+  // parameters: { actions: { argTypesRegex: '^on.*' } }
 }
 
 const Template = (args) => ({
