@@ -15,6 +15,7 @@ const routes = [
           ]
         }
       },
+      // Marketplace
       {
         path: '/marketplace',
         name: 'marketplace',
@@ -28,11 +29,23 @@ const routes = [
       {
         path: '/marketplace/:id',
         name: 'marketplace-detail',
+        props: true,
         component: () => import('pages/marketplace/details/details-market.vue'),
         meta: {
           breadcrumb: [
             { name: 'Marketplace', icon: 'storefront' },
             { name: 'Detail', icon: 'info' }
+          ]
+        }
+      },
+      {
+        path: '/marketplace/enrollment',
+        name: 'marketplace-enrollment',
+        props: true,
+        component: () => import('pages/marketplace/enrollment.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Marketplace', icon: 'storefront' }
           ]
         }
       },

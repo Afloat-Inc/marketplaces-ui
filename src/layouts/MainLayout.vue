@@ -41,7 +41,7 @@ q-layout(view="lHh Lpr lFf")
     q-page-container
       .row.justify-center
         .col-10
-          .q-px-lg.q-pa-lg
+          .q-px-lg.q-pa-lg.routerViewContainer
             not-accounts(v-if="!selectedAccount")
             router-view(v-else)
     //- q-footer
@@ -191,4 +191,7 @@ hr
   height:         2.5vh
   margin-top:     2.4rem
   width:          1px
+
+.routerViewContainer
+  min-height: 50vh
 </style>
