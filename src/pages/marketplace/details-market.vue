@@ -102,7 +102,7 @@ export default {
     async onSubmitApplyForm (form) {
       console.log('form to apply: ', form)
       try {
-        const response = await this.$store.$marketplaceApi.applyForMarket({
+        const response = await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.idMarket,
           notes: form.notes,
