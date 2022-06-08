@@ -9,7 +9,7 @@ q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
     .text-body2 {{ $t('general.loremShort') }}
     q-separator.q-my-sm
     .text-subtitle1.text-weight-bold Administrator
-    account-item(:address="administrator" flat)
+    account-item(:address="administrator" flat shortDisplay)
 </template>
 
 <script>

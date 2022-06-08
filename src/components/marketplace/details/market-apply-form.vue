@@ -8,7 +8,11 @@
       .row
         .col-6
           .text-subtitle2 Owner
-          account-item(:address="market.administrator" flat)
+          account-item(
+            :address="market.administrator"
+            flat
+            shortDisplay
+            )
     q-card-section
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h6 Apply for market
@@ -25,7 +29,7 @@
           label="File"
           :rules="[rules.required]"
           )
-        q-btn(type="submit" color="primary") Submit
+        q-btn(type="submit" color="primary" rounded no-caps) Submit
     q-separator
     q-card-section
 </template>
