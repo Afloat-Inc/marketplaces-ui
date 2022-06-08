@@ -16,36 +16,25 @@ const routes = [
         }
       },
       // Marketplace
+      // {
+      //   path: '/marketplace',
+      //   name: 'marketplace',
+      //   component: () => import('pages/marketplace/index.vue'),
+      //   meta: {
+      //     breadcrumb: [
+      //       { name: 'Marketplace', icon: 'storefront' }
+      //     ]
+      //   }
+      // },
       {
         path: '/marketplace',
         name: 'marketplace',
-        component: () => import('pages/marketplace/index.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Marketplace', icon: 'storefront' }
-          ]
-        }
-      },
-      {
-        path: '/marketplace/details',
-        name: 'marketplace-details',
         props: true,
         component: () => import('pages/marketplace/details-market.vue'),
         meta: {
           breadcrumb: [
             { name: 'Marketplace', icon: 'storefront' },
             { name: 'Detail', icon: 'info' }
-          ]
-        }
-      },
-      {
-        path: '/marketplace/enrollment',
-        name: 'marketplace-enrollment',
-        props: true,
-        component: () => import('pages/marketplace/enrollment.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Marketplace', icon: 'storefront' }
           ]
         }
       },
