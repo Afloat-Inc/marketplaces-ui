@@ -8,7 +8,11 @@
       .row
         .col-6
           .text-subtitle2 Owner
-          account-item(:address="market.administrator" flat)
+          account-item(
+            :address="market.administrator"
+            flat
+            shortDisplay
+          )
         .col-6
           .row.justify-end
             .text-subtitle2 State of Tax Credits
