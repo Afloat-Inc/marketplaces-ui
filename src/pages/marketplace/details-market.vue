@@ -1,9 +1,9 @@
 <template lang="pug">
 #container
-  .row.q-col-gutter-md()
-    .col-8
+  .row.q-col-gutter-md.q-py-md
+    .col-12
       market-apply-form(
-        v-if="!isEnrolled && !isAdmin "
+        v-if="!isEnrolled && !isAdmin"
         :market="market"
         @submit="onSubmitApplyForm"
       )
@@ -22,18 +22,20 @@
 
       q-tab-panels(v-model="tab")
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
-          market-info-card(:market="market")
+          .row
+            .col-12
+              market-info-card(:market="market")
+            .col-12
+              .text-h6.q-pb-md {{$t('pages.marketplace.details.participantsTitle')}}
+              .row.q-gutter-md
+                account-item.no-shadow(
+                  v-for="address in addresses"
+                  :address="address.address"
+                  bordered
+                  shortDisplay
+                )
         q-tab-panel(name="enrollment" v-if="isAdmin")
           enrollment
-    .col-4
-      .text-h6 {{$t('pages.marketplace.details.participantsTitle')}}
-      .row.q-gutter-md
-        account-item.no-shadow(
-          v-for="address in addresses"
-          :address="address.address"
-          bordered
-          shortDisplay
-        )
 </template>
 
 <script>
