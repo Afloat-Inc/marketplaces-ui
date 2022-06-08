@@ -24,7 +24,7 @@
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
           market-info-card(:market="market")
         q-tab-panel(name="enrollment" v-if="isAdmin")
-          enrollment(:applicants="applicants")
+          applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
     .col-4
       .text-h6 {{$t('pages.marketplace.details.participantsTitle')}}
       .row.q-gutter-md
@@ -41,7 +41,7 @@ import { mapGetters } from 'vuex'
 import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
-import Enrollment from '~/pages/marketplace/enrollment.vue'
+import ApplicantsList from '~/components/marketplace/applicants-list.vue'
 const afloatMarketplaceId = process.env.AFLOAT_MARKETPLACE_ID
 
 export default {
@@ -50,7 +50,7 @@ export default {
     AccountItem,
     MarketInfoCard,
     MarketApplyForm,
-    Enrollment
+    ApplicantsList
   },
   data () {
     return {
@@ -111,6 +111,12 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    async enrollApplicant (applicant) {
+      console.log('enrollApplicant', applicant)
+    },
+    async rejectApplicant (applicant) {
+      console.log('rejectApplicant', applicant)
     }
   }
 
