@@ -23,12 +23,27 @@
           placeholder="Notes about your application"
           :rules="[rules.required]"
         )
-        t-file(
-          class="q-my-md"
-          v-model="form.files"
-          label="File"
-          :rules="[rules.required]"
-          )
+        q-btn.q-mr-sm(rounded no-caps color="primary" @click="onMoreFiles") {{'Add files'}}
+        .container(v-for="(file, index, key) in form.files" :key="index")
+          .row
+            ipfs-labeled(
+              class="col-11"
+              v-model="form.files[index]"
+              :index="index"
+              @onDelete="onDeleteFile"
+              label="File"
+              :rules="[rules.required]"
+              showDelete
+              )
+            q-icon(
+              rounded
+              class="col-1 q-pb-md"
+              size="1.5rem"
+              name="delete"
+              label="delete file"
+              color="red"
+              @click="onDeleteFile(index)"
+            )
         q-btn(type="submit" color="primary" rounded no-caps) Submit
     q-separator
     q-card-section
@@ -37,10 +52,10 @@
 <script>
 import AccountItem from '~/components/common/account-item.vue'
 import { validation } from '~/mixins/validation'
-import TFile from '~/components/common/ipfs/ipfs-multi-input.vue'
+import IpfsLabeled from '~/components/common/ipfs/ipfs-labeled.vue'
 export default {
   name: 'MarketApplyForm',
-  components: { AccountItem, TFile },
+  components: { AccountItem, IpfsLabeled },
   mixins: [validation],
   props: {
     /**
@@ -57,7 +72,12 @@ export default {
     return {
       form: {
         notes: undefined,
-        files: undefined
+        files: [
+          {
+            label: undefined,
+            files: []
+          }
+        ]
       },
       marketInfo: {
         owner: '',
@@ -70,6 +90,16 @@ export default {
       this.$refs.applyForm.validate().then(() => {
         this.$emit('submit', this.form)
       })
+    },
+    onMoreFiles () {
+      this.form.files.push({
+        label: undefined,
+        files: []
+      })
+    },
+    async onDeleteFile (index) {
+      console.log(index)
+      this.form.files.splice(index, 1)
     }
   }
 }

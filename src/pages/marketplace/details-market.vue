@@ -22,18 +22,20 @@
 
       q-tab-panels(v-model="tab")
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
-          market-info-card(:market="market")
+          .row
+            .col-12
+              market-info-card(:market="market")
+            .col-12
+              .text-h6.q-pb-md {{$t('pages.marketplace.details.participantsTitle')}}
+              .row.q-gutter-md
+                account-item.no-shadow(
+                  v-for="address in addresses"
+                  :address="address.address"
+                  bordered
+                  shortDisplay
+                )
         q-tab-panel(name="enrollment" v-if="isAdmin")
           applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
-    .col-4
-      .text-h6 {{$t('pages.marketplace.details.participantsTitle')}}
-      .row.q-gutter-md
-        account-item.no-shadow(
-          v-for="participant in participants"
-          :address="participant.address"
-          bordered
-          shortDisplay
-        )
 </template>
 
 <script>
@@ -100,7 +102,7 @@ export default {
     async onSubmitApplyForm (form) {
       console.log('form to apply: ', form)
       try {
-        const response = await this.$store.$marketplaceApi.applyForMarket({
+        const response = await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.idMarket,
           notes: form.notes,
