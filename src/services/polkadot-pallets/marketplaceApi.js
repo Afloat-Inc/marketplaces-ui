@@ -82,7 +82,7 @@ class MarketplaceApi extends BasePolkadotApi {
 
   async applyFor ({ marketId, user, notes, files }, subTrigger) {
     console.log('submitApplicationForm', marketId, user, files, notes, subTrigger)
-    return this.callTx('createVault', user, [marketId, notes, files])
+    return this.callTx('apply', user, [marketId, notes, files])
   }
   // /**
   //  * @name getXpubByUser

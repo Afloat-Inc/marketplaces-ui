@@ -103,7 +103,7 @@ export default {
       try {
         const response = await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
-          marketId: this.idMarket,
+          marketId: this.marketId,
           notes: form.notes,
           files: form.files
         })
