@@ -1,16 +1,10 @@
 /* eslint-disable no-useless-call */
 import MarketInfoCard from '../../../../components/marketplace/details/market-info-card'
-import { action } from '@storybook/addon-actions'
-// import { expect } from '@storybook/jest'
-// import { userEvent, within } from '@storybook/testing-library'
-// import { userEvent, waitFor, within } from '@storybook/testing-library'
-
 export default {
   title: 'Marketplace/MarketInfoCard',
   component: MarketInfoCard,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
-    submittedForm: { action: action('submittedForm') }
   }
 }
 
@@ -25,76 +19,46 @@ const Template = (args) => ({
   data () {
     return {
       marketInfo: {
-        owner: '',
-        taxCredits: [
-          {
-            state: 'Michigan',
-            taxCredits: 'lorem',
-            amount: '500.30'
-          }
-        ]
+        owner: undefined,
+        admin: undefined,
+        appraiser: undefined,
+        label: undefined
       }
     }
   },
   // And then the `args` are bound to your component with `v-bind="args"`
-  template: '<MarketInfoCard v-bind="args" @submittedForm="submitAction"/>',
-  methods: {
-    submitAction (e) {
-      action('submittedForm').call(null, e)
-      this.data = e
-      console.log('data', this.data)
-    }
-  }
+  template: '<MarketInfoCard v-bind="args"/>'
 })
 
 // Base component
-export const Base = Template.bind({})
-
-// Success Submitted
-export const SuccessSubmitted = Template.bind({
+export const Base = Template.bind({
   data () {
     return {
-      data: 'Testing'
+      marketInfo: {
+        owner: undefined,
+        admin: undefined,
+        appraiser: undefined,
+        label: undefined
+      }
     }
   }
+
 })
-// SuccessSubmitted.play = async ({ args, canvasElement }) => {
-//   const canvas = within(canvasElement)
-
-//   await userEvent.type(canvas.getByTestId('label_input'), 'This is a description')
-
-//   await userEvent.click(canvas.getByTestId('submit_btn'))
-//   // console.log('args', args)
-//   // const spy = spyOn(CreateMarketplaceForm, 'submittedForm')
-
-//   // await waitFor(() => expect(args).toHaveBeenCalled())
-// }
-
-// Failed Submitted
-// export const FailedSubmitted = Template.bind({})
-// FailedSubmitted.play = async ({ args, canvasElement }) => {
-//   const canvas = within(canvasElement)
-
-//   await userEvent.type(canvas.getByTestId('label_input'), undefined)
-
-//   await userEvent.click(canvas.getByTestId('submit_btn'))
-//   // console.log('args', args)
-//   // const spy = spyOn(CreateMarketplaceForm, 'submittedForm')
-
-//   // await waitFor(() => expect(args).toHaveBeenCalled())
-// }
 
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-SuccessSubmitted.args = {
+Base.args = {
   market: {
     id: '1',
     label: "Abel's marketplace",
     administrator: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
-  }
-  // primary: true,
-  // label: 'Button'
-}
+  },
+  participants: [
+    {
+      address: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
+    },
+    {
+      address: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
+    }
+  ]
 
-// SuccessSubmitted.data({
-//   data: 'test'
-// })
+}
