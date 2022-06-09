@@ -9,7 +9,7 @@
         .col-6
           .text-subtitle2 Owner
           account-item(
-            :address="market.administrator"
+            :address="market.admin.address"
             flat
             shortDisplay
           )

@@ -4,7 +4,7 @@
     .col-8
       market-apply-form(
         v-if="!isEnrolled && !isAdmin"
-        :market="market"
+        :market="{...market, admin}"
         @submit="onSubmitApplyForm"
       )
       //- Tabs
@@ -24,7 +24,7 @@
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
           .row
             .col-12
-              market-info-card(:market="market")
+              market-info-card(:market="{...market, admin}")
             .col-12
               .text-h6.q-pb-md {{$t('pages.marketplace.details.participantsTitle')}}
               .row.q-gutter-md
@@ -71,7 +71,13 @@ export default {
       })
     },
     isAdmin () {
-      return this.market && this.selectedAccount.address === this.market.administrator
+      return this.admin && this.selectedAccount.address === this.admin.address
+    },
+    admin () {
+      if (this.market && this.market.authorities) {
+        return this.market.authorities.find(v => v.type === 'Admin')
+      }
+      return undefined
     }
   },
   async beforeMount () {
@@ -90,6 +96,7 @@ export default {
       try {
         this.showLoading()
         this.market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
+        this.market.authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         this.participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         this.applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
       } catch (e) {
