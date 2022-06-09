@@ -1,22 +1,45 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
-import markets from '~/services/const/allMarkets'
+// import markets from '~/services/const/allMarkets'
 import participants from '~/services/const/participants'
 import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
   constructor (polkadotApi) {
-    super(polkadotApi, 'marketplace')
+    super(polkadotApi, 'gatedMarketplace')
   }
 
   /**
-   * @name getAfloatMarketplaceDetails
+   * @name getMarketplaceById
    * @description Get afloat marketplace details
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
   async getMarketplaceById ({ marketId }, subTrigger) {
-    return markets.find(e => e.id === marketId)
-    // return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
-    // return this.exQuery('xpubsByOwner', user, subTrigger)
+    const market = await this.exQuery('marketplaces', [marketId])
+    if (!market.isEmpty) {
+      return market.toHuman()
+    }
+    return undefined
+  }
+
+  /**
+   * @name getAuthoritiesByMarketplace
+   * @description Get authorities by marketplace
+   * @param {String} marketId Marketplace Id
+   * @param {String} authTypes Array for types example ['Owner', 'Admin', 'Appraiser']
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Object}
+   */
+  async getAuthoritiesByMarketplace ({ marketId, authTypes }, subTrigger) {
+    const authorities = await this.exEntriesQuery('authoritiesByMarketplace', [marketId, authTypes])
+    const map = this.mapEntries(authorities)
+    const authMap = map.map(m => {
+      return {
+        id: m.id[0],
+        type: m.id[1],
+        address: m.value[0]
+      }
+    })
+    return authMap
   }
 
   /**
@@ -26,13 +49,17 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getAllMarketplaces (subTrigger) {
-    return markets
-    // return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
-    // return this.exQuery('xpubsByOwner', user, subTrigger)
+    const allIds = await this.exEntriesQuery('marketplaces', undefined)
+    return allIds.map(v => {
+      return {
+        id: v[0].toJSON(),
+        value: v[1].toHuman()
+      }
+    })
   }
 
   /**
-   * @name getMarketplaceById
+   * @name getParticipantsByMarket
    * @description Get marketplace's participants by market id
    * @param {String} marketId Market id
    * @param {Function} subTrigger Function to trigger when subscription detect changes
@@ -53,9 +80,9 @@ class MarketplaceApi extends BasePolkadotApi {
     return applicants
   }
 
-  async applyFor (marketId, user, form, subTrigger) {
-    console.log('submitApplicationForm', marketId, user, form, subTrigger)
-    return 'success'
+  async applyFor ({ marketId, user, notes, files }, subTrigger) {
+    console.log('submitApplicationForm', marketId, user, files, notes, subTrigger)
+    return this.callTx('apply', user, [marketId, notes, files])
   }
   // /**
   //  * @name getXpubByUser

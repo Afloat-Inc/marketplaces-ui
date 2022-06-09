@@ -44,7 +44,7 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exQuery (queryName, params, subTrigger) {
-    return this.polkadotApi.api.query[this.palletName][queryName](params, subTrigger)
+    return this.polkadotApi.api.query[this.palletName][queryName](...params, subTrigger)
   }
 
   /**
@@ -57,6 +57,18 @@ class BasePolkadotApi {
    */
   async exMultiQuery (queryName, params, subTrigger) {
     return this.polkadotApi.api.query[this.palletName][queryName].multi(params, subTrigger)
+  }
+
+  /**
+   * @name exEntriesQuery
+   * @description Execute a query or query subscription from polkadot api
+   * @param {String} queryName Query name to execute
+   * @param {Array} params Params for query execution, Params [Array]
+   * @param {*} subTrigger Function handler to query subscription
+   * @returns Query response or unsubscribe function from polkadot api
+   */
+  async exEntriesQuery (queryName, params, subTrigger) {
+    return this.polkadotApi.api.query[this.palletName][queryName].entries()
   }
 
   /**
@@ -164,6 +176,23 @@ class BasePolkadotApi {
    */
   async verifyMessage (message, signature, signer) {
     return this.polkadotApi.verifyMessage(message, signature, signer)
+  }
+
+  /**
+   * @description Just a function to map entries response
+   * @param {Array} entries Entries query response
+   * @returns Array
+   */
+  mapEntries (entries) {
+    if (!entries.isEmpty) {
+      return entries.map(e => {
+        return {
+          id: e[0].toHuman(),
+          value: e[1].toHuman()
+        }
+      })
+    }
+    return undefined
   }
 }
 

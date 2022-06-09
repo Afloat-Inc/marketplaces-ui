@@ -3,8 +3,8 @@
   .row.q-col-gutter-md(v-if="market")
     .col-12
       market-apply-form(
-        v-if="!isEnrolled && !isAdmin"
-        :market="market"
+        v-if="!isEnrolled && !isAdmin && market && admin"
+        :market="{...market, admin}"
         :participantsNumber="participants.length"
         @submit="onSubmitApplyForm"
       )
@@ -21,14 +21,11 @@
         q-tab(name="market-info" label="Market information")
         q-tab(name="enrollment" label="Enrollment requests")
 
-      q-tab-panels(v-model="tab")
+      q-tab-panels(v-model="tab" keep-alive)
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
           .row
             .col-12
-              market-info-card(
-                :market="market"
-                :participants="participants"
-              )
+              market-info-card(:market="{...market, admin}" :participants="participants")
         q-tab-panel(name="enrollment" v-if="isAdmin")
           applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
@@ -66,7 +63,13 @@ export default {
       })
     },
     isAdmin () {
-      return this.market && this.selectedAccount.address === this.market.administrator
+      return this.admin && this.selectedAccount.address === this.admin.address
+    },
+    admin () {
+      if (this.market && this.market.authorities) {
+        return this.market.authorities.find(v => v.type === 'Admin')
+      }
+      return undefined
     }
   },
   async beforeMount () {
@@ -85,6 +88,7 @@ export default {
       try {
         this.showLoading()
         this.market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
+        this.market.authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         this.participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         this.applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
       } catch (e) {
@@ -99,7 +103,7 @@ export default {
       try {
         const response = await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
-          marketId: this.idMarket,
+          marketId: this.marketId,
           notes: form.notes,
           files: form.files
         })
