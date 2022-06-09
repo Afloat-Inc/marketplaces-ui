@@ -3,27 +3,30 @@
   q-card(bordered flat)
     q-card-section
       .row.justify-center
-        .text-h6 {{market.label}}
+        .text-h5 {{market.label}}
     q-card-section
       .row
         .col-6
-          .text-subtitle2 Owner
+          .text-h6 Owner
           account-item(
             :address="market.administrator"
             flat
-            shortDisplay
             )
+        .col-6
+          .row.justify-end
+            .text-h6 Number of participants: {{participantsNumber}}
+    q-separator
     q-card-section
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h6 Apply for market
         t-input(
-          class="q-my-md"
+          class="q-mt-md"
           v-model="form.notes"
           label="Notes"
           placeholder="Notes about your application"
           :rules="[rules.required]"
         )
-        q-btn.q-mr-sm(rounded no-caps color="primary" @click="onMoreFiles") {{'Add files'}}
+        q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -44,7 +47,13 @@
               color="red"
               @click="onDeleteFile(index)"
             )
-        q-btn(type="submit" color="primary" rounded no-caps) Submit
+        q-btn(
+          type="submit"
+          color="primary"
+          rounded
+          no-caps
+          class="q-mt-sm"
+        ) Submit
     q-separator
     q-card-section
 </template>
@@ -64,6 +73,10 @@ export default {
      */
     market: {
       type: Object,
+      required: true
+    },
+    participantsNumber: {
+      type: Number,
       required: true
     }
   },
