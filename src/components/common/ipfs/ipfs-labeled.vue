@@ -1,36 +1,35 @@
 <template lang="pug">
-.container
-  .row.q-col-gutter-xs.q-my-md
-    q-input(
-      v-model="tagFile"
-      class="col-6"
-      outlined
-      color="primary"
-      placeholder="Name of the file"
-      class="borderRight"
-      @keyup="onTypeTagFile"
-    )
-    IpfsViewFile(
-      v-if="files.length > 0"
-      class="col-6"
-      :typeCids="files"
-    )
-    q-file(
-      v-else
-      class="col-6"
-      outlined
-      v-model="displayNames"
-      @update:model-value=" e => updateModel(e)"
-      :label="labelFile"
-      :loading="loading"
-      :rules="[ file => validFile(file) ]"
-      :filled="filled"
-      :readonly="readonly"
-      ref="qFile"
-    )
-      template(v-slot:append)
-      template(slot="loading")
-        q-spinner-dots(v-if="loading")
+.row.q-col-gutter-xs
+  q-input(
+    v-model="tagFile"
+    class="col-6 q-my-xs"
+    outlined
+    color="primary"
+    placeholder="Name of the file"
+    class="borderRight"
+    @keyup="onTypeTagFile"
+  )
+  IpfsViewFile(
+    v-if="files.length > 0"
+    class="col-6 q-my-xs"
+    :typeCids="files"
+  )
+  q-file(
+    v-else
+    class="col-6 q-my-xs"
+    outlined
+    v-model="displayNames"
+    @update:model-value=" e => updateModel(e)"
+    :label="labelFile"
+    :loading="loading"
+    :rules="[ file => validFile(file) ]"
+    :filled="filled"
+    :readonly="readonly"
+    ref="qFile"
+  )
+    template(v-slot:append)
+    template(slot="loading")
+      q-spinner-dots(v-if="loading")
 </template>
 
 <script>

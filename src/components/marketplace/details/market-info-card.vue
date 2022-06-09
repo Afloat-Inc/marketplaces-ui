@@ -3,30 +3,29 @@
   q-card(bordered flat)
     q-card-section
       .row.justify-center
-        .text-h6 {{market.label}}
+        .text-h5 {{market.label}}
     q-card-section
       .row
         .col-6
-          .text-subtitle2 Owner
+          .text-h6 Owner
           account-item(
             :address="market.admin.address"
             flat
-            shortDisplay
           )
         .col-6
           .row.justify-end
-            .text-subtitle2 State of Tax Credits
-          .row.justify-end
-            .text-subtitle2 Michigan
-    q-card-section
-      .row.justify-center.text-subtitle2 Tax Credits
-      q-separator
+            .text-h6 Number of participants: {{participants.length}}
       .row
         .col-12
-          .text-subtitle2(v-for="credit in marketInfo.taxCredits")
-            .row.justify-between
-              div {{credit.state}}
-              div {{credit.amount}}
+          q-separator
+          .text-h6.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
+          .row.q-gutter-md
+            account-item.no-shadow(
+              v-for="participant in participants"
+              :address="participant.address"
+              bordered
+              shortDisplay
+            )
     q-card-section
 </template>
 
@@ -43,29 +42,23 @@ export default {
     market: {
       type: Object,
       required: true
+    },
+    /**
+     * This props contains the participants of the market [Required]
+     * @type {Array}
+     */
+    participants: {
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
       marketInfo: {
-        owner: '',
-        taxCredits: [
-          {
-            state: 'Michigan',
-            taxCredits: 'lorem',
-            amount: '500.30'
-          },
-          {
-            state: 'Ohio',
-            taxCredits: 'lorem',
-            amount: '800.30'
-          },
-          {
-            state: 'Pennsylvania',
-            taxCredits: 'lorem',
-            amount: '1000.30'
-          }
-        ]
+        owner: undefined,
+        admin: undefined,
+        appraiser: undefined,
+        label: undefined
       }
     }
   }
