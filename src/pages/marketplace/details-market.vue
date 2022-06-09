@@ -1,10 +1,11 @@
 <template lang="pug">
 #container
   .row.q-col-gutter-md(v-if="market")
-    .col-8
+    .col-12
       market-apply-form(
         v-if="!isEnrolled && !isAdmin"
         :market="market"
+        :participantsNumber="participants.length"
         @submit="onSubmitApplyForm"
       )
       //- Tabs
@@ -24,16 +25,10 @@
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
           .row
             .col-12
-              market-info-card(:market="market")
-            .col-12
-              .text-h6.q-pb-md {{$t('pages.marketplace.details.participantsTitle')}}
-              .row.q-gutter-md
-                account-item.no-shadow(
-                  v-for="address in addresses"
-                  :address="address.address"
-                  bordered
-                  shortDisplay
-                )
+              market-info-card(
+                :market="market"
+                :participants="participants"
+              )
         q-tab-panel(name="enrollment" v-if="isAdmin")
           applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
@@ -66,8 +61,8 @@ export default {
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
     isEnrolled () {
-      return !!this.participants.find(add => {
-        return add.address === this.selectedAccount.address
+      return !!this.participants.find(participant => {
+        return participant.address === this.selectedAccount.address
       })
     },
     isAdmin () {
