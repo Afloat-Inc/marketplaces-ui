@@ -3,33 +3,57 @@
   q-card(bordered flat)
     q-card-section
       .row.justify-center
-        .text-h6 {{market.label}}
+        .text-h5 {{market.label}}
     q-card-section
       .row
         .col-6
-          .text-subtitle2 Owner
+          .text-h6 Owner
           account-item(
             :address="market.administrator"
             flat
-            shortDisplay
             )
+        .col-6
+          .row.justify-end
+            .text-h6 Number of participants: {{participantsNumber}}
+    q-separator
     q-card-section
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h6 Apply for market
         t-input(
-          class="q-my-md"
+          class="q-mt-md"
           v-model="form.notes"
           label="Notes"
           placeholder="Notes about your application"
           :rules="[rules.required]"
         )
-        t-file(
-          class="q-my-md"
-          v-model="form.files"
-          label="File"
-          :rules="[rules.required]"
-          )
-        q-btn(type="submit" color="primary" rounded no-caps) Submit
+        q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
+        .container(v-for="(file, index, key) in form.files" :key="index")
+          .row
+            ipfs-labeled(
+              class="col-11"
+              v-model="form.files[index]"
+              :index="index"
+              @onDelete="onDeleteFile"
+              label="File"
+              :rules="[rules.required]"
+              showDelete
+              )
+            q-icon(
+              rounded
+              class="col-1 q-pb-md"
+              size="1.5rem"
+              name="delete"
+              label="delete file"
+              color="red"
+              @click="onDeleteFile(index)"
+            )
+        q-btn(
+          type="submit"
+          color="primary"
+          rounded
+          no-caps
+          class="q-mt-sm"
+        ) Submit
     q-separator
     q-card-section
 </template>
@@ -37,10 +61,10 @@
 <script>
 import AccountItem from '~/components/common/account-item.vue'
 import { validation } from '~/mixins/validation'
-import TFile from '~/components/common/ipfs/ipfs-multi-input.vue'
+import IpfsLabeled from '~/components/common/ipfs/ipfs-labeled.vue'
 export default {
   name: 'MarketApplyForm',
-  components: { AccountItem, TFile },
+  components: { AccountItem, IpfsLabeled },
   mixins: [validation],
   props: {
     /**
@@ -50,6 +74,10 @@ export default {
     market: {
       type: Object,
       required: true
+    },
+    participantsNumber: {
+      type: Number,
+      required: true
     }
   },
   emits: ['submit'],
@@ -57,7 +85,12 @@ export default {
     return {
       form: {
         notes: undefined,
-        files: undefined
+        files: [
+          {
+            label: undefined,
+            files: []
+          }
+        ]
       },
       marketInfo: {
         owner: '',
@@ -70,6 +103,16 @@ export default {
       this.$refs.applyForm.validate().then(() => {
         this.$emit('submit', this.form)
       })
+    },
+    onMoreFiles () {
+      this.form.files.push({
+        label: undefined,
+        files: []
+      })
+    },
+    async onDeleteFile (index) {
+      console.log(index)
+      this.form.files.splice(index, 1)
     }
   }
 }

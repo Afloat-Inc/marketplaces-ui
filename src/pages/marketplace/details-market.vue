@@ -1,10 +1,11 @@
 <template lang="pug">
 #container
-  .row.q-col-gutter-md()
-    .col-8
+  .row.q-col-gutter-md(v-if="market")
+    .col-12
       market-apply-form(
-        v-if="!isEnrolled && !isAdmin "
+        v-if="!isEnrolled && !isAdmin"
         :market="market"
+        :participantsNumber="participants.length"
         @submit="onSubmitApplyForm"
       )
       //- Tabs
@@ -17,23 +18,19 @@
         active-class="text-primary text-weight-bolder"
         class="bg-white text-grey-5"
       )
-        q-tab(name="market-info" label="Market informmation")
+        q-tab(name="market-info" label="Market information")
         q-tab(name="enrollment" label="Enrollment requests")
 
       q-tab-panels(v-model="tab")
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
-          market-info-card(:market="market")
+          .row
+            .col-12
+              market-info-card(
+                :market="market"
+                :participants="participants"
+              )
         q-tab-panel(name="enrollment" v-if="isAdmin")
-          enrollment
-    .col-4
-      .text-h6 {{$t('pages.marketplace.details.participantsTitle')}}
-      .row.q-gutter-md
-        account-item.no-shadow(
-          v-for="address in addresses"
-          :address="address.address"
-          bordered
-          shortDisplay
-        )
+          applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
 <script>
@@ -41,46 +38,39 @@ import { mapGetters } from 'vuex'
 import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
-import Enrollment from '~/pages/marketplace/enrollment.vue'
+import ApplicantsList from '~/components/marketplace/applicants-list.vue'
+const afloatMarketplaceId = process.env.AFLOAT_MARKETPLACE_ID
+
 export default {
   name: 'DetailsMarket',
   components: {
     AccountItem,
     MarketInfoCard,
     MarketApplyForm,
-    Enrollment
+    ApplicantsList
   },
   data () {
     return {
       tab: 'market-info',
-      allMarketplaces: undefined,
-      idMarket: undefined,
-      addresses: [],
-      market: {
-        label: undefined,
-        administrator: undefined,
-        taxCredits: undefined
-      }
+      marketId: afloatMarketplaceId,
+      market: undefined,
+      participants: [],
+      applicants: []
     }
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
     isEnrolled () {
-      return !!this.addresses.find(add => {
-        return add.address === this.selectedAccount.address
+      return !!this.participants.find(participant => {
+        return participant.address === this.selectedAccount.address
       })
     },
     isAdmin () {
-      return this.selectedAccount.address === this.market.administrator
+      return this.market && this.selectedAccount.address === this.market.administrator
     }
-
   },
   async beforeMount () {
-    this.syncParams()
-    await this.getAllMarketplace()
-    this.market = this.getMarketplaceInfo()
-    const response = await this.getAddresses()
-    this.addresses = response
+    this.getMarketplaceInfo()
   },
   methods: {
     syncParams () {
@@ -91,27 +81,23 @@ export default {
         this.$router.push({ name: 'marketplace' })
       }
     },
-    getMarketplaceInfo () {
-      return this.allMarketplaces.find(market => {
-        return market.id === this.idMarket
-      })
-    },
-    async getAllMarketplace () {
+    async getMarketplaceInfo () {
       try {
-        this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces()
-        console.log('allMarketplaces', this.allMarketplaces)
+        this.showLoading()
+        this.market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
+        this.participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
+        this.applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
-    },
-    async getAddresses () {
-      return await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.idMarket })
     },
     async onSubmitApplyForm (form) {
       console.log('form to apply: ', form)
       try {
-        const response = await this.$store.$marketplaceApi.applyForMarket({
+        const response = await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.idMarket,
           notes: form.notes,
@@ -122,6 +108,12 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    async enrollApplicant (applicant) {
+      console.log('enrollApplicant', applicant)
+    },
+    async rejectApplicant (applicant) {
+      console.log('rejectApplicant', applicant)
     }
   }
 

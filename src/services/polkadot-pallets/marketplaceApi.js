@@ -1,9 +1,22 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
 import markets from '~/services/const/allMarkets'
 import participants from '~/services/const/participants'
+import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
   constructor (polkadotApi) {
     super(polkadotApi, 'marketplace')
+  }
+
+  /**
+   * @name getAfloatMarketplaceDetails
+   * @description Get afloat marketplace details
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Object}
+   */
+  async getMarketplaceById ({ marketId }, subTrigger) {
+    return markets.find(e => e.id === marketId)
+    // return this.polkadotApi.api.query.nbvStorage.xpubsByOwner(user, subTrigger)
+    // return this.exQuery('xpubsByOwner', user, subTrigger)
   }
 
   /**
@@ -25,8 +38,19 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
-  async getParticipantsByMarket (marketId, subTrigger) {
+  async getParticipantsByMarket ({ marketId }, subTrigger) {
     return participants
+  }
+
+  /**
+   * @name getApplicantsByMarket
+   * @description Get marketplace's applicants by market id
+   * @param {String} marketId Market id
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Object}
+   */
+  async getApplicantsByMarket ({ marketId }, subTrigger) {
+    return applicants
   }
 
   async applyFor (marketId, user, form, subTrigger) {
