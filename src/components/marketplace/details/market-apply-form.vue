@@ -20,6 +20,8 @@
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h6 Apply for market
         t-input(
+          data-cy="notes_input"
+          testid="notes_input"
           class="q-mt-md"
           v-model="form.notes"
           label="Notes"
@@ -34,7 +36,6 @@
               v-model="form.files[index]"
               :index="index"
               @onDelete="onDeleteFile"
-              label="File"
               :rules="[rules.required]"
               showDelete
               )
@@ -46,6 +47,8 @@
               label="delete file"
               color="red"
               @click="onDeleteFile(index)"
+              data-cy="delete_file"
+              data-testid="delete_file"
             )
         q-btn(
           type="submit"
@@ -53,6 +56,8 @@
           rounded
           no-caps
           class="q-mt-sm"
+          data-cy="submit_apply_btn"
+          data-testid="submit_apply_btn"
         ) Submit
     q-separator
     q-card-section
@@ -75,6 +80,10 @@ export default {
       type: Object,
       required: true
     },
+    /**
+     * This props contains the number of participats to display [Required]
+     * @type {Object}
+     */
     participantsNumber: {
       type: Number,
       required: true
