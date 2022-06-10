@@ -1,9 +1,13 @@
 <template lang="pug">
 #container
     .text-h6 Applicants
-    #applicantDetails(v-for="applicant in applicants")
-      q-card.q-my-sm
+    #applicantDetails(v-if="applicants.length > 0")
+      q-card.q-my-sm(v-for="applicant in applicants")
         applicant-expander-item(v-bind="applicant" @onEnroll="onEnrollApplicant" @onReject="onRejectApplicant")
+    #applicantDetailsEmpty(v-else)
+      q-card(bordered flat)
+        q-card-section
+          .text-subtitle2 {{$t('pages.marketplace.details.noApplicants')}}
 </template>
 
 <script>
