@@ -3,6 +3,12 @@ q-expansion-item(group="applicants")
   template(v-slot:header)
     .row.full-width.justify-between
       account-item(:address="address" flat inherit)
+      q-chip(
+        :label="status"
+        size="sm"
+        color="primary"
+        class="text-white q-mt-md"
+      )
   #body.q-pa-sm
     .text-subtitle1 Notes:
     #notes.q-px-sm
@@ -58,6 +64,10 @@ export default {
     files: {
       type: Array,
       default: () => []
+    },
+    status: {
+      type: String,
+      default: undefined
     }
   },
   emits: ['onEnroll', 'onReject'],
