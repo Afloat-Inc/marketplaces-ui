@@ -1,5 +1,7 @@
 <template lang="pug">
 .row.q-col-gutter-xs
+  .col-12
+    .text-subtitle2 {{label}}
   q-input(
     v-model="tagFile"
     class="col-6 q-my-xs"
@@ -8,6 +10,9 @@
     placeholder="Name of the file"
     class="borderRight"
     @keyup="onTypeTagFile"
+    data-cy="name_file"
+    testid="name_file"
+    data-testid="name_file"
   )
   q-file(
     class="col-6 q-my-xs"
@@ -20,6 +25,8 @@
     :filled="filled"
     :readonly="readonly"
     ref="qFile"
+    data-cy="qFile"
+    data-testid="qFile"
   )
     template(v-slot:append)
       q-icon(
@@ -35,44 +42,20 @@
 import BrowserIpfs from '~/services/BrowserIpfs.js'
 import IpfsViewFile from './ipfs-view-file-selector'
 export default {
-  name: 'TIpfsLabeled',
+  name: 'IpfsLabeled',
   components: { IpfsViewFile },
   props: {
     label: {
-      default: 'default',
+      default: '',
       type: String
     },
     modelValue: {
       type: Object,
       default: () => {}
     },
-    mcallback: {
-      type: Function,
-      default: () => {}
-    },
     rules: {
       type: Array,
       default: () => []
-    },
-    type: {
-      type: String,
-      default: 'text'
-    },
-    standout: {
-      type: String,
-      default: null
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    hint: {
-      type: String,
-      default: ''
     },
     filled: {
       type: Boolean,
@@ -83,7 +66,7 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue', 'onDelete'],
+  emits: ['update:modelValue'],
   data () {
     return {
       loading: false,
