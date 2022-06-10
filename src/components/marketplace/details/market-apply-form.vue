@@ -9,7 +9,7 @@
         .col-6
           .text-h6 Owner
           account-item(
-            :address="market.administrator"
+            :address="market.authorities[1].address"
             flat
             )
         .col-6
@@ -18,7 +18,8 @@
     q-separator
     q-card-section
       q-form(ref="applyForm" @submit="onSubmit")
-        .text-h6 Apply for market
+        .text-h6 {{$t('pages.marketplace.applyForm.title')}}
+        .text-subtitle2(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
         t-input(
           class="q-mt-md"
           v-model="form.notes"
@@ -26,7 +27,9 @@
           placeholder="Notes about your application"
           :rules="[rules.required]"
         )
-        q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
+        .row.justify-between
+          div(class="q-pt-sm") {{$t('pages.marketplace.applyForm.filesTitle')}}
+          q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -101,7 +104,17 @@ export default {
   methods: {
     onSubmit () {
       this.$refs.applyForm.validate().then(() => {
-        this.$emit('submit', this.form)
+        const files = this.form.files.map(file => {
+          return {
+            displayName: file.label,
+            cid: file.files[0].value
+          }
+        })
+        const data = {
+          notes: this.form.notes,
+          files
+        }
+        this.$emit('submit', data)
       })
     },
     onMoreFiles () {
