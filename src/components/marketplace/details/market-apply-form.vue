@@ -103,10 +103,6 @@ export default {
             files: []
           }
         ]
-      },
-      marketInfo: {
-        owner: '',
-        taxCredits: ''
       }
     }
   },
