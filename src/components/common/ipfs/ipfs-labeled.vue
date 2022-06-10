@@ -9,13 +9,7 @@
     class="borderRight"
     @keyup="onTypeTagFile"
   )
-  IpfsViewFile(
-    v-if="files.length > 0"
-    class="col-6 q-my-xs"
-    :typeCids="files"
-  )
   q-file(
-    v-else
     class="col-6 q-my-xs"
     outlined
     v-model="displayNames"
@@ -28,6 +22,11 @@
     ref="qFile"
   )
     template(v-slot:append)
+      q-icon(
+        v-if="!loading && state.loaded"
+        name="check"
+        color="primary"
+      )
     template(slot="loading")
       q-spinner-dots(v-if="loading")
 </template>
@@ -93,7 +92,10 @@ export default {
       files: [],
       displayNames: undefined,
       tagFile: undefined,
-      labelFile: undefined
+      labelFile: undefined,
+      state: {
+        loaded: false
+      }
     }
   },
   computed: {
@@ -153,6 +155,7 @@ export default {
           files: this.files
         }
         this.loading = false
+        this.state.loaded = true
         this.$emit('update:modelValue', JSON.parse(JSON.stringify(data)))
       } catch (e) {
         console.error(e)
@@ -162,8 +165,10 @@ export default {
       }
     },
     validFile (file) {
+      console.log('Valid file', file, typeof file)
       if (file != null && this.loading) return true
       else if (!this.loading && this.initWithString) return true
+      else if (!this.loading && typeof file === 'object') return true
       return this.$t('forms.errors.fileRequired')
     },
     onTypeTagFile () {
