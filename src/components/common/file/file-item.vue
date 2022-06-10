@@ -1,7 +1,12 @@
 <template lang="pug">
 q-item.no-padding(dense @click="openFile" clickable)
   q-item-section(avatar)
-    q-icon(name="file_open" color="primary")
+    q-icon(v-if="!loading" name="file_open" color="primary")
+    q-spinner(
+      v-else
+      color="primary"
+      size="sm"
+    )
   q-item-section
     .text-body2 {{ displayName }}
   q-item-section(avatar)
@@ -10,6 +15,8 @@ q-item.no-padding(dense @click="openFile" clickable)
 </template>
 
 <script>
+import BrowserIpfs from '~/services/BrowserIpfs.js'
+
 export default {
   name: 'FileItem',
   props: {
@@ -22,11 +29,23 @@ export default {
       default: undefined
     }
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   methods: {
-    openFile () {
-      const fileUrl = 'https://storybook.js.org/docs/vue/get-started/introduction'
-      window.open(fileUrl, '_blank')
-    //   this.$emit('')
+    async openFile () {
+      try {
+        this.loading = true
+        const file = await BrowserIpfs.retrieve(this.cid)
+        window.open(URL.createObjectURL(file.payload))
+      } catch (e) {
+        console.error(e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.loading = false
+      }
     }
   }
 }
