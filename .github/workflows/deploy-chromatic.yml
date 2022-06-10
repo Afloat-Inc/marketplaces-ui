@@ -1,0 +1,58 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Chromatic Deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches-ignore: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: chromatic-deployment
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+
+      # Setup node
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version: '16.x'
+
+      # GIT Config
+      - name: Fix up git URLs
+        run: echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
+
+      # Setup quasar
+      - name: Setup environment
+        run: |
+            yarn install
+
+      # Build App
+      - name: Deploy Chromatic
+        uses: chromaui/action-next@v1
+        env:
+          APP_NAME: 'Native Bitcoin Vault'
+          CHROMATIC_WSS: 'wss://n4.hashed.systems'
+          BDK_SERVICES_URL: 'https://bdk.hashed.systems'
+        with:
+          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          APP_NAME: 'Native Bitcoin Vault'
+          WSS: 'wss://n4.hashed.systems'
+          BDK_SERVICES_URL: 'https://bdk.hashed.systems'
