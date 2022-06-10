@@ -26,11 +26,12 @@ const Template = (args) => ({
     return {
       form: {
         notes: undefined,
-        files: undefined
-      },
-      marketInfo: {
-        owner: '',
-        taxCredits: ''
+        files: [
+          {
+            label: undefined,
+            files: []
+          }
+        ]
       }
     }
   },
@@ -44,7 +45,26 @@ const Template = (args) => ({
     }
   }
 })
-
+const marketProp = {
+  label: 'Afloat Marketplace',
+  authorities: [
+    {
+      id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+      type: 'Admin',
+      address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+    },
+    {
+      id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+      type: 'Owner',
+      address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+    }
+  ],
+  admin: {
+    id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+    type: 'Admin',
+    address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+  }
+}
 // Base component
 export const Base = Template.bind({})
 // Sucess submit
@@ -53,21 +73,13 @@ export const SuccessSubmitted = Template.bind({})
 export const FailedSubmitted = Template.bind({})
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Base.args = {
-  market: {
-    id: '0',
-    label: "Afloat's marketplace",
-    administrator: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-  },
+  market: marketProp,
   participantsNumber: 2
 }
 
 // Success Submitted
 SuccessSubmitted.args = {
-  market: {
-    id: '0',
-    label: "Afloat's marketplace",
-    administrator: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-  },
+  market: marketProp,
   participantsNumber: 2
 }
 SuccessSubmitted.play = async ({ args, canvasElement }) => {
@@ -80,11 +92,7 @@ SuccessSubmitted.play = async ({ args, canvasElement }) => {
 }
 // FailedSubmitted
 FailedSubmitted.args = {
-  market: {
-    id: '0',
-    label: "Afloat's marketplace",
-    administrator: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-  },
+  market: marketProp,
   participantsNumber: 6
 }
 FailedSubmitted.play = async ({ args, canvasElement }) => {

@@ -48,9 +48,24 @@ export const Base = Template.bind({
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Base.args = {
   market: {
-    id: '1',
-    label: "Abel's marketplace",
-    administrator: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
+    label: 'Afloat Marketplace',
+    authorities: [
+      {
+        id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+        type: 'Admin',
+        address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+      },
+      {
+        id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+        type: 'Owner',
+        address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+      }
+    ],
+    admin: {
+      id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+      type: 'Admin',
+      address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+    }
   },
   participants: [
     {
