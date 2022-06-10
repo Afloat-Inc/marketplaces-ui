@@ -60,6 +60,7 @@
     "@storybook/vue3": "^6.5.7",
     "@vue/eslint-config-standard": "6.0.0",
     "babel-loader": "^8.2.3",
+    "chromatic": "^6.5.6",
     "cypress": "^9.5.4",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
