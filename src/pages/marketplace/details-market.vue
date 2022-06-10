@@ -120,11 +120,10 @@ export default {
       console.log('enrollApplicant', applicant)
       try {
         this.showLoading()
-        const applicationId = '0x0d773b8ba5a1218da996dad20cbd1918c870e2e1506c0b81609e761612efd9e9'
         const response = await this.$store.$marketplaceApi.enrollApplicant({
           user: this.selectedAccount.address,
           marketId: this.marketId,
-          accountOrApplication: { Account: applicationId },
+          accountOrApplication: { Account: applicant.address },
           approved: true
         })
         this.showNotification({
@@ -142,11 +141,10 @@ export default {
       console.log('rejectApplicant', applicant)
       try {
         this.showLoading()
-        const applicationId = '0x0d773b8ba5a1218da996dad20cbd1918c870e2e1506c0b81609e761612efd9e9'
         const response = await this.$store.$marketplaceApi.enrollApplicant({
           user: this.selectedAccount.address,
           marketId: this.marketId,
-          accountOrApplication: { Account: applicationId },
+          accountOrApplication: { Account: applicant.address },
           approved: false
         })
         this.showNotification({
