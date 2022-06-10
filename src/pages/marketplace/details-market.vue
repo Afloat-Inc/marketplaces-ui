@@ -5,7 +5,8 @@
       market-apply-form(
         v-if="!isEnrolled && !isAdmin && market && admin"
         :market="{...market, admin}"
-        :participantsNumber="participants.length"
+        :status="statusApplication"
+        :participantsNumber="participants?.length"
         @submit="onSubmitApplyForm"
       )
       //- Tabs
@@ -51,6 +52,7 @@ export default {
       tab: 'market-info',
       marketId: afloatMarketplaceId,
       market: undefined,
+      application: undefined,
       participants: [],
       applicants: []
     }
@@ -58,9 +60,12 @@ export default {
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
     isEnrolled () {
-      return !!this.participants.find(participant => {
-        return participant.address === this.selectedAccount.address
+      return !!this.participants?.find(participant => {
+        return participant === this.selectedAccount.address
       })
+    },
+    statusApplication () {
+      return this.application?.status
     },
     isAdmin () {
       return this.admin && this.selectedAccount.address === this.admin.address
@@ -70,6 +75,11 @@ export default {
         return this.market.authorities.find(v => v.type === 'Admin')
       }
       return undefined
+    }
+  },
+  watch: {
+    selectedAccount () {
+      this.getApplication()
     }
   },
   async beforeMount () {
@@ -91,6 +101,7 @@ export default {
         this.market.authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         this.participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         this.applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
+        await this.getApplication()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -108,7 +119,7 @@ export default {
           notes: form.notes,
           files: form.files
         })
-        this.showNotification({ message: response.message, color: 'positive' })
+        this.showNotification({ message: 'Application was submitted' + response.message, color: 'positive' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -150,6 +161,20 @@ export default {
         this.showNotification({
           message: 'Application rejected. ' + response.message,
           color: 'positive'
+        })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async getApplication () {
+      try {
+        this.showLoading()
+        this.application = await this.$store.$marketplaceApi.getApplicationStatusByAccount({
+          account: this.selectedAccount.address,
+          marketId: this.marketId
         })
       } catch (e) {
         console.error('error', e)
