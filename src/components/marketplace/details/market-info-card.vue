@@ -19,13 +19,16 @@
         .col-12
           q-separator
           .text-h6.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
-          .row.q-gutter-md
+          .row.q-gutter-md(v-if="participants.length > 0 ")
             account-item.no-shadow(
               v-for="participant in participants"
-              :address="participant.address"
+              :address="participant"
               bordered
               shortDisplay
             )
+          .row.q-gutter-md(v-else)
+            .col-12
+              .text-subtitle2 {{$t('pages.marketplace.details.noParticipants')}}
     q-card-section
 </template>
 
@@ -49,7 +52,8 @@ export default {
      */
     participants: {
       type: Array,
-      required: true
+      required: true,
+      default: () => []
     }
   },
   data () {
