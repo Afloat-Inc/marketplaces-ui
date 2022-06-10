@@ -1,7 +1,7 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
 // import markets from '~/services/const/allMarkets'
 import participants from '~/services/const/participants'
-import applicants from '~/services/const/applicants'
+// import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
   constructor (polkadotApi) {
     super(polkadotApi, 'gatedMarketplace')
@@ -30,7 +30,7 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getAuthoritiesByMarketplace ({ marketId, authTypes }, subTrigger) {
-    const authorities = await this.exEntriesQuery('authoritiesByMarketplace', [marketId, authTypes])
+    const authorities = await this.exEntriesQuery('authoritiesByMarketplace', [marketId])
     const map = this.mapEntries(authorities)
     const authMap = map.map(m => {
       return {
@@ -71,13 +71,56 @@ class MarketplaceApi extends BasePolkadotApi {
 
   /**
    * @name getApplicantsByMarket
-   * @description Get marketplace's applicants by market id
+   * @description Get marketplace's applicants details by market id
    * @param {String} marketId Market id
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
   async getApplicantsByMarket ({ marketId }, subTrigger) {
-    return applicants
+    // 1 Get applicants address by Marketplace
+    const applicants = await this.exEntriesQuery('applicantsByMarketplace', [marketId])
+    // Map to human
+    const map = this.mapEntries(applicants)
+
+    // Map applicant addresses by applicant status
+    const applicantsByState = map.map(v => {
+      return {
+        applicantId: v.id[0],
+        status: v.id[1],
+        addresses: v.value,
+        key: v.key
+      }
+    })
+    console.log('applicantsByState', applicantsByState)
+
+    // Applicants address to call in multiquery
+    let applicantsAddress = []
+    applicantsByState.forEach(ap => {
+      applicantsAddress = applicantsAddress.concat(ap.addresses.map(e => {
+        return [
+          e,
+          marketId
+        ]
+      }))
+    })
+
+    // 2 Get applicants Ids
+    const applicantsIds = await this.exMultiQuery('applicationsByAccount', applicantsAddress, subTrigger)
+    console.log('applicantsIds', applicantsIds.map(v => v.toHuman()))
+
+    // 3 Get applicant details
+    const applicantsDetails = await this.exMultiQuery('applications', applicantsIds.map(v => v.toHuman()), subTrigger)
+    console.log('applicantsDetails', applicantsDetails)
+
+    // Add address to applicant details
+    const details = applicantsDetails.map((v, i) => {
+      return {
+        ...v.toHuman(),
+        address: applicantsAddress[i][0]
+      }
+    })
+    console.log('details', details)
+    return details
   }
 
   async applyFor ({ marketId, user, notes, files }, subTrigger) {
