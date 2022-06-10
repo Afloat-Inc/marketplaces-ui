@@ -1,6 +1,6 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
 // import markets from '~/services/const/allMarkets'
-import participants from '~/services/const/participants'
+// import participants from '~/services/const/participants'
 // import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
   constructor (polkadotApi) {
@@ -65,8 +65,17 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
+  // async getParticipantsByMarket ({ marketId }, subTrigger) {
+  //   return participants
+  // }
+
   async getParticipantsByMarket ({ marketId }, subTrigger) {
-    return participants
+    // 1 Get applicants address by Marketplace
+    const applicants = await this.exQuery('applicantsByMarketplace', [marketId, 'Approved'])
+    console.log('applicants', applicants)
+    // Map to human
+    const map = this.mapEntries(applicants)
+    return map
   }
 
   /**
@@ -95,7 +104,7 @@ class MarketplaceApi extends BasePolkadotApi {
 
     // Applicants address to call in multiquery
     let applicantsAddress = []
-    applicantsByState.forEach(ap => {
+    applicantsByState.filter(e => e.status !== 'Approved').forEach(ap => {
       applicantsAddress = applicantsAddress.concat(ap.addresses.map(e => {
         return [
           e,
