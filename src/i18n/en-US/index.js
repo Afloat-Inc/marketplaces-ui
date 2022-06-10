@@ -32,7 +32,11 @@ export default {
     marketplace: {
       details: {
         participantsTitle: 'Participants'
-
+      },
+      applyForm: {
+        title: 'Apply for Marketplace',
+        subtitle: 'Fill in the form to apply for the Marketplace',
+        filesTitle: 'Upload files'
       }
     }
   }
