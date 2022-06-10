@@ -68,7 +68,7 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exEntriesQuery (queryName, params, subTrigger) {
-    return this.polkadotApi.api.query[this.palletName][queryName].entries()
+    return this.polkadotApi.api.query[this.palletName][queryName].entries(...params)
   }
 
   /**
@@ -186,7 +186,9 @@ class BasePolkadotApi {
   mapEntries (entries) {
     if (!entries.isEmpty) {
       return entries.map(e => {
+        // console.log('IDDDD', e[0], e[0].toHuman())
         return {
+          key: e[0],
           id: e[0].toHuman(),
           value: e[1].toHuman()
         }
