@@ -9,7 +9,7 @@
         .col-6
           .text-h6 Owner
           account-item(
-            :address="market.administrator"
+            :address="market.authorities[1].address"
             flat
             )
         .col-6
@@ -18,15 +18,20 @@
     q-separator
     q-card-section
       q-form(ref="applyForm" @submit="onSubmit")
-        .text-h6 Apply for market
+        .text-h6 {{$t('pages.marketplace.applyForm.title')}}
+        .text-subtitle2(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
         t-input(
+          data-cy="notes_input"
+          testid="notes_input"
           class="q-mt-md"
           v-model="form.notes"
           label="Notes"
           placeholder="Notes about your application"
           :rules="[rules.required]"
         )
-        q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
+        .row.justify-between
+          div(class="q-pt-sm") {{$t('pages.marketplace.applyForm.filesTitle')}}
+          q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -34,7 +39,6 @@
               v-model="form.files[index]"
               :index="index"
               @onDelete="onDeleteFile"
-              label="File"
               :rules="[rules.required]"
               showDelete
               )
@@ -46,6 +50,8 @@
               label="delete file"
               color="red"
               @click="onDeleteFile(index)"
+              data-cy="delete_file"
+              data-testid="delete_file"
             )
         q-btn(
           type="submit"
@@ -53,6 +59,8 @@
           rounded
           no-caps
           class="q-mt-sm"
+          data-cy="submit_apply_btn"
+          data-testid="submit_apply_btn"
         ) Submit
     q-separator
     q-card-section
@@ -75,6 +83,10 @@ export default {
       type: Object,
       required: true
     },
+    /**
+     * This props contains the number of participats to display [Required]
+     * @type {Object}
+     */
     participantsNumber: {
       type: Number,
       required: true
@@ -91,17 +103,23 @@ export default {
             files: []
           }
         ]
-      },
-      marketInfo: {
-        owner: '',
-        taxCredits: ''
       }
     }
   },
   methods: {
     onSubmit () {
       this.$refs.applyForm.validate().then(() => {
-        this.$emit('submit', this.form)
+        const files = this.form.files.map(file => {
+          return {
+            displayName: file.label,
+            cid: file.files[0].value
+          }
+        })
+        const data = {
+          notes: this.form.notes,
+          files
+        }
+        this.$emit('submit', data)
       })
     },
     onMoreFiles () {

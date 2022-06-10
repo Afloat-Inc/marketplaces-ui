@@ -4,7 +4,7 @@ import '@quasar/extras/animate/fadeInUp.css'
 import '@quasar/extras/animate/fadeOutDown.css'
 import '@quasar/extras/animate/fadeInRight.css'
 import '@quasar/extras/animate/fadeOutRight.css'
-
+// import '../src/css/quasar.variables.styl'
 import 'quasar/dist/quasar.css'
 import { app } from '@storybook/vue3'
 import { Quasar } from 'quasar'

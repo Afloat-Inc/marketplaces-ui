@@ -1,5 +1,7 @@
 <template lang="pug">
 .row.q-col-gutter-xs
+  .col-12
+    .text-subtitle2 {{label}}
   q-input(
     v-model="tagFile"
     class="col-6 q-my-xs"
@@ -8,14 +10,11 @@
     placeholder="Name of the file"
     class="borderRight"
     @keyup="onTypeTagFile"
-  )
-  IpfsViewFile(
-    v-if="files.length > 0"
-    class="col-6 q-my-xs"
-    :typeCids="files"
+    data-cy="name_file"
+    testid="name_file"
+    data-testid="name_file"
   )
   q-file(
-    v-else
     class="col-6 q-my-xs"
     outlined
     v-model="displayNames"
@@ -26,8 +25,15 @@
     :filled="filled"
     :readonly="readonly"
     ref="qFile"
+    data-cy="qFile"
+    data-testid="qFile"
   )
     template(v-slot:append)
+      q-icon(
+        v-if="!loading && state.loaded"
+        name="check"
+        color="primary"
+      )
     template(slot="loading")
       q-spinner-dots(v-if="loading")
 </template>
@@ -36,44 +42,20 @@
 import BrowserIpfs from '~/services/BrowserIpfs.js'
 import IpfsViewFile from './ipfs-view-file-selector'
 export default {
-  name: 'TIpfsLabeled',
+  name: 'IpfsLabeled',
   components: { IpfsViewFile },
   props: {
     label: {
-      default: 'default',
+      default: '',
       type: String
     },
     modelValue: {
       type: Object,
       default: () => {}
     },
-    mcallback: {
-      type: Function,
-      default: () => {}
-    },
     rules: {
       type: Array,
       default: () => []
-    },
-    type: {
-      type: String,
-      default: 'text'
-    },
-    standout: {
-      type: String,
-      default: null
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    hint: {
-      type: String,
-      default: ''
     },
     filled: {
       type: Boolean,
@@ -84,7 +66,7 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue', 'onDelete'],
+  emits: ['update:modelValue'],
   data () {
     return {
       loading: false,
@@ -93,7 +75,10 @@ export default {
       files: [],
       displayNames: undefined,
       tagFile: undefined,
-      labelFile: undefined
+      labelFile: undefined,
+      state: {
+        loaded: false
+      }
     }
   },
   computed: {
@@ -153,6 +138,7 @@ export default {
           files: this.files
         }
         this.loading = false
+        this.state.loaded = true
         this.$emit('update:modelValue', JSON.parse(JSON.stringify(data)))
       } catch (e) {
         console.error(e)
@@ -162,8 +148,10 @@ export default {
       }
     },
     validFile (file) {
+      console.log('Valid file', file, typeof file)
       if (file != null && this.loading) return true
       else if (!this.loading && this.initWithString) return true
+      else if (!this.loading && typeof file === 'object') return true
       return this.$t('forms.errors.fileRequired')
     },
     onTypeTagFile () {

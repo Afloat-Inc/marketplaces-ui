@@ -127,6 +127,22 @@ class MarketplaceApi extends BasePolkadotApi {
     console.log('submitApplicationForm', marketId, user, files, notes, subTrigger)
     return this.callTx('apply', user, [marketId, notes, files])
   }
+
+  /**
+   *
+   * @name enrollApplicant
+   * @description enroll to a marketplace
+   * @param {String [address]} user User address to sign the transaction
+   * @param {String} marketId Market id
+   * @param {String} accountOrApplication Application id or account address
+   * @param {Boolean} approved Approved or not
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Object}
+   */
+  async enrollApplicant ({ marketId, user, accountOrApplication, approved }, subTrigger) {
+    console.log('enrollApplicant', marketId, user, accountOrApplication, approved, subTrigger)
+    return this.callTx('enroll', user, [marketId, accountOrApplication, approved])
+  }
   // /**
   //  * @name getXpubByUser
   //  * @description Get Xpub by user
