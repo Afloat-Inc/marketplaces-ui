@@ -9,14 +9,17 @@
         .col-6
           .text-h6 Owner
           account-item(
-            :address="market.authorities[1].address"
+            :address="market.admin.address"
             flat
             )
         .col-6
           .row.justify-end
             .text-h6 Number of participants: {{participantsNumber}}
     q-separator
-    q-card-section
+    q-card-section(v-if="status === 'Pending'")
+      .row.q-gutter-md
+        .col-12.text-subtitle2 {{$t('pages.marketplace.details.pending')}}
+    q-card-section(v-else)
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h6 {{$t('pages.marketplace.applyForm.title')}}
         .text-subtitle2(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
@@ -89,7 +92,17 @@ export default {
      */
     participantsNumber: {
       type: Number,
-      required: true
+      required: true,
+      default: () => 0
+    },
+    /**
+     * This props contains the status of the application [Required]
+     * @type {Array}
+     */
+    status: {
+      type: String,
+      required: true,
+      default: () => undefined
     }
   },
   emits: ['submit'],
