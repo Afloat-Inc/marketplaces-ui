@@ -1,43 +1,47 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
     q-header()
-      q-toolbar(class="bg-white text-primary")
-        q-toolbar-title
-          Logo(includeSubtitle)
-        .row.q-gutter-md
-          q-item.routerItems(
-            clickable
-            :to="{ name: 'home'}"
-            exact
-            active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('Home')}"
-            dense
-          )
-            q-item-section
-              q-item-label Home
-          q-item.routerItems(
-            clickable
-            :to="{ name: 'marketplace'}"
-            active-class="activeRouter"
-            :class="{ 'activeRouter': isActive('Marketplace')}"
-            dense
-          )
-            q-item-section
-              q-item-label Marketplace
-          q-item.routerItems(
-            clickable
-            dense
-            @click="signAndVerifyMessage"
-          )
-            q-item-section
-              q-item-label Sign and Verify Message
-          hr
-          q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
-            selected-account-btn(:selectedAccount="selectedAccount")
-            accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-      //- q-toolbar(class="bg-white text-primary")
-      //-   q-breadcrumbs(active-color="primary" style="font-size: 16px")
-      //-     q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
+      .row.justify-center
+        .col-xs-12.col-sm-12.col-md-11
+          q-toolbar(class="bg-white text-primary bottomLine q-pt-md q-px-md")
+            q-toolbar-title
+              Logo(
+                includeSubtitle
+              )
+            .row.q-gutter-md
+              q-item.routerItems.nav-link(
+                clickable
+                :to="{ name: 'home'}"
+                exact
+                active-class="activeRouter"
+                :class="{ 'activeRouter': isActive('Home')}"
+                dense
+              )
+                q-item-section
+                  q-item-label Home
+              q-item.routerItems.nav-link(
+                clickable
+                :to="{ name: 'marketplace'}"
+                active-class="activeRouter"
+                :class="{ 'activeRouter': isActive('Marketplace')}"
+                dense
+              )
+                q-item-section
+                  q-item-label Marketplace
+              q-item.routerItems.nav-link(
+                clickable
+                dense
+                @click="signAndVerifyMessage"
+              )
+                q-item-section
+                  q-item-label Sign and Verify Message
+              hr
+              q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
+                selected-account-btn(:selectedAccount="selectedAccount")
+                accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+          //- q-toolbar(class="bg-white text-primary")
+          //-   q-breadcrumbs(active-color="primary" style="font-size: 16px")
+          //-     q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
     q-page-container
       .row.justify-center
         .col-10
@@ -166,7 +170,6 @@ export default defineComponent({
 
 .routerItems
   border-radius: 5px
-  color: $black
 
 .routerItems:hover
   color: $dark
@@ -194,4 +197,6 @@ hr
 
 .routerViewContainer
   min-height: 50vh
+.bottomLine
+  border-bottom: 1px solid #ccc
 </style>
