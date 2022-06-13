@@ -63,10 +63,13 @@ const marketProp = {
     id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
     type: 'Admin',
     address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
-  }
+  },
+  status: undefined
 }
 // Base component
 export const Base = Template.bind({})
+// Base component
+export const ApplicationSent = Template.bind({})
 // Sucess submit
 export const SuccessSubmitted = Template.bind({})
 // Failed submit
@@ -75,6 +78,11 @@ export const FailedSubmitted = Template.bind({})
 Base.args = {
   market: marketProp,
   participantsNumber: 2
+}
+ApplicationSent.args = {
+  market: marketProp,
+  participantsNumber: 2,
+  status: 'Pending'
 }
 
 // Success Submitted

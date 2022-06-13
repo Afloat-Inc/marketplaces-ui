@@ -68,12 +68,47 @@ Base.args = {
     }
   },
   participants: [
-    {
-      address: '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST'
-    },
-    {
-      address: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
-    }
+    '5DaWmLfzBTLbKFwBC5YxtAQ45XMSAQCDLcZL6zW9ZiJsGSST',
+    '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
   ]
+}
 
+// Participants component
+export const NoParticipants = Template.bind({
+  data () {
+    return {
+      marketInfo: {
+        owner: undefined,
+        admin: undefined,
+        appraiser: undefined,
+        label: undefined
+      }
+    }
+  }
+
+})
+
+// More on args: https://storybook.js.org/docs/vue/writing-stories/args
+NoParticipants.args = {
+  market: {
+    label: 'Afloat Marketplace',
+    authorities: [
+      {
+        id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+        type: 'Admin',
+        address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+      },
+      {
+        id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+        type: 'Owner',
+        address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+      }
+    ],
+    admin: {
+      id: '0xc4ed08c3bfaffdc960132da99403dc96c10e3f311e393c0e4c32619ec8462f64',
+      type: 'Admin',
+      address: '5CmFmVadzNQFaeiyXXNugRXT1MuaoocUyogtYHEQeWjGp7pX'
+    }
+  },
+  participants: []
 }
