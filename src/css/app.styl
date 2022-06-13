@@ -1,18 +1,22 @@
 // app global css in Sass form
-$primary   = #F2C037
-$secondary = #26A69A
-$accent    = #9C27B0
-
-$dark      = #1D1D1D
-
-$positive  = #21BA45
-$negative  = #C10015
-$info      = #31CCEC
-$warning   = #F2C037
+primary   = #2EB7E5
+secondary = #1f7a99
+accent    = #9C27B0
+dark      = #0087b4
+light     = #73e9ff
+positive  = #21BA45
+negative  = #C10015
+info      = #31CCEC
+warning   = #F2C037
+grey      = #6c757d
+white     = #ffffff
+black     = #162c34
+bg-body   =   rgba(0,0,0,.25)
+label-color  = #212529
 
 .global-font
     font-size: 2rem
-    color: $positives
+    color: positive
 
 .modalSize
   width: 65vw
@@ -53,7 +57,40 @@ $warning   = #F2C037
   transform: scale(1.05)
   cursor: pointer
 
-body
-  font-family: Whitney SSm A, Whitney SSm B, 'sans-serif' !important
+.label
+  font-size: 1.1rem
+  font-weight: 500
+  color: label-color
   font-style: normal
-  font-weight: 600
+
+.nav-link
+  font-size: 16px
+  font-weight: 700
+  color: #3c484c !important
+  text-transform: uppercase
+  font-style: normal
+body
+  font-family: 'Afloat font', sans-serif !important
+  font-style: normal
+  font-weight: 500
+  font-size: 16px
+
+a
+  color: secondary
+  text-decoration: none
+a:hover
+  text-decoration: underline
+  color: primary
+.q-field--outlined .q-field__control
+  background-color: #FFF
+  border-radius: 10px !important
+.q-btn:hover
+  background-color: secondary !important
+.q-layout__section--marginal
+  background-color: #FFF
+@font-face {
+  font-family: 'Afloat font';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/Whitney-SSm-Medium.ttf') format('ttf');
+}

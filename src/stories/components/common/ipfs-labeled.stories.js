@@ -55,16 +55,8 @@ export const Base = Template.bind({
 Base.args = {
   label: 'lorem ipsum',
   modelValue: {
-
   },
-  mcallback: () => {
-  },
-  rules: [],
-  type: 'text',
-  standout: '',
-  prefix: '',
-  suffix: '',
-  hint: 'hint text',
+  rules: [val => !!val || 'Required'],
   filled: false,
   readonly: false
 
@@ -87,25 +79,16 @@ export const FilledExample = Template.bind({
 
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 FilledExample.args = {
-  label: 'label text',
+  label: 'lorem ipsum',
   modelValue: {
   },
-  mcallback: () => {
-  },
   rules: [val => !!val || 'Required'],
-  type: 'text',
-  standout: '',
-  prefix: '',
-  suffix: '',
-  hint: 'hint text',
   filled: false,
   readonly: false
-
 }
 FilledExample.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   await userEvent.type(canvas.getByTestId('name_file'), 'This file contains my reason for applying')
   const file = new File([image], 'colors.svg', { type: 'image/svg+xml' })
   await userEvent.upload(canvas.getByTestId('qFile'), file)
-  await userEvent.click(canvas.getByTestId('submit_apply_btn'))
 }
