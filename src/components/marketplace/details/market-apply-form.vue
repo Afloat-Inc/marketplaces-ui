@@ -34,7 +34,7 @@
         )
         .row.justify-between
           div(class="q-pt-sm") {{$t('pages.marketplace.applyForm.filesTitle')}}
-          q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" @click="onMoreFiles") Add Files
+          q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" unelevated @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -61,6 +61,7 @@
           color="primary"
           rounded
           no-caps
+          unelevated
           class="q-mt-sm"
           data-cy="submit_apply_btn"
           data-testid="submit_apply_btn"
