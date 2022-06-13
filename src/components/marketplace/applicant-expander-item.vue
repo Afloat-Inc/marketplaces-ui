@@ -26,12 +26,16 @@ q-expansion-item(group="applicants")
         label="Enroll"
         color="primary"
         size="md"
+        unelevated
+        rounded
         no-caps
         @click="enroll"
       )
       q-btn(
         label="Reject"
         color="negative"
+        rounded
+        unelevated
         size="md"
         no-caps
         @click="reject"

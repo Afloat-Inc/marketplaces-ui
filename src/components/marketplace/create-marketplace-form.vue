@@ -3,6 +3,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     q-btn.float-right(
       icon="close"
       round
+      unelevated
       color="primary"
       v-close-popup
       size="sm"
@@ -18,6 +19,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     )
     q-btn.float-right.q-mb-md(
       data-testid="submit_btn"
+      unelevated
       label="Create marketplace"
       color="primary"
       size="md"
