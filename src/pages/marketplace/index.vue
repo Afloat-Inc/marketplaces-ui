@@ -6,6 +6,7 @@
     q-btn(
       label="Add Marketplace"
       no-caps
+      unelevated
       color="primary"
       rounded
       @click="modals.isShowingAddMarketplace = true"
