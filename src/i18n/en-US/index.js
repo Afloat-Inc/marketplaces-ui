@@ -31,7 +31,10 @@ export default {
   pages: {
     marketplace: {
       details: {
-        participantsTitle: 'Participants'
+        participantsTitle: 'Participants',
+        noParticipants: 'No participants yet',
+        noApplicants: 'No applicants yet',
+        pending: 'Your application is under review'
       },
       applyForm: {
         title: 'Apply for Marketplace',

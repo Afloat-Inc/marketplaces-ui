@@ -72,10 +72,7 @@ class MarketplaceApi extends BasePolkadotApi {
   async getParticipantsByMarket ({ marketId }, subTrigger) {
     // 1 Get applicants address by Marketplace
     const applicants = await this.exQuery('applicantsByMarketplace', [marketId, 'Approved'])
-    console.log('applicants', applicants)
-    // Map to human
-    const map = this.mapEntries(applicants)
-    return map
+    return applicants.toHuman()
   }
 
   /**
@@ -151,6 +148,23 @@ class MarketplaceApi extends BasePolkadotApi {
   async enrollApplicant ({ marketId, user, accountOrApplication, approved }, subTrigger) {
     console.log('enrollApplicant', marketId, user, accountOrApplication, approved, subTrigger)
     return this.callTx('enroll', user, [marketId, accountOrApplication, approved])
+  }
+
+  /**
+   * @name getApplicationStatusByAccount
+   * @description Get application information by account
+   * @param {String} marketId Market id
+   * @param {String} account Current account address
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   */
+  async getApplicationStatusByAccount ({ marketId, account }, subTrigger) {
+    console.log('getApplicationStatusByAccount', marketId, account, subTrigger)
+    const applicantionId = await this.exQuery('applicationsByAccount', [account, marketId])
+    if (applicantionId.isEmpty) {
+      return undefined
+    }
+    const application = await this.exQuery('applications', [applicantionId.toHuman()])
+    return application.toHuman()
   }
   // /**
   //  * @name getXpubByUser
