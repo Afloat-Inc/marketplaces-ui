@@ -65,7 +65,7 @@ export default {
       })
     },
     statusApplication () {
-      return this.application?.status
+      return this.application?.status || 'Not applied'
     },
     isAdmin () {
       return this.admin && this.selectedAccount.address === this.admin.address
@@ -79,7 +79,7 @@ export default {
   },
   watch: {
     selectedAccount () {
-      this.getApplication()
+      this.getMarketplaceInfo()
     }
   },
   async beforeMount () {
@@ -113,32 +113,33 @@ export default {
       console.log('form to apply: ', form)
       try {
         this.showLoading()
-        const response = await this.$store.$marketplaceApi.applyFor({
+        await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.marketId,
           notes: form.notes,
           files: form.files
         })
-        this.showNotification({ message: 'Application was submitted' + response.message, color: 'positive' })
+        this.showNotification({ message: 'Application was submitted', color: 'positive' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
+        this.getMarketplaceInfo()
       }
     },
     async enrollApplicant (applicant) {
       console.log('enrollApplicant', applicant)
       try {
         this.showLoading()
-        const response = await this.$store.$marketplaceApi.enrollApplicant({
+        await this.$store.$marketplaceApi.enrollApplicant({
           user: this.selectedAccount.address,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           approved: true
         })
         this.showNotification({
-          message: 'Application approved. ' + response.message,
+          message: 'Application approved.',
           color: 'positive'
         })
       } catch (e) {
@@ -146,20 +147,21 @@ export default {
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
+        this.getMarketplaceInfo()
       }
     },
     async rejectApplicant (applicant) {
       console.log('rejectApplicant', applicant)
       try {
         this.showLoading()
-        const response = await this.$store.$marketplaceApi.enrollApplicant({
+        await this.$store.$marketplaceApi.enrollApplicant({
           user: this.selectedAccount.address,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           approved: false
         })
         this.showNotification({
-          message: 'Application rejected. ' + response.message,
+          message: 'Application rejected. ',
           color: 'positive'
         })
       } catch (e) {
@@ -167,11 +169,11 @@ export default {
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
+        this.getMarketplaceInfo()
       }
     },
     async getApplication () {
       try {
-        this.showLoading()
         this.application = await this.$store.$marketplaceApi.getApplicationStatusByAccount({
           account: this.selectedAccount.address,
           marketId: this.marketId
@@ -179,8 +181,6 @@ export default {
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
-      } finally {
-        this.hideLoading()
       }
     }
   }
