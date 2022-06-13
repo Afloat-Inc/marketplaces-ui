@@ -9,7 +9,7 @@
         .col-6
           .text-h6 Owner
           account-item(
-            :address="market.admin.address"
+            :address="market.admin?.address"
             flat
           )
         .col-6
