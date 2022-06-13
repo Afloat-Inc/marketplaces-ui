@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .logo-icon
   width: 50px
   height: 50px
