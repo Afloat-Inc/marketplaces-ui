@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .linksTabs
   font-family: Whitney SSm A,Whitney SSm B
   font-style: normal

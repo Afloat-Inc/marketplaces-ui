@@ -12,7 +12,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .sub
   vertical-align: sub
   font-size: 10px

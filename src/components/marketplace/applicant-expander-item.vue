@@ -6,7 +6,7 @@ q-expansion-item(group="applicants")
       q-chip(
         :label="status"
         size="sm"
-        color="primary"
+        :color="getColor"
         class="text-white q-mt-md"
       )
   #body.q-pa-sm
@@ -71,6 +71,18 @@ export default {
     }
   },
   emits: ['onEnroll', 'onReject'],
+  computed: {
+    getColor () {
+      switch (this.status) {
+      case 'Pending':
+        return 'primary'
+      case 'Rejected':
+        return 'negative'
+      default:
+        return 'primary'
+      }
+    }
+  },
   methods: {
     enroll () {
       const data = {

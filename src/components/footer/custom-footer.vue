@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .taxGiving
   margin-left: 0 !important
   margin-right: 0 !important

@@ -8,6 +8,7 @@
     outlined
     color="primary"
     placeholder="Name of the file"
+    :rules="rules"
     class="borderRight"
     @keyup="onTypeTagFile"
     data-cy="name_file"
