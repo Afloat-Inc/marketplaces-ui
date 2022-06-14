@@ -7,14 +7,14 @@ q-expansion-item(group="applicants")
         :label="status"
         size="sm"
         :color="getColor"
-        class="text-white q-mt-md"
+        class="text-white q-mt-md label"
       )
   #body.q-pa-sm
-    .text-subtitle1 Notes:
+    .text-h6.q-pb-md Notes:
     #notes.q-px-sm
-      .text-body2 {{ notes }}
+      .label {{ notes }}
     q-separator(inset).q-my-sm
-    .text-subtitle1 Files:
+    .text-h6.q-pb-md Files:
     #files.q-px-sm
       .row.q-col-gutter-xs
         .col-6(v-for="file in files")
@@ -32,6 +32,7 @@ q-expansion-item(group="applicants")
         @click="enroll"
       )
       q-btn(
+        v-if="status !== 'Rejected'"
         label="Reject"
         color="negative"
         rounded
