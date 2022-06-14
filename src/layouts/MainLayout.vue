@@ -1,44 +1,43 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
-    q-header()
+    q-header(class="bg-white")
       .row.justify-center
         .col-xs-12.col-sm-12.col-md-11
-          q-toolbar(class="bg-white text-primary bottomLine q-pt-md q-px-md")
+          q-toolbar(class="bg-white text-primary bottomLine")
             q-toolbar-title
               Logo(
                 includeSubtitle
               )
-            .row.q-gutter-md
-              q-item.routerItems.nav-link(
-                clickable
-                :to="{ name: 'home'}"
-                exact
-                active-class="activeRouter"
-                :class="{ 'activeRouter': isActive('Home')}"
-                dense
-              )
-                q-item-section
-                  q-item-label Home
-              q-item.routerItems.nav-link(
-                clickable
-                :to="{ name: 'marketplace'}"
-                active-class="activeRouter"
-                :class="{ 'activeRouter': isActive('Marketplace')}"
-                dense
-              )
-                q-item-section
-                  q-item-label Marketplace
-              q-item.routerItems.nav-link(
-                clickable
-                dense
-                @click="signAndVerifyMessage"
-              )
-                q-item-section
-                  q-item-label Sign and Verify Message
-              hr
-              q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
-                selected-account-btn(:selectedAccount="selectedAccount")
-                accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+            q-item.routerItems.nav-link(
+              clickable
+              :to="{ name: 'home'}"
+              exact
+              active-class="activeRouter"
+              :class="{ 'activeRouter': isActive('Home')}"
+              dense
+            )
+              q-item-section
+                q-item-label Home
+            q-item.routerItems.nav-link(
+              clickable
+              :to="{ name: 'marketplace'}"
+              active-class="activeRouter"
+              :class="{ 'activeRouter': isActive('Marketplace')}"
+              dense
+            )
+              q-item-section
+                q-item-label Marketplace
+            q-item.routerItems.nav-link(
+              clickable
+              dense
+              @click="signAndVerifyMessage"
+            )
+              q-item-section
+                q-item-label Sign and Verify Message
+            hr
+            q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
+              selected-account-btn(:selectedAccount="selectedAccount")
+              accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
           //- q-toolbar(class="bg-white text-primary")
           //-   q-breadcrumbs(active-color="primary" style="font-size: 16px")
           //-     q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
@@ -166,37 +165,26 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
+@import '~/css/app.styl'
 
-.routerItems
-  border-radius: 5px
-
-.routerItems:hover
-  color: $dark
 .activeRouter
-  color: $black
+  color: $color-primary
   background-color: white
-  border-bottom: 4px solid $secondary
+  border-bottom: 4px solid $color-primary-dark
   border-radius: 0px
 
 .hasLink
   color: $light
-.header-custom
-  padding: 1em 1em 0
-  background: $white
-  border-bottom: 1px solid #ccc
 
-.rightAlign
-  justify-content: flex-end
 hr
   border:         none
   border-left:    1px solid hsla(200, 10%, 50%,100)
   height:         2.5vh
-  margin-top:     2.4rem
   width:          1px
 
 .routerViewContainer
   min-height: 50vh
 .bottomLine
-  border-bottom: 1px solid #ccc
+  border-bottom: 1px solid $color-neutral-grey-3
 </style>
