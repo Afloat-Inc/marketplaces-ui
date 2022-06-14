@@ -29,6 +29,6 @@ module.exports = {
   },
   env: (config) => ({
     ...config,
-    WSS: 'this is a test'
+    WSS: process.env.CHROMATIC_WSS
   })
 };
