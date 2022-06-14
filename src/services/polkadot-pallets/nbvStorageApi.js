@@ -1,8 +1,8 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
 
 class NbvStorageApi extends BasePolkadotApi {
-  constructor (polkadotApi) {
-    super(polkadotApi, 'nbvStorage')
+  constructor (polkadotApi, notify) {
+    super(polkadotApi, 'nbvStorage', notify)
   }
 
   /**

@@ -46,7 +46,8 @@ q-layout(view="lHh Lpr lFf")
       .row.justify-center
         .col-10
           .q-px-lg.q-pa-lg.routerViewContainer
-            not-accounts(v-if="!selectedAccount")
+            not-connected(v-if="!isConnectedToServer")
+            not-accounts(v-else-if="!selectedAccount")
             router-view(v-else)
     //- q-footer
     custom-footer.atBottom
@@ -79,6 +80,7 @@ export default defineComponent({
     const $route = useRoute()
     const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
+    const isConnectedToServer = computed(() => $store.$connectedToServer)
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const accounts = ref(undefined)
     const breadcrumbList = ref(undefined)
@@ -160,7 +162,8 @@ export default defineComponent({
       selectedAccount,
       breadcrumbList,
       isActive,
-      signAndVerifyMessage
+      signAndVerifyMessage,
+      isConnectedToServer
     }
   }
 })

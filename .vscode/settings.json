@@ -11,5 +11,25 @@
     "Unsub",
     "xpub",
     "xpubs"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#5cc7eb",
+    "activityBar.activeBorder": "#e31cb1",
+    "activityBar.background": "#5cc7eb",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#e31cb1",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "sash.hoverBorder": "#5cc7eb",
+    "statusBar.background": "#2eb7e6",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#189cc9",
+    "statusBarItem.remoteBackground": "#2eb7e6",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#2eb7e6",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#2eb7e699",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.color": "#2eb7e6"
 }

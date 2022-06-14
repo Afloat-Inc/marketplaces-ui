@@ -4,9 +4,10 @@ class BasePolkadotApi {
    * @param {PolkadotApi} polkadotApi Instance from PolkadotApi class
    * @param {String} palletName Pallet Name
    */
-  constructor (polkadotApi, palletName) {
+  constructor (polkadotApi, palletName, notify) {
     this.polkadotApi = polkadotApi
     this.palletName = palletName
+    this.notify = notify
   }
 
   /**
@@ -80,6 +81,11 @@ class BasePolkadotApi {
    * @param {*} unsub Unsubscribe Function
    */
   async handlerTXResponse (e, resolve, reject, unsub) {
+    this.notify({
+      message: 'Waiting for polkadot confirmation',
+      // background: 'green',
+      type: 'listening'
+    })
     const { events = [], status } = e
     console.log('events', events)
     console.log('status', status)
