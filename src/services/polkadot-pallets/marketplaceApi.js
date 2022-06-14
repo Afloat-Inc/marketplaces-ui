@@ -3,8 +3,8 @@ import BasePolkadotApi from '~/services/basePolkadotApi'
 // import participants from '~/services/const/participants'
 // import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
-  constructor (polkadotApi) {
-    super(polkadotApi, 'gatedMarketplace')
+  constructor (polkadotApi, notify) {
+    super(polkadotApi, 'gatedMarketplace', notify)
   }
 
   /**
