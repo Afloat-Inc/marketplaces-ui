@@ -4,7 +4,7 @@
     .col-12
       market-apply-form(
         v-if="!isEnrolled && !isAdmin && market && admin"
-        :market="{...market, admin}"
+        :market="{...market, admin, owner}"
         :status="statusApplication"
         :participantsNumber="participants?.length"
         @submit="onSubmitApplyForm"
@@ -26,7 +26,7 @@
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
           .row
             .col-12
-              market-info-card(:market="{...market, admin}" :participants="participants")
+              market-info-card(:market="{...market, admin, owner}" :participants="participants")
         q-tab-panel(name="enrollment" v-if="isAdmin")
           applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
@@ -68,17 +68,28 @@ export default {
       return this.application?.status || 'Not applied'
     },
     isAdmin () {
-      return this.admin && this.selectedAccount.address === this.admin.address
+      const isAdmin = this.admin && this.selectedAccount.address === this.admin.address
+      const isOwner = this.owner && this.selectedAccount.address === this.owner.address
+      return isAdmin || isOwner
     },
     admin () {
       if (this.market && this.market.authorities) {
         return this.market.authorities.find(v => v.type === 'Admin')
       }
       return undefined
+    },
+    owner () {
+      if (this.market && this.market.authorities) {
+        return this.market.authorities.find(v => v.type === 'Owner')
+      }
+      return undefined
     }
   },
   watch: {
     selectedAccount () {
+      if (this.tab === 'enrollment') {
+        this.tab = 'market-info'
+      }
       this.getMarketplaceInfo()
     }
   },
