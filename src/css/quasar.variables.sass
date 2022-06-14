@@ -12,28 +12,44 @@
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
-$primary   : #2EB7E5
-$secondary : #1f7a99
-$accent    : #9C27B0
+$color-primary             : #2eb7e6
+$color-primary-dark            : #1f7a99
+$color-primary-light             : #80dfff
+$color-secondary             : #fcd945
+$color-secondary-dark            : #d9b930
+$color-secondary-light             : #fce975
+$color-neutral-grey-1            : #f2f3f4 /*ex-light*/
+$color-neutral-grey-2            : #daddde /*light*/
+$color-neutral-grey-3            : #ccc /*medium*/
+$color-neutral-grey-4            : #a6acae /*medium*/
+$color-neutral-grey-5            : #677175 /*muted*/
+$color-neutral-grey-6            : #3c484c /*dark*/
+$color-black             : #162c34
+$color-white             : #fff
+$color-red             : #f76767
+$color-green             : #2ee6b9
+$color-purple            : #663366
+/* font weights */
+$font-weight-book :  400
+$font-weight-medium  : 500
+$font-weight-semibold :  600
+$font-weight-bold : 700
 
-$dark      : #0087b4
-$light     : #73e9ff
-
-$positive  : #21BA45
-$negative  : #C10015
-$info      : #31CCEC
-$warning   : #F2C037
-$grey      : #6c757d
-$white     : #ffffff
-$black     : #162c34
-$bg-body: rgba(0,0,0,.25)
+:root
+  --q-primary: #{$color-primary} !important
+  --q-secondary: #{$color-secondary} !important
+  --q-accent: #{$color-secondary} !important
+  --q-positive: #{$color-green}   !important
+  --q-negative: #{$color-red} !important
+  --q-info: #{$color-purple}  !important
+  --q-warning: #{$color-secondary}  !important
 
 a
-  color: $secondary
+  color: $color-primary-dark
   text-decoration: none
 a:hover
   text-decoration: underline
-  color: $primary
+  color: $color-primary
 .q-field--outlined .q-field__control
   background-color: #FFF
   border-radius: 10px !important
