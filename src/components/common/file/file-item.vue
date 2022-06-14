@@ -8,7 +8,7 @@ q-item.no-padding(dense @click="openFile" clickable)
       size="sm"
     )
   q-item-section
-    .text-body2 {{ displayName }}
+    .caption {{ displayName }}
   q-item-section(avatar)
     .text-overline.q-mr-xs 2mb
   slot
