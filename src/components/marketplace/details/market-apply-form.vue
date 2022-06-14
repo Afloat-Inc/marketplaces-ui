@@ -6,19 +6,19 @@
         .text-h2 {{market.label}}
     q-card-section
       .row
-        .col-6.q-pb-md
+        .col-7.q-pb-md
           .label Administrator
           account-item(
             :address="market.admin?.address"
             flat
             bordered
           )
-        .col-6
+        .col-5
           .row.justify-end
             .label Number of participants: {{participantsNumber}}
 
       .row
-        .col-6.q-pb-md
+        .col-7.q-pb-md
           .label Owner
           account-item(
             :address="market.owner?.address"
