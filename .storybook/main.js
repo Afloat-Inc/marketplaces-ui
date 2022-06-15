@@ -29,6 +29,7 @@ module.exports = {
   },
   env: (config) => ({
     ...config,
-    WSS: process.env.CHROMATIC_WSS
+    WSS: process.env.CHROMATIC_WSS,
+    IPFS_URL: process.env.IPFS_URL
   })
 };
