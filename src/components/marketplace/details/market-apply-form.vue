@@ -3,26 +3,35 @@
   q-card(bordered flat)
     q-card-section
       .row.justify-center
-        .text-h5 {{market.label}}
+        .text-h2 {{market.label}}
     q-card-section
       .row
-        .col-6
-          .text-h6 Owner
+        .col-7.q-pb-md
+          .label Administrator
           account-item(
-            :address="market.admin.address"
+            :address="market.admin?.address"
             flat
-            )
-        .col-6
+            bordered
+          )
+        .col-5
           .row.justify-end
-            .text-h6 Number of participants: {{participantsNumber}}
-    q-separator
+            .label Number of participants: {{participantsNumber}}
+
+      .row
+        .col-7.q-pb-md
+          .label Owner
+          account-item(
+            :address="market.owner?.address"
+            flat
+            bordered
+          )    q-separator
     q-card-section(v-if="status === 'Pending'")
       .row.q-gutter-md
         .col-12.text-subtitle2 {{$t('pages.marketplace.details.pending')}}
     q-card-section(v-else)
       q-form(ref="applyForm" @submit="onSubmit")
-        .text-h6 {{$t('pages.marketplace.applyForm.title')}}
-        .text-subtitle2(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
+        .text-h4 {{$t('pages.marketplace.applyForm.title')}}
+        .text-h5(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
         t-input(
           data-cy="notes_input"
           testid="notes_input"
@@ -33,7 +42,7 @@
           :rules="[rules.required]"
         )
         .row.justify-between
-          div(class="q-pt-sm") {{$t('pages.marketplace.applyForm.filesTitle')}}
+          div(class="q-pt-sm label") {{$t('pages.marketplace.applyForm.filesTitle')}}
           q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" unelevated @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row

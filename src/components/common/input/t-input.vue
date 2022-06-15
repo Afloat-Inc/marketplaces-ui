@@ -1,6 +1,6 @@
 <template lang='pug'>
 div
-  .text-subtitle3.text-capitalize.label {{label}}
+  .label {{label}}
   q-input(
     outlined
     v-model="content"

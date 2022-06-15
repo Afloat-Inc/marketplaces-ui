@@ -3,22 +3,31 @@
   q-card(bordered flat)
     q-card-section
       .row.justify-center
-        .text-h5 {{market.label}}
+        .text-h2 {{market.label}}
     q-card-section
       .row
-        .col-6
-          .text-h6 Owner
+        .col-7.q-pb-md
+          .label Administrator
           account-item(
             :address="market.admin?.address"
             flat
+            bordered
           )
-        .col-6
+        .col-5
           .row.justify-end
-            .text-h6 Number of participants: {{participants.length}}
+            .label Number of participants: {{participants.length}}
+      .row
+        .col-7.q-pb-md
+          .label Owner
+          account-item(
+            :address="market.owner?.address"
+            flat
+            bordered
+          )
       .row
         .col-12
           q-separator
-          .text-h6.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
+          .label.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
           .row.q-gutter-md(v-if="participants.length > 0 ")
             account-item.no-shadow(
               v-for="participant in participants"

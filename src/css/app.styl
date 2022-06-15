@@ -1,22 +1,62 @@
 // app global css in Sass form
-primary   = #2EB7E5
-secondary = #1f7a99
-accent    = #9C27B0
-dark      = #0087b4
-light     = #73e9ff
-positive  = #21BA45
-negative  = #C10015
-info      = #31CCEC
-warning   = #F2C037
-grey      = #6c757d
-white     = #ffffff
-black     = #162c34
-bg-body   =   rgba(0,0,0,.25)
-label-color  = #212529
+// primary   = #2eb7e6
+// secondary = #1f7a99
+// accent    = #9C27B0
+// dark      = #0087b4
+// light     = #73e9ff
+// positive  = #21BA45
+// negative  = #C10015
+// info      = #31CCEC
+// warning   = #F2C037
+// grey      = #6c757d
+// white     = #ffffff
+// black     = #162c34
+// bg-body   =   rgba(0,0,0,.25)
+// label-color  = #212529
 
-.global-font
-    font-size: 2rem
-    color: positive
+color-primary             = #2eb7e6 !default;
+$color-primary-dark            = #1f7a99 !default;
+$color-primary-light             = #80dfff !default;
+$color-secondary             = #fcd945 !default;
+$color-secondary-dark            = #d9b930;
+$color-secondary-light             = #fce975;
+$color-neutral-grey-1            = #f2f3f4; /*ex-light*/
+$color-neutral-grey-2            = #daddde; /*light*/
+$color-neutral-grey-3            = #ccc; /*medium*/
+$color-neutral-grey-4            = #a6acae; /*medium*/
+$color-neutral-grey-5            = #677175; /*muted*/
+$color-neutral-grey-6            = #3c484c; /*dark*/
+$color-black             = #162c34;
+$color-white             = #fff;
+$color-red             = #f76767;
+$color-green             = #2ee6b9;
+$color-purple            = #663366;
+/* font weights */
+$font-size-base             = 1rem;
+$font-weight-book =  400;
+$font-weight-medium  = 500;
+$font-weight-semibold =  600;
+$font-weight-bold = 700;
+
+:root
+  --q-primary #2eb7e6 !important
+  --q-secondary #fcd945 !important
+  --q-accent #fcd945 !important
+  --q-positive #2ee6b9 !important
+  --q-negative #f76767 !important
+  --q-info #663366 !important
+  --q-warning #fcd945 !important
+
+$font-size-sm= ($font-size-base * 0.75) //12
+$font-size-lg= ($font-size-base * 1) //16
+$font-size-xlg= ($font-size-base * 1.25) //20
+$font-size-xxl= ($font-size-base * 1.5) //24
+$font-size-xxxl= ($font-size-base * 1.685) //27
+$font-size-xxxxl= ($font-size-base * 2.625) //42
+$font-size-xxxxll= ($font-size-base * 3)
+$font-size-xxxxlll= ($font-size-base * 3.5)
+$font-size-button= ($font-size-base * 1) //17px InVison Button Size
+$font-size-menu= ($font-size-base * 0.875) //14px InVison Button Size
 
 .modalSize
   width: 65vw
@@ -57,40 +97,101 @@ label-color  = #212529
   transform: scale(1.05)
   cursor: pointer
 
-.label
-  font-size: 1.1rem
-  font-weight: 500
-  color: label-color
-  font-style: normal
-
 .nav-link
-  font-size: 16px
-  font-weight: 700
-  color: #3c484c !important
+  min-height: 5rem
+  font-size: $font-size-lg
+  font-weight: $font-weight-semibold
+  color: $color-neutral-grey-6 !important
   text-transform: uppercase
   font-style: normal
+  border-radius: 5px
+
 body
   font-family: 'Afloat font', sans-serif !important
-  font-style: normal
-  font-weight: 500
-  font-size: 16px
+  font-style: normal !important
+  font-size: 16px !important
 
 a
-  color: secondary
+  font-family: 'Afloat font', sans-serif !important
+  font-style: normal !important
+  font-weight: $font-weight-semibold !important
+  font-size: $font-size-base !important
+  color: $color-primary !important
   text-decoration: none
 a:hover
-  text-decoration: underline
-  color: primary
+  text-decoration: underline !important
+  font-weight: $font-weight-semibold !important
+  color: $color-primary !important
+
 .q-field--outlined .q-field__control
-  background-color: #FFF
+  background-color: color-white
   border-radius: 10px !important
+.q-btn
+  font-weight: $font-weight-semibold !important
+  font-size: $font-size-button !important
+  line-height: 18px !important
 .q-btn:hover
   background-color: secondary !important
 .q-layout__section--marginal
-  background-color: #FFF
+  background-color: color-white
+
 @font-face {
   font-family: 'Afloat font';
   font-style: normal;
   font-weight: 500;
   src: url('/fonts/Whitney-SSm-Medium.ttf') format('ttf');
 }
+.text-h2
+  font-family: 'Afloat font', sans-serif !important
+  font-size: 1.5rem !important
+  font-weight: $font-weight-bold !important
+  color: $color-black !important
+  font-style: normal  !important
+.text-h4
+  font-family: 'Afloat font', sans-serif !important
+  font-size: $font-size-lg !important
+  font-weight: $font-weight-semibold !important
+  color: $color-black !important
+  font-style: normal   !important
+  line-height: 22px !important
+.text-h5
+  font-family: 'Afloat font', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+  line-height: 24px !important;
+
+.text-h6
+  font-family: 'Afloat font', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 17px !important;
+  font-weight: 600   !important;
+  color: label-color  !important;
+  font-style: normal !important;
+
+.label
+  font-family: 'Afloat font', sans-serif !important;
+  font-size: $font-size-base !important;
+  font-weight: $font-weight-medium !important;
+  color: $color-black !important;
+  font-style: normal !important;
+.caption
+  font-family: 'Afloat font', sans-serif !important
+  font-size: $font-size-sm  !important
+  font-weight: $font-weight-bold !important
+  color: $color-black !important
+  font-style: normal !important
+.tabs
+  font-family: 'Afloat font', sans-serif !important
+  font-size: $font-size-base !important
+  font-weight: $font-weight-medium !important
+  color: $color-neutral-grey-5  !important
+  font-style: normal !important
+
+p
+  font-family: 'Afloat font';
+  font-style: normal;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
+  line-height: 24px;
+  color: $color-neutral-grey-4
