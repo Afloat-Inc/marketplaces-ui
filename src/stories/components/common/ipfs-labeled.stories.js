@@ -5,7 +5,7 @@ import IpfsLabeled from '../../../components/common/ipfs/ipfs-labeled'
 import { userEvent, within } from '@storybook/testing-library'
 import image from '../../assets/colors.svg'
 export default {
-  title: 'common/ipfs-labeled',
+  title: 'common/IpfsLabeled',
   component: IpfsLabeled,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
