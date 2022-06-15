@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-call */
-import FileItem from '../../../../components/common/file/file-item'
+import FileItem from '../../../components/common/file/file-item'
 // import { expect } from '@storybook/jest'
 // import { userEvent, within } from '@storybook/testing-library'
 export default {
@@ -34,5 +34,4 @@ export const Base = Template.bind({})
 Base.args = {
   cid: 'Qmdk3gwwrfoWif9zJ3YTahH7fGq3JgqDBR3G2kqvbAqCro:pdf:Lorem_ipsum.pdf',
   displayName: 'file.pdf'
-
 }

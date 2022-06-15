@@ -2,6 +2,7 @@
 div
   .label {{label}}
   q-input(
+    :input-class="{'q-placeholder-write': content , 'q-placeholder' : !content }"
     outlined
     v-model="content"
     :placeholder="placeholder"
