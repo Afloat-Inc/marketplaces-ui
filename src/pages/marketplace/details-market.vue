@@ -15,12 +15,13 @@
         v-if="isAdmin"
         :breakpoint="0"
         no-caps
-        align="justify"
-        active-class="text-primary text-weight-bolder"
-        class="bg-white text-grey-5"
+        indicator-color="white"
+        align="left"
+        class="bottomLineTabs"
+        active-class="active-tab"
       )
-        q-tab(name="market-info" label="Market information")
-        q-tab(name="enrollment" label="Enrollment requests")
+        q-tab(:ripple="false" name="market-info" label="Market information")
+        q-tab(:riple="false" name="enrollment" label="Enrollment requests")
 
       q-tab-panels(v-model="tab" keep-alive)
         q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
@@ -199,6 +200,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-
+<style lang="stylus" scoped>
+.bottomLineTabs
+  border-bottom: 1px solid #979797 !important
 </style>
