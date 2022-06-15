@@ -14,10 +14,10 @@
 // bg-body   =   rgba(0,0,0,.25)
 // label-color  = #212529
 
-color-primary             = #2eb7e6 !default;
-$color-primary-dark            = #1f7a99 !default;
-$color-primary-light             = #80dfff !default;
-$color-secondary             = #fcd945 !default;
+$color-primary           = #2eb7e6;
+$color-primary-dark            = #1f7a99;
+$color-primary-light             = #80dfff;
+$color-secondary             = #fcd945;
 $color-secondary-dark            = #d9b930;
 $color-secondary-light             = #fce975;
 $color-neutral-grey-1            = #f2f3f4; /*ex-light*/
@@ -205,7 +205,12 @@ p
   font-size: $font-size-base;
   line-height: 24px;
   color: $color-neutral-grey-4
-
+.q-field__label
+  font-family: 'Afloat font', sans-serif !important
+  font-style: normal !important
+  color: $color-neutral-grey-4 !important
+  padding: 0rem 1rem !important
+  font-size : $font-size-lg !important
 .q-card
   border-radius: 10px !important
 .q-card > .q-focus-helper
@@ -217,6 +222,7 @@ p
 
 .q-tab
   background-color: $color-neutral-grey-1 !important
+  color: $color-neutral-grey-5 !important
   border-top-left-radius: 12px !important
   border-top-right-radius: 12px !important
   border-bottom: 0px white !important
@@ -225,11 +231,16 @@ p
   background-color: white !important
   border-top-left-radius: 12px !important
   border-top-right-radius: 12px !important
-  border-style: solid !important
+  border-style: solid solid none solid!important
   border-width: 1px !important
-  border-color: $color-neutral-grey-3 !important
+  border-color: #979797 !important
+  color: #495057 !important
 .q-tab__label
   font-family: 'Afloat font', sans-serif !important
   font-weight: $font-weight-bold !important
   font-size: 14px !important
   text-transform: uppercase !important
+.dropdown-item:hover
+  font-weight: $font-weight-bold !important
+.q-menu
+  border-radius: 0.5rem !important
