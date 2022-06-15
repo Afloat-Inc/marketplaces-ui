@@ -172,9 +172,7 @@ export default defineComponent({
 @import '~/css/app.styl'
 
 .activeRouter
-  color: $color-primary
-  background-color: white
-  border-bottom: 4px solid $color-primary-dark
+  border-bottom: 4px solid $color-primary-dark !important
   border-radius: 0px
 
 .hasLink
