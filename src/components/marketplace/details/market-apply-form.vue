@@ -11,7 +11,6 @@
           account-item(
             :address="market.admin?.address"
             flat
-            bordered
           )
         .col-5
           .row.justify-end
@@ -23,7 +22,6 @@
           account-item(
             :address="market.owner?.address"
             flat
-            bordered
           )    q-separator
     q-card-section(v-if="status === 'Pending'")
       .row.q-gutter-md
@@ -56,7 +54,7 @@
               )
             q-icon(
               rounded
-              class="col-1 q-pb-md"
+              class="col-1 q-pb-md cursor-pointer"
               size="1.5rem"
               name="delete"
               label="delete file"
@@ -75,7 +73,6 @@
           data-cy="submit_apply_btn"
           data-testid="submit_apply_btn"
         ) Submit
-    q-separator
     q-card-section
 </template>
 
