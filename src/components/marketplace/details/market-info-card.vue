@@ -11,7 +11,6 @@
           account-item(
             :address="market.admin?.address"
             flat
-            bordered
           )
         .col-5
           .row.justify-end
@@ -22,7 +21,6 @@
           account-item(
             :address="market.owner?.address"
             flat
-            bordered
           )
       .row
         .col-12

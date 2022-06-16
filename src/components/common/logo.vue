@@ -24,7 +24,7 @@ export default {
   margin-left: 10px
   margin-right: 0px
 .subtitle
-  font-family: 'Afloat font', sans-serif
+  font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif
   font-style: normal
   font-weight: 600
   font-size: 1.1rem

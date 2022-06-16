@@ -19,13 +19,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~/css/app.styl'
 .linksTabs
-  font-family: Whitney SSm A,Whitney SSm B
-  font-style: normal
-  font-size: 1rem
-  line-height: 3rem
-  font-size: 14px
-  font-weight: 600
+  font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
+  color: $color-primary-dark !important
+  font-style: italic !important
+  line-height: 3rem !important
+  font-size: $font-size-menu !important
+  font-weight: $font-weight-semibold !important
+  text-decoration: underline !important
+.linksTabs:hover
+  color: $color-primary !important
 span
   color: $secondary
   height: 1rem

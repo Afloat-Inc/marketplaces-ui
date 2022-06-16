@@ -35,6 +35,7 @@ q-expansion-item(group="applicants")
         v-if="status !== 'Rejected'"
         label="Reject"
         color="negative"
+        class="btn-reject"
         rounded
         unelevated
         size="md"
@@ -118,7 +119,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~/css/app.styl'
+
 .card-btn:hover
   transform: scale(1.01)
   cursor: pointer
+.btn-reject:hover
+  color: $color-primary-dark
 </style>

@@ -1,9 +1,9 @@
 <template lang="pug">
 .row.justify-center
   div.text-grey-8.q-pr-sm.contact Contact:
-  a(class="contact" href="https://t.me/stayafloat" target="_blank") {{'Telegram Link'}}
+  a(class="contact link" href="https://t.me/stayafloat" target="_blank") {{'Telegram Link'}}
 .row.justify-center
-  a(class="contact" href="mailto:admin@stayafloat.io" target="_blank") {{'admin@stayafloat.io'}}
+  a(class="contact link" href="mailto:admin@stayafloat.io" target="_blank") {{'admin@stayafloat.io'}}
 
 </template>
 
@@ -14,9 +14,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~/css/app.styl'
 .contact
-  font-family: Whitney SSm A,Whitney SSm B
+  font-family: 'Whitney SSm A','Whitney SSm B', sans-serif !important
   font-style: normal
   font-weight: 600
   font-size: 1rem
+.link
+  color: $color-primary-dark !important
 </style>
