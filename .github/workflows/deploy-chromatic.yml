@@ -29,31 +29,31 @@ jobs:
 
 
       # Setup node
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.1.1
-        with:
-          node-version: '16.x'
+      # - name: Setup Node.js environment
+      #   uses: actions/setup-node@v3.1.1
+      #   with:
+      #     node-version: '16.x'
 
       # GIT Config
-      - name: Fix up git URLs
-        run: echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
+      # - name: Fix up git URLs
+      #   run: echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
 
       # Setup quasar
-      - name: Setup environment
-        run: |
-            yarn install
+      # - name: Setup environment
+      #   run: |
+      #       yarn install
 
       # Build App
-      - name: Deploy Chromatic
-        uses: chromaui/action-next@v1
-        env:
-          APP_NAME: 'Native Bitcoin Vault'
-          CHROMATIC_WSS: 'wss://n4.hashed.systems'
-          BDK_SERVICES_URL: 'https://bdk.hashed.systems'
-          IPFS_URL: 'https://ipfs.infura.io:5001'
-        with:
-          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          APP_NAME: 'Native Bitcoin Vault'
-          WSS: 'wss://n4.hashed.systems'
-          BDK_SERVICES_URL: 'https://bdk.hashed.systems'
+      # - name: Deploy Chromatic
+      #   uses: chromaui/action-next@v1
+      #   env:
+      #     APP_NAME: 'Native Bitcoin Vault'
+      #     CHROMATIC_WSS: 'wss://n4.hashed.systems'
+      #     BDK_SERVICES_URL: 'https://bdk.hashed.systems'
+      #     IPFS_URL: 'https://ipfs.infura.io:5001'
+      #   with:
+      #     # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+      #     projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+      #     APP_NAME: 'Native Bitcoin Vault'
+      #     WSS: 'wss://n4.hashed.systems'
+      #     BDK_SERVICES_URL: 'https://bdk.hashed.systems'
