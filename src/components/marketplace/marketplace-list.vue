@@ -5,7 +5,7 @@
   #items(v-else)
     .row.q-col-gutter-md
       .col-3(v-for="marketplace in marketplaces")
-        marketplace-item(v-bind="marketplace" @onClick="selectMarketplace")
+        marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
 </template>
 
 <script>
