@@ -14,6 +14,7 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getMarketplaceById ({ marketId }, subTrigger) {
+    console.log('getMarketplaceById', marketId)
     const market = await this.exQuery('marketplaces', [marketId])
     if (!market.isEmpty) {
       return market.toHuman()
@@ -50,11 +51,11 @@ class MarketplaceApi extends BasePolkadotApi {
    */
   async getAllMarketplaces (subTrigger) {
     const allIds = await this.exEntriesQuery('marketplaces')
-    console.log('getAllMarketplaces', allIds)
-    return allIds.map(v => {
+    const map = this.mapEntries(allIds)
+    return map.map(v => {
       return {
-        id: v[0].toJSON(),
-        value: v[1].toHuman()
+        ...v,
+        id: v.id[0]
       }
     })
   }
