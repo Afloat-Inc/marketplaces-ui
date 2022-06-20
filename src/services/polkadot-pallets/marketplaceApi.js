@@ -52,12 +52,23 @@ class MarketplaceApi extends BasePolkadotApi {
   async getAllMarketplaces (subTrigger) {
     const allIds = await this.exEntriesQuery('marketplaces')
     const map = this.mapEntries(allIds)
-    return map.map(v => {
+    const allMarketplaces = map.map(v => {
       return {
         ...v,
         id: v.id[0]
       }
     })
+    const promises = []
+    allMarketplaces.forEach(market => {
+      promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
+    })
+    const marketDetails = await Promise.all(promises)
+    allMarketplaces.map((market, i) => {
+      market.administrator = marketDetails[i][0].address
+      market.owner = marketDetails[i][1].address
+      return market
+    })
+    return allMarketplaces
   }
 
   /**
@@ -187,6 +198,16 @@ class MarketplaceApi extends BasePolkadotApi {
     const application = await this.exQuery('applications', [applicantionId.toHuman()])
     return application.toHuman()
   }
+
+  async getMarketplacesByAuthority ({ accountId, marketplaceId }, subTrigger) {
+    console.log('getMarketplacesByAuthority', accountId, marketplaceId, subTrigger)
+    const marketplaceAuthority = await this.exQuery('marketplacesByAuthority', [accountId, marketplaceId])
+    if (marketplaceAuthority.isEmpty) {
+      return undefined
+    }
+    return marketplaceAuthority.toHuman()
+  }
+
   // /**
   //  * @name getXpubByUser
   //  * @description Get Xpub by user
