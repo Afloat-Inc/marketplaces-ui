@@ -3,8 +3,20 @@
   #no-items(v-if="!haveMarketplaces")
     .text-body2 {{ emptyLabel }}
   #items(v-else)
-    .row.q-col-gutter-md
+    .row.justify-center
+      t-input(
+        testid="label_input"
+        label="Search"
+        v-model="search"
+        @keyup="onSearch()"
+        placeholder="Please write a keyword"
+        autofocus
+      )
+    .row.q-col-gutter-md(v-if="search === ''")
       .col-3(v-for="marketplace in marketplaces")
+        marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
+    .row.q-col-gutter-md(v-if="search !== ''")
+      .col-3(v-for="marketplace in resultSearch")
         marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
 </template>
 
@@ -33,6 +45,12 @@ export default {
     }
   },
   emits: ['selectedMarketplace'],
+  data () {
+    return {
+      search: '',
+      resultSearch: []
+    }
+  },
   computed: {
     haveMarketplaces () {
       return (this.marketplaces && this.marketplaces.length > 0)
@@ -41,6 +59,13 @@ export default {
   methods: {
     selectMarketplace (marketplace) {
       this.$emit('selectedMarketplace', marketplace)
+    },
+    onSearch () {
+      if (this.search.length > 0) {
+        const currentSearch = this.search.toLowerCase()
+        this.resultSearch = this.marketplaces.filter(item => item.value.label.toLowerCase().includes(currentSearch))
+        console.log(this.resultSearch)
+      }
     }
   }
 }
