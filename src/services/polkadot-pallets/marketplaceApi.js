@@ -61,6 +61,25 @@ class MarketplaceApi extends BasePolkadotApi {
   }
 
   /**
+   * @name getMyMarketplaces
+   * @description Get all marketplaces
+   * @param {String} accountId User polkadot address
+   * @param {Function} subTrigger Function to trigger when subscription detect changes
+   * @returns {Object}
+   */
+  async getMyMarketplaces ({ accountId }, subTrigger) {
+    const allIds = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
+    const map = this.mapEntries(allIds)
+    console.log('map', map)
+    return map.map(v => {
+      return {
+        ...v,
+        id: v.id[1]
+      }
+    })
+  }
+
+  /**
    * @name getParticipantsByMarket
    * @description Get marketplace's participants by market id
    * @param {String} marketId Market id
