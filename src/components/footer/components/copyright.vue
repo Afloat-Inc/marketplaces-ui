@@ -1,7 +1,7 @@
 <template lang="pug">
 .row.q-pt-sm.justify-center
   span.copyright
-    | © 2019 AFLOAT
+    | © 2022 Test
     span.sub ®
     | , INC. ALL RIGHTS RESERVED
 </template>
