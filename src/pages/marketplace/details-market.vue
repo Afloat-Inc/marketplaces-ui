@@ -38,7 +38,6 @@ import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
 import ApplicantsList from '~/components/marketplace/applicants-list.vue'
-const afloatMarketplaceId = process.env.AFLOAT_MARKETPLACE_ID
 
 export default {
   name: 'DetailsMarket',
@@ -51,7 +50,7 @@ export default {
   data () {
     return {
       tab: 'market-info',
-      marketId: afloatMarketplaceId,
+      marketId: undefined,
       market: undefined,
       application: undefined,
       participants: [],
@@ -95,13 +94,14 @@ export default {
     }
   },
   async beforeMount () {
+    this.syncParams()
     this.getMarketplaceInfo()
   },
   methods: {
     syncParams () {
       const queries = this.$route.query
       if (queries && queries.marketId) {
-        this.idMarket = this.$route.query.marketId
+        this.marketId = this.$route.query.marketId
       } else {
         this.$router.push({ name: 'marketplace' })
       }

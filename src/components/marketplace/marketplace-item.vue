@@ -3,13 +3,10 @@ q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
   .row.justify-center
     q-icon(name="store" size="4em" color="primary")
   #labels
-    .text-subtitle1.text-weight-bold Label
-    .text-body2 {{ label }}
-    q-separator.q-my-sm
-    .text-body2 {{ $t('general.loremShort') }}
+    .text-subtitle1.text-weight-bold {{ marketplace?.value.label }}
     q-separator.q-my-sm
     .text-subtitle1.text-weight-bold Administrator
-    account-item(:address="administrator" flat shortDisplay)
+    account-item(:address="marketplace?.administrator" flat shortDisplay)
 </template>
 
 <script>
@@ -22,16 +19,8 @@ export default {
   name: 'MarketplaceItem',
   components: { AccountItem },
   props: {
-    id: {
-      type: String,
-      default: undefined
-    },
-    label: {
-      type: String,
-      default: undefined
-    },
-    administrator: {
-      type: String,
+    marketplace: {
+      type: Object,
       default: undefined
     }
   },
@@ -39,10 +28,11 @@ export default {
   methods: {
     onClick () {
       const marketplace = {
-        id: this.id,
-        label: this.label,
-        administrator: this.administrator
+        id: this.marketplace.id,
+        label: this.marketplace.value.label,
+        administrator: this.marketplace.administrator
       }
+      console.log(marketplace)
       this.$emit('onClick', marketplace)
     }
   }
