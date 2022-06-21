@@ -25,9 +25,9 @@
 
   q-tab-panels(v-model="tab" animated)
     q-tab-panel(name="myMarketplaces")
-      marketplace-list(:marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace" @loadMarkets="onLoadMyMarketplaces")
+      marketplace-list(:marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMyMarketplaces")
     q-tab-panel(name="allMarketplaces")
-      marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @loadMarkets="onLoadMoreMarkets")
+      marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
       q-card.modalSize

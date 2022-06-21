@@ -50,7 +50,7 @@ export default {
       default: 'There are not marketplaces yet'
     }
   },
-  emits: ['selectedMarketplace', 'loadMarkets'],
+  emits: ['selectedMarketplace', 'onLoadMarkets'],
   data () {
     return {
       search: '',
@@ -80,7 +80,7 @@ export default {
     },
     loadMoreMarkets (index, done) {
       const stop = this.$refs.infiniteScroll.stop
-      this.$emit('loadMarkets', { index, done, stop })
+      this.$emit('onLoadMarkets', { index, done, stop })
     },
     onSearch () {
       const currentSearch = this.search.toLowerCase()
