@@ -22,7 +22,7 @@
           .row.justify-center.q-my-md
             q-spinner-dots(color="primary" size="40px")
         .row.q-col-gutter-md
-          .col-3(v-for="marketplace in marketplaces" :key="marketplace.key")
+          .col-3(v-for="marketplace in resultSearch" :key="marketplace.key")
             marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
 </template>
 
