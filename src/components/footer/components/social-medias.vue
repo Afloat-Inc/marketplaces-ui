@@ -44,5 +44,5 @@ export default {
   height: 30px
   padding: 3px
 .social-media:hover
-  background-color: $color-primary-dark
+  background-color: $color-primary
 </style>
