@@ -34,7 +34,8 @@ export default {
         participantsTitle: 'Participants',
         noParticipants: 'No participants yet',
         noApplicants: 'No applicants yet',
-        pending: 'Your application is under review'
+        pending: 'Your application is under review',
+        noMarketplaces: 'No markets yet'
       },
       applyForm: {
         title: 'Apply for Marketplace',
