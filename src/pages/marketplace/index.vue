@@ -62,21 +62,33 @@ export default {
   },
   mounted () {
     this.getAllMarketplace()
+    this.getMyMarketplaces()
   },
   methods: {
     async getAllMarketplace () {
       this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces()
+    },
+    async getMyMarketplaces () {
+      try {
+        this.showLoading()
+        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
     },
     createMarketplace (marketplace) {
       try {
         this.showLoading()
         console.log('createMarketplace', marketplace)
         this.modals.isShowingAddMarketplace = false
-        this.myMarketplaces.push({
-          ...marketplace,
-          id: this.myMarketplaces.length.toString(),
-          administrator: this.selectedAccount.address
-        })
+        // this.myMarketplaces.push({
+        //   ...marketplace,
+        //   id: this.myMarketplaces.length.toString(),
+        //   administrator: this.selectedAccount.address
+        // })
         if (this.tab !== 'myMarketplaces') {
           this.tab = 'myMarketplaces'
         }
