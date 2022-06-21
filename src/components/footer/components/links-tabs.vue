@@ -5,7 +5,6 @@
   a(href="#" class="linksTabs") Privacy Policy
   span &#124;
   a(href="#" class="linksTabs") FAQ
-  Logo
 </template>
 
 <script>
@@ -22,7 +21,7 @@ export default {
 @import '~/css/app.styl'
 .linksTabs
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
-  color: $color-primary-dark !important
+  color: $color-primary !important
   font-style: italic !important
   line-height: 3rem !important
   font-size: $font-size-menu !important

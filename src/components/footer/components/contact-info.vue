@@ -3,7 +3,7 @@
   div.text-grey-8.q-pr-sm.contact Contact:
   a(class="contact link" href="https://t.me/stayafloat" target="_blank") {{'Telegram Link'}}
 .row.justify-center
-  a(class="contact link" href="mailto:admin@stayafloat.io" target="_blank") {{'admin@stayafloat.io'}}
+  a(class="contact link" href="mailto:admin@email.io" target="_blank") {{'admin@email.io'}}
 
 </template>
 
@@ -21,5 +21,5 @@ export default {
   font-weight: 600
   font-size: 1rem
 .link
-  color: $color-primary-dark !important
+  color: $color-primary !important
 </style>

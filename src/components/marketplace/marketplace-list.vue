@@ -3,6 +3,14 @@
   #no-items(v-if="!haveMarketplaces")
     .text-body2 {{ emptyLabel }}
   #items(v-else)
+    .row.justify-center
+      t-input(
+        testid="label_input"
+        label="Search"
+        v-model="search"
+        placeholder="Please write a keyword"
+        autofocus
+      )
     #scroll-area(ref="scrollTargetRef" class="q-pa-md")
       q-infinite-scroll(
         :offset="100"
@@ -43,10 +51,28 @@ export default {
     }
   },
   emits: ['selectedMarketplace', 'loadMarkets'],
+  data () {
+    return {
+      search: '',
+      resultSearch: []
+    }
+  },
   computed: {
     haveMarketplaces () {
       return (this.marketplaces && this.marketplaces.length > 0)
     }
+  },
+  watch: {
+    search (value) {
+      if (value !== '') {
+        this.onSearch()
+      } else {
+        this.resultSearch = this.marketplaces
+      }
+    }
+  },
+  mounted () {
+    this.resultSearch = this.marketplaces
   },
   methods: {
     selectMarketplace (marketplace) {
@@ -55,6 +81,10 @@ export default {
     loadMoreMarkets (index, done) {
       const stop = this.$refs.infiniteScroll.stop
       this.$emit('loadMarkets', { index, done, stop })
+    },
+    onSearch () {
+      const currentSearch = this.search.toLowerCase()
+      this.resultSearch = this.marketplaces.filter(item => item.value.label.toLowerCase().includes(currentSearch))
     }
   }
 }

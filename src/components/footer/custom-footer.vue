@@ -2,10 +2,8 @@
 .row.justify-center
   q-toolbar(class="bg-white text-primary")
     q-toolbar-title
-      .row.justify-center
-        div.logoFullFooter
       .row.justify-center.q-pb-md
-        div.taxGiving The TAXGIVING&reg; Company
+        div.taxGiving The Company
       ContactInfo
       SocialMedias.q-py-lg
       LinksTabs

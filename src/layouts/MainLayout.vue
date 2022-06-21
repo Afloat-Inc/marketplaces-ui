@@ -4,10 +4,7 @@ q-layout(view="lHh Lpr lFf")
       .row.justify-center
         .col-xs-12.col-sm-12.col-md-11
           q-toolbar(class="bg-white text-primary bottomLine")
-            q-toolbar-title
-              Logo(
-                includeSubtitle
-              )
+            q-toolbar-title The company
             q-item.routerItems.nav-link(
               clickable
               :to="{ name: 'home'}"
@@ -172,7 +169,7 @@ export default defineComponent({
 @import '~/css/app.styl'
 
 .activeRouter
-  border-bottom: 4px solid $color-primary-dark !important
+  border-bottom: 4px solid $color-primary !important
   border-radius: 0px
 
 .hasLink
