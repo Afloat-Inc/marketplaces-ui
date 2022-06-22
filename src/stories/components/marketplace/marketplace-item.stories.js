@@ -38,7 +38,7 @@ Base.args = {
     value: {
       label: 'Alexis marketplace'
     },
-    owner: 'Test owner',
-    administrator: 'Test admin'
+    owner: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym',
+    administrator: '5GRTyA72wHWqn8CrtHGYpfVHPwcgTKWiuZ4KkZCD9fk8BJ31'
   }
 }
