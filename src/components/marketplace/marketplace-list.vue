@@ -11,9 +11,19 @@
         placeholder="Please write a keyword"
         autofocus
       )
-    .row.q-col-gutter-md
-      .col-3(v-for="marketplace in resultSearch")
-        marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
+    #scroll-area(ref="scrollTargetRef" class="q-pa-md")
+      q-infinite-scroll(
+        :offset="100"
+        @load="loadMoreMarkets"
+        :scroll-target="$refs.scrollTargetRef"
+        ref="infiniteScroll"
+      )
+        template(v-slot:loading)
+          .row.justify-center.q-my-md
+            q-spinner-dots(color="primary" size="40px")
+        .row.q-col-gutter-md
+          .col-3(v-for="marketplace in resultSearch" :key="marketplace.key")
+            marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
 </template>
 
 <script>
@@ -40,7 +50,7 @@ export default {
       default: 'There are not marketplaces yet'
     }
   },
-  emits: ['selectedMarketplace'],
+  emits: ['selectedMarketplace', 'onLoadMarkets'],
   data () {
     return {
       search: '',
@@ -68,6 +78,10 @@ export default {
     selectMarketplace (marketplace) {
       this.$emit('selectedMarketplace', marketplace)
     },
+    loadMoreMarkets (index, done) {
+      const stop = this.$refs.infiniteScroll.stop
+      this.$emit('onLoadMarkets', { index, done, stop })
+    },
     onSearch () {
       const currentSearch = this.search.toLowerCase()
       this.resultSearch = this.marketplaces.filter(item => item.value.label.toLowerCase().includes(currentSearch))
@@ -78,4 +92,7 @@ export default {
 <style lang="stylus" scoped>
 #container
   min-height: 35vh
+#scroll-area
+    height: calc(75vh - 120px)
+    overflow-x: hidden
 </style>

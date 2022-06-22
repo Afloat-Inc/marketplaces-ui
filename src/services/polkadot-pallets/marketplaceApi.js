@@ -49,8 +49,8 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
-  async getAllMarketplaces (subTrigger) {
-    const allIds = await this.exEntriesQuery('marketplaces')
+  async getAllMarketplaces ({ startKey, pageSize }, subTrigger) {
+    const allIds = await this.exEntriesQuery('marketplaces', [], { startKey, pageSize })
     const map = this.mapEntries(allIds)
     const allMarketplaces = map.map(v => {
       return {
@@ -73,11 +73,12 @@ class MarketplaceApi extends BasePolkadotApi {
 
   /**
    * @name getMyMarketplaces
-   * @description Get all marketplaces
+   * @description Get ALL my marketplaces
    * @param {String} accountId User polkadot address
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
+  // TODO: Get all my marketplaces from the Backend, because the marketplaces are paginated
   async getMyMarketplaces ({ accountId }, subTrigger) {
     const allIds = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
     const map = this.mapEntries(allIds)

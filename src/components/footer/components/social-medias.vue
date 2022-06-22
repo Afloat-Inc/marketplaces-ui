@@ -20,16 +20,16 @@ export default {
   name: 'SocialMedias',
   methods: {
     openTwitter () {
-      window.open('https://twitter.com/AfloatTaxCredit', '_blank')
+      window.open('https://twitter.com/', '_blank')
     },
     openFacebook () {
-      window.open('https://www.facebook.com/afloatinc', '_blank')
+      window.open('https://www.facebook.com/', '_blank')
     },
     openLinkedin () {
-      window.open('https://www.linkedin.com/company/afloat-inc', '_blank')
+      window.open('https://www.linkedin.com/company/', '_blank')
     },
     openInstagram () {
-      window.open('https://instagram.com/afloattaxcredit', '_blank')
+      window.open('https://instagram.com/', '_blank')
     }
   }
 }

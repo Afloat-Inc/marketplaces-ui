@@ -43,5 +43,5 @@ export default {
 
 <style lang="stylus" scoped>
 .container
-  min-height: 20vh
+  min-height: 35vh
 </style>
