@@ -89,6 +89,8 @@ export default {
           user: this.selectedAccount.address,
           label: marketplace.label
         })
+        this.getMyMarketplaces()
+        this.getAllMarketplace()
         if (this.tab !== 'myMarketplaces') {
           this.tab = 'myMarketplaces'
         }
@@ -98,7 +100,6 @@ export default {
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
-        this.getAllMarketplace()
       }
     },
     onSelectMarketplace (marketplace) {
