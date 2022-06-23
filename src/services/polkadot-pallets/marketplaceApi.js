@@ -79,6 +79,7 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getMyMarketplaces ({ accountId }, subTrigger) {
+    // 1 Get all the applications by user address
     const allIds = await this.exEntriesQuery('applicationsByAccount', [accountId])
     const map = this.mapEntries(allIds)
     const response = map.map(v => {
@@ -87,10 +88,11 @@ class MarketplaceApi extends BasePolkadotApi {
         applicationId: v.value
       }
     })
-    console.log('allIds', response)
+    // 2 Map all the aplicationsIds into array of application id
     const applicationsId = map.map(v => v.value)
-    console.log('Array of Applications id', applicationsId)
+    // 2.1 Execute multiquery to retrieve the applications details
     const applications = await this.exMultiQuery('applications', applicationsId)
+    // 3 Map all the applications into array of application details
     const applicationsReadable = applications.map((v, index) => {
       const marketId = response.find(r => r.applicationId === applicationsId[index]).marketId
       return {
@@ -99,30 +101,37 @@ class MarketplaceApi extends BasePolkadotApi {
         value: v.toHuman()
       }
     })
-
+    // 4 filter all the applications by approved status
     const marketplacesIds = applicationsReadable.filter(v => v.value.status === 'Approved').map(v => v.marketId)
-    console.log('Array of Marketplaces id', marketplacesIds)
-    const marketplaces = await this.exMultiQuery('marketplaces', marketplacesIds)
-    console.log('marketplacesData', marketplaces)
+    // 5 Execute Query to retrieve the marketplaces By Authority [Admin flow]
+    const authorities = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
+    const mapAuthorities = this.mapEntries(authorities)
+    // 6 map mapAuthorities to array of authorities readable
+    const authoritiesMap = mapAuthorities.map(v => {
+      return v.id[1]
+    })
+    // 7 Join all the from the admin flow & when the user is applicant
+    const marketplacesIdJoined = marketplacesIds.concat(authoritiesMap)
+    // 8 get marketplaces details
+    const marketplaces = await this.exMultiQuery('marketplaces', marketplacesIdJoined)
+    // 9 map marketplaces details toHuman
     const marketLabels = marketplaces.map((v, index) => {
       return v.toHuman()
     })
-
-    console.log('marketplacesDataHuman', marketLabels)
+    // 10 Join marketplace label with marketplaceId
     const marketInfo = marketLabels.map((v, index) => {
       return {
-        id: marketplacesIds[index],
+        id: marketplacesIdJoined[index],
         label: v.label
       }
     })
-    console.log('marketInfo', marketInfo)
+    // 11 Get Authorities by marketplaces given marketplacesId
     const promises = []
     marketInfo.forEach(market => {
       promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
     })
     const marketDetails = await Promise.all(promises)
-    console.log('marketDetails', marketDetails)
-
+    // 12 Map marketplaces details
     return marketInfo.map((market, i) => {
       return {
         ...market,
