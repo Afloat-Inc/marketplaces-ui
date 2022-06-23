@@ -48,6 +48,14 @@ export default {
     emptyLabel: {
       type: String,
       default: 'There are not marketplaces yet'
+    },
+    /**
+     * This props is used to know if the tab is the my marketplaces or the all marketplaces
+     * My marketplaces doesn't have pagination yet
+     */
+    type: {
+      type: String,
+      default: undefined
     }
   },
   emits: ['selectedMarketplace', 'onLoadMarkets'],
@@ -69,6 +77,9 @@ export default {
       } else {
         this.resultSearch = this.marketplaces
       }
+    },
+    marketplaces () {
+      this.resultSearch = this.marketplaces
     }
   },
   mounted () {
@@ -80,6 +91,10 @@ export default {
     },
     loadMoreMarkets (index, done) {
       const stop = this.$refs.infiniteScroll.stop
+      if (this.type === 'my-marketplaces') {
+        done()
+        return
+      }
       this.$emit('onLoadMarkets', { index, done, stop })
     },
     onSearch () {
