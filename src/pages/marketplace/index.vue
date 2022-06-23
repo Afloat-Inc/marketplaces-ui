@@ -25,7 +25,7 @@
 
   q-tab-panels(v-model="tab" animated)
     q-tab-panel(name="myMarketplaces")
-      marketplace-list(:marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMyMarketplaces")
+      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace")
     q-tab-panel(name="allMarketplaces")
       marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
@@ -67,11 +67,10 @@ export default {
     selectedAccount (account) {
       this.getAllMarketplace()
       this.getMyMarketplaces()
-      this.$forceUpdate()
     }
   },
   mounted () {
-    // this.getAllMarketplace()
+    this.getAllMarketplace()
     this.getMyMarketplaces()
   },
   methods: {
@@ -79,26 +78,14 @@ export default {
       const lastMarketplace = this.allMarketplaces[this.allMarketplaces.length - 1]
       const loadedMoreMarkets = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: lastMarketplace.key, pageSize: this.pagination.limit })
       this.allMarketplaces = this.allMarketplaces.concat(loadedMoreMarkets)
-      this.getMyMarketplaces()
       if (loadedMoreMarkets.length > 0) done()
       else stop()
-    },
-    async onLoadMyMarketplaces ({ index, done, stop }) {
-      // const lastMarketplace = this.myMarketplaces[this.myMarketplaces.length - 1]
-      // const loadedMyMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ startKey: lastMarketplace.key, pageSize: this.pagination.limit })
-      // this.myMarketplaces = this.myMarketplaces.concat(loadedMyMarketplaces)
-      // if (loadedMyMarketplaces.length > 0) done()
-      // else stop()
-      // done()
     },
     async getAllMarketplace () {
       this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
     },
     async getMyMarketplaces () {
       this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
-      console.log(this.myMarketplaces)
-      // this.myMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner === this.selectedAccount.address)
-      // this.allMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner !== this.selectedAccount.address)
     },
     createMarketplace (marketplace) {
       try {
