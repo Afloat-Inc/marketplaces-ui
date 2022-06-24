@@ -1,7 +1,7 @@
 <template lang="pug">
 .row.q-pt-sm.justify-center
   span.copyright
-    | © 2022 Test by Marketplaces
+    | © 2022 Hashed Systems DAO LLC
     span.sub ®
     | , INC. ALL RIGHTS RESERVED
 </template>
