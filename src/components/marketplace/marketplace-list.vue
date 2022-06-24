@@ -1,7 +1,7 @@
 <template lang="pug">
 #container
   #no-items(v-if="!haveMarketplaces")
-    .text-body2 {{ emptyLabel }}
+    .row.justify-center.q-pa-md.text-h4 {{ emptyLabel }}
   #items(v-else)
     .row.justify-center
       t-input(
@@ -110,4 +110,5 @@ export default {
 #scroll-area
     height: calc(75vh - 120px)
     overflow-x: hidden
+
 </style>
