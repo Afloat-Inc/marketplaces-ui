@@ -218,6 +218,11 @@ class MarketplaceApi extends BasePolkadotApi {
     return this.callTx('apply', user, [marketId, notes, files])
   }
 
+  async createMarketplace ({ admin, user, label }, subTrigger) {
+    console.log('createMarketplace', admin, user, subTrigger)
+    return this.callTx('createMarketplace', user, [admin, label])
+  }
+
   /**
    *
    * @name enrollApplicant

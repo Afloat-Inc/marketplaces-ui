@@ -104,16 +104,18 @@ export default {
         this.hideLoading()
       }
     },
-    createMarketplace (marketplace) {
+    async createMarketplace (marketplace) {
       try {
         this.showLoading()
         console.log('createMarketplace', marketplace)
         this.modals.isShowingAddMarketplace = false
-        // this.myMarketplaces.push({
-        //   ...marketplace,
-        //   id: this.myMarketplaces.length.toString(),
-        //   administrator: this.selectedAccount.address
-        // })
+        await this.$store.$marketplaceApi.createMarketplace({
+          admin: this.selectedAccount.address,
+          user: this.selectedAccount.address,
+          label: marketplace.label
+        })
+        this.getMyMarketplaces()
+        this.getAllMarketplace()
         if (this.tab !== 'myMarketplaces') {
           this.tab = 'myMarketplaces'
         }

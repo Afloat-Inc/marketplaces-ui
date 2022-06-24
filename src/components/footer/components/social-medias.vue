@@ -20,7 +20,7 @@ export default {
   name: 'SocialMedias',
   methods: {
     openTwitter () {
-      window.open('https://twitter.com/', '_blank')
+      window.open('https://twitter.com/hashednetwork', '_blank')
     },
     openFacebook () {
       window.open('https://www.facebook.com/', '_blank')
