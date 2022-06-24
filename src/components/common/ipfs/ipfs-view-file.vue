@@ -28,7 +28,7 @@
       outline
       v-if="typeCid"
       :loading="loading"
-      :color="color"
+      :color="'secondary'"
       @click="viewFile"
       :label="labelC"
       :icon="icon"

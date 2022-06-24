@@ -1,6 +1,6 @@
 <template lang="pug">
 .row.justify-center
-  q-toolbar(class="bg-white text-primary")
+  q-toolbar(class="text-primary")
     q-toolbar-title
       .row.justify-center.q-pb-md
         div.taxGiving The Company

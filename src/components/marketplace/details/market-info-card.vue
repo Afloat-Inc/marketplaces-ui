@@ -1,6 +1,6 @@
 <template lang="pug">
 #container
-  q-card(bordered flat)
+  q-card(flat class="card-style")
     q-card-section
       .row.justify-center
         .text-h2 {{market.label}}
@@ -36,7 +36,6 @@
           .row.q-gutter-md(v-else)
             .col-12
               .text-subtitle2 {{$t('pages.marketplace.details.noParticipants')}}
-    q-card-section
 </template>
 
 <script>
