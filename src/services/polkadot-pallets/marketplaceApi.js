@@ -78,15 +78,57 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
-  // TODO: Get all my marketplaces from the Backend, because the marketplaces are paginated
   async getMyMarketplaces ({ accountId }, subTrigger) {
-    const allIds = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
+    const allIds = await this.exEntriesQuery('applicationsByAccount', [accountId])
     const map = this.mapEntries(allIds)
-    console.log('map', map)
-    return map.map(v => {
+    const response = map.map(v => {
       return {
-        ...v,
-        id: v.id[1]
+        marketId: v.id[1],
+        applicationId: v.value
+      }
+    })
+    console.log('allIds', response)
+    const applicationsId = map.map(v => v.value)
+    console.log('Array of Applications id', applicationsId)
+    const applications = await this.exMultiQuery('applications', applicationsId)
+    const applicationsReadable = applications.map((v, index) => {
+      const marketId = response.find(r => r.applicationId === applicationsId[index]).marketId
+      return {
+        id: applicationsId[index],
+        marketId,
+        value: v.toHuman()
+      }
+    })
+
+    const marketplacesIds = applicationsReadable.filter(v => v.value.status === 'Approved').map(v => v.marketId)
+    console.log('Array of Marketplaces id', marketplacesIds)
+    const marketplaces = await this.exMultiQuery('marketplaces', marketplacesIds)
+    console.log('marketplacesData', marketplaces)
+    const marketLabels = marketplaces.map((v, index) => {
+      return v.toHuman()
+    })
+
+    console.log('marketplacesDataHuman', marketLabels)
+    const marketInfo = marketLabels.map((v, index) => {
+      return {
+        id: marketplacesIds[index],
+        label: v.label
+      }
+    })
+    console.log('marketInfo', marketInfo)
+    const promises = []
+    marketInfo.forEach(market => {
+      promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
+    })
+    const marketDetails = await Promise.all(promises)
+    console.log('marketDetails', marketDetails)
+
+    return marketInfo.map((market, i) => {
+      return {
+        ...market,
+        value: { label: market.label },
+        administrator: marketDetails[i][0].address,
+        owner: marketDetails[i][1].address
       }
     })
   }

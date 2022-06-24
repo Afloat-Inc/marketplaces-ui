@@ -71,7 +71,7 @@ export default {
     }
   },
   mounted () {
-    this.getAllMarketplace()
+    // this.getAllMarketplace()
     this.getMyMarketplaces()
   },
   methods: {
@@ -89,14 +89,16 @@ export default {
       // this.myMarketplaces = this.myMarketplaces.concat(loadedMyMarketplaces)
       // if (loadedMyMarketplaces.length > 0) done()
       // else stop()
-      done()
+      // done()
     },
     async getAllMarketplace () {
       this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
     },
     async getMyMarketplaces () {
-      this.myMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner === this.selectedAccount.address)
-      this.allMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner !== this.selectedAccount.address)
+      this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
+      console.log(this.myMarketplaces)
+      // this.myMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner === this.selectedAccount.address)
+      // this.allMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner !== this.selectedAccount.address)
     },
     async createMarketplace (marketplace) {
       try {
