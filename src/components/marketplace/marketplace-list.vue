@@ -3,7 +3,7 @@
   #no-items(v-if="!haveMarketplaces")
     .text-body2 {{ emptyLabel }}
   #items(v-else)
-    .row.justify-center
+    .row.justify-start
       t-input(
         testid="label_input"
         label="Search"
