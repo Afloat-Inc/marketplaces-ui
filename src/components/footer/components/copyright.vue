@@ -1,7 +1,7 @@
 <template lang="pug">
 .row.q-pt-sm.justify-center
-  span.copyright
-    | © 2022 Hashed Systems DAO LLC
+  span.copyright.text-uppercase
+    | © 2022 Hashed Network Dao LLC
     span.sub ®
     | , INC. ALL RIGHTS RESERVED
 </template>
@@ -19,11 +19,9 @@ export default {
   font-size: 10px
 .copyright
   position: relative !important
-  opacity: 0.2 !important
-  font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
+  opacity: 0.3 !important
   font-style: italic
   font-size: 0.9rem
-  color: $color-neutral-grey-5
+  color: black
   letter-spacing: 0.875px !important
-  font-weight: $font-weight-semibold
 </style>
