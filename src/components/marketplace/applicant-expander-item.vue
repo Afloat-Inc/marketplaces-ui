@@ -10,11 +10,11 @@ q-expansion-item(group="applicants")
         class="text-white q-mt-md label"
       )
   #body.q-pa-sm
-    .text-h6.q-pb-md Notes:
+    .text-h6.q-pb-md {{ $t('pages.marketplace.details.notesTitle') }}:
     #notes.q-px-sm
       .label {{ notes }}
     q-separator(inset).q-my-sm
-    .text-h6.q-pb-md Files:
+    .text-h6.q-pb-md {{ $t('pages.marketplace.details.filesTitle') }}:
     #files.q-px-sm
       .row.q-col-gutter-xs
         .col-6(v-for="file in files")
@@ -23,7 +23,7 @@ q-expansion-item(group="applicants")
               //- q-tooltip Click to open file
     .row.q-mt-sm.justify-end.q-gutter-x-sm
       q-btn(
-        label="Enroll"
+        :label="$t('pages.marketplace.details.enrollButton')"
         color="secondary"
         size="md"
         outline
@@ -32,7 +32,7 @@ q-expansion-item(group="applicants")
       )
       q-btn(
         v-if="status !== 'Rejected'"
-        label="Reject"
+        :label="$t('pages.marketplace.details.rejectButton')"
         color="negative"
         class="btn-reject"
         outline

@@ -2,9 +2,9 @@
 #container
   //- Header
   .row.justify-between.items-center
-    .text-h6 Marketplace
+    .text-h6 {{ $t('pages.marketplace.marketplaceTitle') }}
     q-btn(
-      label="Add Marketplace"
+      :label="$t('pages.marketplace.addMarketplaceButton')"
       no-caps
       unelevated
       color="secondary"
@@ -21,8 +21,8 @@
     :narrow-indicator="false"
     active-class="active-tab"
   )
-    q-tab(name="myMarketplaces" label="My marketplaces")
-    q-tab(name="allMarketplaces" label="All marketplaces")
+    q-tab(name="myMarketplaces" :label="$t('pages.marketplace.tabs.myMarketplaces')")
+    q-tab(name="allMarketplaces" :label="$t('pages.marketplace.tabs.allMarketplaces')")
 
   q-tab-panels(v-model="tab")
     q-tab-panel(name="myMarketplaces" class="tabPanel")

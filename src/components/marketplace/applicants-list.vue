@@ -3,14 +3,14 @@
   q-card(flat)
     q-card-section
       .row.justify-center
-        .text-h2 {{$t('pages.marketplace.applicants.title')}}
+        .text-h2 {{ $t('pages.marketplace.details.applicantsTitle') }}
       #applicantDetails(v-if="applicants.length > 0")
         q-card.q-my-md(v-for="applicant in applicants")
           applicant-expander-item(v-bind="applicant" @onEnroll="onEnrollApplicant" @onReject="onRejectApplicant")
       #applicantDetailsEmpty(v-else)
         q-card(bordered flat)
           q-card-section
-            .text-h4 {{$t('pages.marketplace.details.noApplicants')}}
+            .text-h4 {{ $t('pages.marketplace.details.noApplicants') }}
 </template>
 
 <script>

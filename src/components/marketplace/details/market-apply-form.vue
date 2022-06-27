@@ -7,18 +7,18 @@
     q-card-section
       .row
         .col-7.q-pb-md
-          .label Administrator
+          .label {{ $t('pages.marketplace.role.administrator') }}
           account-item(
             :address="market.admin?.address"
             flat
           )
         .col-5
           .row.justify-end
-            .label Number of participants: {{participantsNumber}}
+            .label {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}: {{participantsNumber}}
 
       .row
         .col-7.q-pb-md
-          .label Owner
+          .label {{ $t('pages.marketplace.role.owner') }}
           account-item(
             :address="market.owner?.address"
             flat
@@ -35,13 +35,13 @@
           testid="notes_input"
           class="q-mt-md"
           v-model="form.notes"
-          label="Notes"
-          placeholder="Notes about your application"
+          :label="$t('pages.marketplace.applyForm.notes.label')"
+          :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
           :rules="[rules.required]"
         )
         .row.justify-between
           div(class="q-pt-sm label") {{$t('pages.marketplace.applyForm.filesTitle')}}
-          q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") Add Files
+          q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -72,7 +72,7 @@
           class="q-mt-sm"
           data-cy="submit_apply_btn"
           data-testid="submit_apply_btn"
-        ) Submit
+        ) {{ $t('pages.marketplace.applyForm.submitButton') }}
 </template>
 
 <script>

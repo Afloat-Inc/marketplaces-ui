@@ -1,10 +1,10 @@
 <template lang="pug">
 .row.justify-center.q-gutter-sm.linksTabs
-  a(href="#" class="linksTabs") Terms of Use
+  a(href="#" class="linksTabs") {{ $t('general.footer.terms') }}
   span &#124;
-  a(href="#" class="linksTabs") Privacy Policy
+  a(href="#" class="linksTabs") {{ $t('general.footer.privacyPolicy') }}
   span &#124;
-  a(href="#" class="linksTabs") FAQ
+  a(href="#" class="linksTabs") {{ $t('general.footer.faq') }}
 </template>
 
 <script>

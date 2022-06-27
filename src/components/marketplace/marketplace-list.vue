@@ -6,9 +6,9 @@
     .row.justify-start
       t-input(
         testid="label_input"
-        label="Search"
+        :label="$t('pages.marketplace.searchInput.label')"
         v-model="search"
-        placeholder="Please write a keyword"
+        :placeholder="$t('pages.marketplace.searchInput.placeholder')"
         autofocus
       )
     #scroll-area(ref="scrollTargetRef" class="q-pa-md")

@@ -7,17 +7,17 @@
     q-card-section
       .row
         .col-7.q-pb-md
-          .label Administrator
+          .label {{ $t('pages.marketplace.role.administrator') }}
           account-item(
             :address="market.admin?.address"
             flat
           )
         .col-5
           .row.justify-end
-            .label Number of participants: {{participants.length}}
+            .label {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}: {{participants.length}}
       .row
         .col-7.q-pb-md
-          .label Owner
+          .label {{ $t('pages.marketplace.role.owner') }}
           account-item(
             :address="market.owner?.address"
             flat
@@ -25,7 +25,7 @@
       .row
         .col-12
           q-separator
-          .label.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
+          .label.q-py-md {{ $t('pages.marketplace.details.participantsTitle') }}
           .row.q-gutter-md(v-if="participants.length > 0 ")
             account-item.no-shadow(
               v-for="participant in participants"
@@ -35,7 +35,7 @@
             )
           .row.q-gutter-md(v-else)
             .col-12
-              .text-subtitle2 {{$t('pages.marketplace.details.noParticipants')}}
+              .text-subtitle2 {{ $t('pages.marketplace.details.noParticipants') }}
 </template>
 
 <script>
