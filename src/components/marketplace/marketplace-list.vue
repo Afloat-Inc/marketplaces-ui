@@ -1,16 +1,18 @@
 <template lang="pug">
 #container
   #no-items(v-if="!haveMarketplaces")
-    .row.justify-center.q-pa-md.text-h4 {{ emptyLabel }}
+    .row.justify-center.q-pa-md.text-body2 {{ emptyLabel }}
   #items(v-else)
-    .row.justify-start
-      t-input(
-        testid="label_input"
-        label="Search"
-        v-model="search"
-        placeholder="Please write a keyword"
-        autofocus
-      )
+    .row.justify-start.q-px-md
+      .col-4
+        t-input(
+          testid="label_input"
+          label="Search"
+          v-model="search"
+          placeholder="Please write a keyword"
+          autofocus
+          class="text-subtitle2"
+        )
     #scroll-area(ref="scrollTargetRef" class="q-pa-md")
       q-infinite-scroll(
         :offset="100"

@@ -9,10 +9,11 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       size="sm"
     )
     .text-h4.q-mb-lg Create new marketplace
-    t-input(
+    q-input(
       testid="label_input"
       label="Label"
       v-model="label"
+      outlined
       :rules="[rules.required]"
       placeholder="Please write a description"
       autofocus
