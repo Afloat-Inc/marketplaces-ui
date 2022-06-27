@@ -3,11 +3,11 @@ q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
   .row.justify-center
     q-icon(name="store" size="4em" color="primary")
   #labels
-    .text-subtitle1.text-weight-bold {{ marketplace?.value.label }}
+    .text-subtitle2.text-weight-bold {{ marketplace?.value.label }}
     q-separator.q-my-sm
-    .text-subtitle1.text-weight-bold Administrator
+    .text-subtitle2.text-weight-bold Administrator
     account-item(:address="marketplace?.administrator" flat shortDisplay)
-    .text-subtitle1.text-weight-bold Owner
+    .text-subtitle2.text-weight-bold Owner
     account-item(:address="marketplace?.owner" flat shortDisplay)
 </template>
 
