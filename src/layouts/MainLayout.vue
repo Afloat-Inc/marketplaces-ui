@@ -4,7 +4,7 @@ q-layout(view="lHh Lpr lFf")
       .row.justify-center
         .col-xs-12.col-sm-12.col-md-12
           q-toolbar(class="bg-primary text-white" inset)
-            q-toolbar-title The company
+            q-toolbar-title Hashed Network
             q-item.routerItems(
               clickable
               :to="{ name: 'home'}"
@@ -31,7 +31,6 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label Sign and Verify Message
-            hr
             q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
               selected-account-btn(:selectedAccount="selectedAccount")
               accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
