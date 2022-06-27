@@ -26,6 +26,8 @@ div
           )
     template(v-slot:hint) {{hint}}
   q-btn(
+    outline
+    color="secondary"
     label="encrypt"
     @click="onEncrypt()"
   )

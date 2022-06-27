@@ -1,6 +1,6 @@
 <template lang="pug">
 #container
-  q-card(bordered flat)
+  q-card(flat class="card-style")
     q-card-section
       .row.justify-center
         .text-h2 {{market.label}}
@@ -24,8 +24,8 @@
             flat
           )    q-separator
     q-card-section(v-if="status === 'Pending'")
-      .row.q-gutter-md
-        .col-12.text-subtitle2 {{$t('pages.marketplace.details.pending')}}
+      .row.justify-center.q-gutter-md
+        .text-h5 {{$t('pages.marketplace.details.pending')}}
     q-card-section(v-else)
       q-form(ref="applyForm" @submit="onSubmit")
         .text-h4 {{$t('pages.marketplace.applyForm.title')}}
@@ -41,7 +41,7 @@
         )
         .row.justify-between
           div(class="q-pt-sm label") {{$t('pages.marketplace.applyForm.filesTitle')}}
-          q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" unelevated @click="onMoreFiles") Add Files
+          q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -65,15 +65,14 @@
             )
         q-btn(
           type="submit"
-          color="primary"
-          rounded
+          color="secondary"
+          outline
           no-caps
           unelevated
           class="q-mt-sm"
           data-cy="submit_apply_btn"
           data-testid="submit_apply_btn"
         ) Submit
-    q-card-section
 </template>
 
 <script>

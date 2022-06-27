@@ -1,11 +1,11 @@
 <template lang="pug">
 q-layout(view="lHh Lpr lFf")
-    q-header(class="bg-white")
+    q-header(class="bg-primary")
       .row.justify-center
-        .col-xs-12.col-sm-12.col-md-11
-          q-toolbar(class="bg-white text-primary bottomLine")
+        .col-xs-12.col-sm-12.col-md-12
+          q-toolbar(class="bg-primary text-white" inset)
             q-toolbar-title The company
-            q-item.routerItems.nav-link(
+            q-item.routerItems(
               clickable
               :to="{ name: 'home'}"
               exact
@@ -15,7 +15,7 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label Home
-            q-item.routerItems.nav-link(
+            q-item.routerItems(
               clickable
               :to="{ name: 'marketplace'}"
               active-class="activeRouter"
@@ -24,7 +24,7 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label Marketplace
-            q-item.routerItems.nav-link(
+            q-item.routerItems(
               clickable
               dense
               @click="signAndVerifyMessage"
@@ -35,9 +35,9 @@ q-layout(view="lHh Lpr lFf")
             q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
               selected-account-btn(:selectedAccount="selectedAccount")
               accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-          //- q-toolbar(class="bg-white text-primary")
-          //-   q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          //-     q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
+          q-toolbar(class="bg-white text-primary" class="bottomLine")
+            q-breadcrumbs(active-color="primary" style="font-size: 16px")
+              q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
     q-page-container
       .row.justify-center
         .col-10
@@ -111,7 +111,7 @@ export default defineComponent({
         $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
       } catch (e) {
         console.error('requestUsers', e)
-        showNotification({ color: 'red', message: e.message || e })
+        showNotification({ color: 'negative', message: e.message || e })
       } finally {
         hideLoading()
       }
@@ -167,22 +167,22 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 @import '~/css/app.styl'
+.routerItems
+  border-radius: 5px
+  margin: 10px 10px 10px 10px
 
+.routerItems:hover
+  background-color: $color-secondary
+  color: $color-white
 .activeRouter
-  border-bottom: 4px solid $color-primary !important
-  border-radius: 0px
-
+  color: $color-primary
+  background-color: $color-white
 .hasLink
   color: $light
-
-hr
-  border:         none
-  border-left:    1px solid hsla(200, 10%, 50%,100)
-  height:         2.5vh
-  width:          1px
 
 .routerViewContainer
   min-height: 50vh
 .bottomLine
-  border-bottom: 1px solid $color-neutral-grey-3
+  border-bottom: 1px solid $color-neutral-grey-2
+  padding: 10px 0px 10px 0px
 </style>

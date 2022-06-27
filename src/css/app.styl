@@ -11,13 +11,13 @@
 // grey      = #6c757d
 // white     = #ffffff
 // black     = #162c34
-// bg-body   =   rgba(0,0,0,.25)
 // label-color  = #212529
 
-$color-primary           = #2ee630;
-$color-primary-dark            = #1f7a99;
-$color-primary-light             = #80dfff;
-$color-secondary             = #fcd945;
+$bg-body   =   rgba(0,0,0,.05);
+$color-primary           = #2ebe6a;
+$color-primary-dark            = #2ebe6a;
+$color-primary-light             = #2ebe6a;
+$color-secondary             = #008d3e;
 $color-secondary-dark            = #d9b930;
 $color-secondary-light             = #fce975;
 $color-neutral-grey-1            = #f2f3f4; /*ex-light*/
@@ -28,7 +28,7 @@ $color-neutral-grey-5            = #677175; /*muted*/
 $color-neutral-grey-6            = #3c484c; /*dark*/
 $color-black             = #162c34;
 $color-white             = #fff;
-$color-red             = #dc3545;
+$color-red             = #C10015;
 $color-green             = #2ee6b9;
 $color-purple            = #663366;
 /* font weights */
@@ -39,13 +39,15 @@ $font-weight-semibold =  600;
 $font-weight-bold = 700;
 
 :root
-  --q-primary #2ee630 !important
-  --q-secondary #fcd945 !important
-  --q-accent #fcd945 !important
-  --q-positive #2ee6b9 !important
-  --q-negative #f76767 !important
-  --q-info #663366 !important
-  --q-warning #fcd945 !important
+  --q-primary: #2ebe6a !important
+  --q-secondary: #008d3e !important
+  --q-accent: #9C27B0;
+  --q-positive: #21BA45;
+  --q-negative: #C10015;
+  --q-info: #31CCEC;
+  --q-warning: #F2C037;
+  --q-dark: #1D1D1D;
+  --q-dark-page: #121212;
 
 $font-size-sm= ($font-size-base * 0.75) //12
 $font-size-lg= ($font-size-base * 1) //16
@@ -98,13 +100,15 @@ $font-size-menu= ($font-size-base * 0.875) //14px InVison Button Size
   cursor: pointer
 
 .nav-link
-  min-height: 5.6rem
   font-size: $font-size-lg
-  font-weight: $font-weight-semibold
-  color: $color-neutral-grey-6 !important
-  text-transform: uppercase
+  font-weight: $font-weight-book
+  color: $color-white !important
+  text-transform: capitalize
   font-style: normal
   border-radius: 5px
+.nav-link:hover
+  background-color: $secondary
+  color: white
 
 body
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
@@ -112,26 +116,7 @@ body
   font-size: 1rem !important
   line-height: 1.5 !important
   text-align: left !important
-
-a
-  font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
-  font-style: normal !important
-  font-weight: $font-weight-semibold !important
-  font-size: $font-size-base !important
-  color: $color-primary !important
-  text-decoration: none
-a:hover
-  text-decoration: underline !important
-  font-weight: $font-weight-semibold !important
-  color: $color-primary !important
-.q-btn
-  font-weight: $font-weight-semibold !important
-  font-size: $font-size-button !important
-  line-height: 18px !important
-.q-btn:hover
-  background-color: $color-primary-dark !important
-.q-layout__section--marginal
-  background-color: color-white
+  background: $bg-body !important
 .q-placeholder
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
   font-style: normal !important
@@ -205,14 +190,7 @@ p
   font-size: $font-size-base;
   line-height: 24px;
   color: $color-neutral-grey-4
-a
-  color: $color-primary-dark
-  text-decoration: none
-a:hover
-  text-decoration: underline
-  color: $color-primary
 .q-field--outlined .q-field__control
-  background-color: #FFF
   border-radius: 10px !important
 .q-field__label
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
@@ -220,37 +198,33 @@ a:hover
   color: $color-neutral-grey-4 !important
   padding: 0rem 1rem !important
   font-size : $font-size-lg !important
-.q-card
-  border-radius: 10px !important
-.q-card > .q-focus-helper
-  border-radius: 0.75rem !important
 .q-chip__content
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
   font-style: normal !important
   color: white !important
-
-.q-tab
-  background-color: $color-neutral-grey-1 !important
-  color: $color-neutral-grey-5 !important
-  border-top-left-radius: 12px !important
-  border-top-right-radius: 12px !important
-  border-bottom: 0px white !important
-  margin-right: 10px !important
-.active-tab
-  background-color: white !important
-  border-top-left-radius: 12px !important
-  border-top-right-radius: 12px !important
-  border-style: solid solid none solid!important
-  border-width: 1px !important
-  border-color: #979797 !important
-  color: #495057 !important
+.q-tab-panels
+  border-bottom-left-radius: 12px !important
+  border-bottom-right-radius: 12px !important
 .q-tab__label
   font-family: 'Whitney SSm A', 'Whitney SSm B', sans-serif !important
   font-weight: $font-weight-semibold !important
-  font-size: 14px !important
-  text-transform: uppercase !important
-  padding: 0.5rem 1.2rem !important
+  font-size: 16px !important
+.q-tab
+  color: $color-secondary !important
+  background: transparent !important
+  border-style: solid solid none solid !important
+  border-width: 1px !important
+  border-top-left-radius: 6px !important
+  border-top-right-radius: 6px !important
+.active-tab
+  background: $color-primary-dark !important
+  color: $color-white !important
+  border-style: solid solid none solid !important
+  border-color: $color-primary-dark !important
+  border-width: 1px !important
+  border-top-left-radius: 6px !important
+  border-top-right-radius: 6px !important
 .dropdown-item:hover
   font-weight: $font-weight-bold !important
-.q-menu
-  border-radius: 0.5rem !important
+.card-style
+  padding : 0rem 2rem !important

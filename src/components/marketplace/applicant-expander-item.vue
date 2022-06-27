@@ -24,10 +24,9 @@ q-expansion-item(group="applicants")
     .row.q-mt-sm.justify-end.q-gutter-x-sm
       q-btn(
         label="Enroll"
-        color="primary"
+        color="secondary"
         size="md"
-        unelevated
-        rounded
+        outline
         no-caps
         @click="enroll"
       )
@@ -36,8 +35,7 @@ q-expansion-item(group="applicants")
         label="Reject"
         color="negative"
         class="btn-reject"
-        rounded
-        unelevated
+        outline
         size="md"
         no-caps
         @click="reject"

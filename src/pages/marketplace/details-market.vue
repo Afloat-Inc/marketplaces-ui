@@ -16,7 +16,7 @@
         :breakpoint="0"
         no-caps
         indicator-color="white"
-        align="left"
+        align="justify"
         class="bottomLineTabs"
         active-class="active-tab"
       )
@@ -24,11 +24,11 @@
         q-tab(:riple="false" name="enrollment" label="Enrollment requests")
 
       q-tab-panels(v-model="tab" keep-alive)
-        q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin")
+        q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
           .row
             .col-12
               market-info-card(:market="{...market, admin, owner}" :participants="participants")
-        q-tab-panel(name="enrollment" v-if="isAdmin")
+        q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
           applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
@@ -109,11 +109,15 @@ export default {
     async getMarketplaceInfo () {
       try {
         this.showLoading()
-        this.market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
-        this.market.authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
-        this.participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
-        this.applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
+        const market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
+        const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
+        const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
+        const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
+        this.applicants = applicants
+        this.participants = participants
         await this.getApplication()
+        this.market = market
+        this.market.authorities = authorities
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -201,6 +205,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~/css/app.styl'
+.tabPanel
+  min-height: calc(80vh - 120px);
+
 .bottomLineTabs
-  border-bottom: 1px solid #979797 !important
+  // border-bottom: 1px solid $color-secondary !important
 </style>

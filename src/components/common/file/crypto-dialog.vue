@@ -25,7 +25,8 @@ q-dialog(v-model="openDialog" persistent)
           )
       q-card-actions(align="right")
         q-btn(
-          color="primary"
+          outline
+          color="secondary"
           id='confirmKey'
           data-cy='confirmKey'
           :label="$t('common.buttons.confirm')"

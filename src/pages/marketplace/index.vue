@@ -7,8 +7,8 @@
       label="Add Marketplace"
       no-caps
       unelevated
-      color="primary"
-      rounded
+      color="secondary"
+      outline
       @click="modals.isShowingAddMarketplace = true"
     )
   //- Tabs
@@ -17,16 +17,17 @@
     :breakpoint="0"
     no-caps
     align="justify"
-    active-class="text-primary text-weight-bolder"
-    class="bg-white text-grey-5"
+    :switch-indicator="false"
+    :narrow-indicator="false"
+    active-class="active-tab"
   )
     q-tab(name="myMarketplaces" label="My marketplaces")
     q-tab(name="allMarketplaces" label="All marketplaces")
 
-  q-tab-panels(v-model="tab" animated)
-    q-tab-panel(name="myMarketplaces")
-      marketplace-list(:marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMyMarketplaces")
-    q-tab-panel(name="allMarketplaces")
+  q-tab-panels(v-model="tab")
+    q-tab-panel(name="myMarketplaces" class="tabPanel")
+      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace")
+    q-tab-panel(name="allMarketplaces" class="tabPanel")
       marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
@@ -67,11 +68,10 @@ export default {
     selectedAccount (account) {
       this.getAllMarketplace()
       this.getMyMarketplaces()
-      this.$forceUpdate()
     }
   },
   mounted () {
-    // this.getAllMarketplace()
+    this.getAllMarketplace()
     this.getMyMarketplaces()
   },
   methods: {
@@ -79,26 +79,30 @@ export default {
       const lastMarketplace = this.allMarketplaces[this.allMarketplaces.length - 1]
       const loadedMoreMarkets = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: lastMarketplace.key, pageSize: this.pagination.limit })
       this.allMarketplaces = this.allMarketplaces.concat(loadedMoreMarkets)
-      this.getMyMarketplaces()
       if (loadedMoreMarkets.length > 0) done()
       else stop()
     },
-    async onLoadMyMarketplaces ({ index, done, stop }) {
-      // const lastMarketplace = this.myMarketplaces[this.myMarketplaces.length - 1]
-      // const loadedMyMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ startKey: lastMarketplace.key, pageSize: this.pagination.limit })
-      // this.myMarketplaces = this.myMarketplaces.concat(loadedMyMarketplaces)
-      // if (loadedMyMarketplaces.length > 0) done()
-      // else stop()
-      // done()
-    },
     async getAllMarketplace () {
-      this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
+      try {
+        this.showLoading()
+        this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
     },
     async getMyMarketplaces () {
-      this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
-      console.log(this.myMarketplaces)
-      // this.myMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner === this.selectedAccount.address)
-      // this.allMarketplaces = this.allMarketplaces.filter(marketplace => marketplace.owner !== this.selectedAccount.address)
+      try {
+        this.showLoading()
+        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
     },
     async createMarketplace (marketplace) {
       try {
@@ -134,9 +138,13 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
+@import '~/css/app.styl'
 .activeTab
   border-radius: 10px 10px 0px 0px
 .normalTab
   border-radius: 10px 10px 0px 0px
+.tabPanel
+  padding: 20px
+  background-color: $color-white
 </style>
