@@ -2,7 +2,7 @@
 #container
   //- Header
   .row.justify-between.items-center
-    .text-h6 Marketplace
+    .text-h5 Marketplace
     q-btn(
       label="Add Marketplace"
       no-caps
@@ -16,9 +16,8 @@
     v-model="tab"
     :breakpoint="0"
     no-caps
+    indicator-color="transparent"
     align="justify"
-    :switch-indicator="false"
-    :narrow-indicator="false"
     active-class="active-tab"
   )
     q-tab(name="myMarketplaces" label="My marketplaces")
@@ -145,6 +144,6 @@ export default {
 .normalTab
   border-radius: 10px 10px 0px 0px
 .tabPanel
-  padding: 20px
-  background-color: $color-white
+  padding: 1rem 0rem 0rem 0rem
+  background-color: $bg-body
 </style>

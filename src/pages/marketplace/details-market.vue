@@ -1,35 +1,30 @@
 <template lang="pug">
-#container
-  .row.q-col-gutter-md(v-if="market")
-    .col-12
-      market-apply-form(
-        v-if="!isEnrolled && !isAdmin && market && admin"
-        :market="{...market, admin, owner}"
-        :status="statusApplication"
-        :participantsNumber="participants?.length"
-        @submit="onSubmitApplyForm"
-      )
-      //- Tabs
-      q-tabs.q-mt-lg(
-        v-model="tab"
-        v-if="isAdmin"
-        :breakpoint="0"
-        no-caps
-        indicator-color="white"
-        align="justify"
-        class="bottomLineTabs"
-        active-class="active-tab"
-      )
-        q-tab(:ripple="false" name="market-info" label="Market information")
-        q-tab(:riple="false" name="enrollment" label="Enrollment requests")
+#container(v-if="market")
+  market-apply-form(
+    v-if="!isEnrolled && !isAdmin && market && admin"
+    :market="{...market, admin, owner}"
+    :status="statusApplication"
+    :participantsNumber="participants?.length"
+    @submit="onSubmitApplyForm"
+  )
+  //- Tabs
+  q-tabs.q-mt-lg(
+    v-model="tab"
+    v-if="isAdmin"
+    :breakpoint="0"
+    no-caps
+    indicator-color="transparent"
+    align="justify"
+    active-class="active-tab"
+  )
+    q-tab(:ripple="false" name="market-info" label="Market information")
+    q-tab(:riple="false" name="enrollment" label="Enrollment requests")
 
-      q-tab-panels(v-model="tab" keep-alive)
-        q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
-          .row
-            .col-12
-              market-info-card(:market="{...market, admin, owner}" :participants="participants")
-        q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
-          applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
+  q-tab-panels(v-model="tab" keep-alive)
+    q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
+      market-info-card(:market="{...market, admin, owner}" :participants="participants")
+    q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
+      applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
 <script>
@@ -208,6 +203,8 @@ export default {
 @import '~/css/app.styl'
 .tabPanel
   min-height: calc(80vh - 120px);
+  background: $bg-body !important
+  padding: 0px !important
 
 .bottomLineTabs
   // border-bottom: 1px solid $color-secondary !important

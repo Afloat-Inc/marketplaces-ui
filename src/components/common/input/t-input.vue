@@ -2,7 +2,6 @@
 div
   .label {{label}}
   q-input(
-    :input-class="{'q-placeholder-write': content , 'q-placeholder' : !content }"
     outlined
     v-model="content"
     :placeholder="placeholder"
@@ -211,7 +210,6 @@ export default {
 <style lang="stylus" scoped>
 .q-field__marginal
   font-size: 16px
-
 .colorTailwind
   color: #374157
 </style>

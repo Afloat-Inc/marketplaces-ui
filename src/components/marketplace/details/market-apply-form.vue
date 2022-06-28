@@ -2,34 +2,29 @@
 #container
   q-card(flat class="card-style")
     q-card-section
-      .row.justify-center
-        .text-h2 {{market.label}}
+      .row.justify-between
+        .text-h5 {{market.label}}
     q-card-section
-      .row
-        .col-7.q-pb-md
-          .label Administrator
+      .text-subtitle2.text-weight-regular.q-py-md Number of participants:
+        .text-body2 {{participantsNumber}}
+      .row.q-col-gutter-md
+        .col-6.q-pb-md
+          .text-subtitle2.text-weight-regular Administrator
           account-item(
             :address="market.admin?.address"
-            flat
           )
-        .col-5
-          .row.justify-end
-            .label Number of participants: {{participantsNumber}}
-
-      .row
-        .col-7.q-pb-md
-          .label Owner
+        .col-6.q-pb-md
+          .text-subtitle2.text-weight-regular Owner
           account-item(
             :address="market.owner?.address"
-            flat
           )    q-separator
     q-card-section(v-if="status === 'Pending'")
       .row.justify-center.q-gutter-md
-        .text-h5 {{$t('pages.marketplace.details.pending')}}
+        .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
     q-card-section(v-else)
       q-form(ref="applyForm" @submit="onSubmit")
-        .text-h4 {{$t('pages.marketplace.applyForm.title')}}
-        .text-h5(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
+        .text-subtitle1 {{$t('pages.marketplace.applyForm.title')}}
+        .text-subtitle2.text-weight-regular(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
         t-input(
           data-cy="notes_input"
           testid="notes_input"
@@ -40,7 +35,7 @@
           :rules="[rules.required]"
         )
         .row.justify-between
-          div(class="q-pt-sm label") {{$t('pages.marketplace.applyForm.filesTitle')}}
+          div(class="q-pt-sm text-subtitle2 text-weight-regular") {{$t('pages.marketplace.applyForm.filesTitle')}}
           q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") Add Files
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
@@ -63,16 +58,17 @@
               data-cy="delete_file"
               data-testid="delete_file"
             )
-        q-btn(
-          type="submit"
-          color="secondary"
-          outline
-          no-caps
-          unelevated
-          class="q-mt-sm"
-          data-cy="submit_apply_btn"
-          data-testid="submit_apply_btn"
-        ) Submit
+        .row.justify-end.q-px-sm
+          q-btn(
+            type="submit"
+            color="secondary"
+            outline
+            no-caps
+            unelevated
+            class="q-mt-sm"
+            data-cy="submit_apply_btn"
+            data-testid="submit_apply_btn"
+          ) Submit
 </template>
 
 <script>

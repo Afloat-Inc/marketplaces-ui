@@ -5,16 +5,16 @@ q-expansion-item(group="applicants")
       account-item(:address="address" flat inherit)
       q-chip(
         :label="status"
-        size="sm"
+        size="md"
         :color="getColor"
         class="text-white q-mt-md label"
       )
   #body.q-pa-sm
-    .text-h6.q-pb-md Notes:
+    .text-subtitle2.text-weight-regular.q-pb-md Notes
     #notes.q-px-sm
-      .label {{ notes }}
+      .text-body2 {{ notes }}
     q-separator(inset).q-my-sm
-    .text-h6.q-pb-md Files:
+    .text-subtitle2.text-weight-regular.q-pb-md Files
     #files.q-px-sm
       .row.q-col-gutter-xs
         .col-6(v-for="file in files")

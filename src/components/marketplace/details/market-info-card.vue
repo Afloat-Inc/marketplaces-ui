@@ -2,32 +2,27 @@
 #container
   q-card(flat class="card-style")
     q-card-section
-      .row.justify-center
-        .text-h2 {{market.label}}
+      .row.justify-between
+        .text-h5 {{market.label}}
     q-card-section
-      .row
-        .col-7.q-pb-md
-          .label Administrator
+      .text-subtitle2.text-weight-regular.q-my-md Number of participants
+        .text-body2 {{participants.length}}
+      .row.q-col-gutter-md
+        .col-6.q-pb-md
+          .text-subtitle2.text-weight-regular Administrator
           account-item(
             :address="market.admin?.address"
-            flat
           )
-        .col-5
-          .row.justify-end
-            .label Number of participants: {{participants.length}}
-      .row
-        .col-7.q-pb-md
-          .label Owner
+        .col-6.q-pb-md
+          .text-subtitle2.text-weight-regular Owner
           account-item(
             :address="market.owner?.address"
-            flat
           )
       .row
         .col-12
-          q-separator
-          .label.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
+          .text-subtitle2.text-weight-regular.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
           .row.q-gutter-md(v-if="participants.length > 0 ")
-            account-item.no-shadow(
+            account-item(
               v-for="participant in participants"
               :address="participant"
               bordered
@@ -35,7 +30,7 @@
             )
           .row.q-gutter-md(v-else)
             .col-12
-              .text-subtitle2 {{$t('pages.marketplace.details.noParticipants')}}
+              .text-subtitle2.text-weight-regular {{$t('pages.marketplace.details.noParticipants')}}
 </template>
 
 <script>

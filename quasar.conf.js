@@ -175,8 +175,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Hashed Afloat Client',
-        short_name: 'Hashed Afloat Client',
+        name: 'Hashed Network Client',
+        short_name: 'Hashed Network Client',
         description: 'This is a template developed by HASHED',
         display: 'standalone',
         orientation: 'portrait',

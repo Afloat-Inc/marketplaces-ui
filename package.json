@@ -2,7 +2,7 @@
   "name": "hashed-afloat-client",
   "version": "0.0.1",
   "description": "This is a template developed by HASHED",
-  "productName": "Hashed Afloat Client",
+  "productName": "Hashed Network Client",
   "author": "Jose Maria <josemgo.9.11@gmail.com",
   "private": true,
   "scripts": {

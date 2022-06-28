@@ -3,7 +3,7 @@
   q-toolbar(class="text-primary")
     q-toolbar-title
       .row.justify-center.q-pb-md
-        div.taxGiving The Company
+        div.taxGiving Hashed Network
       ContactInfo
       SocialMedias.q-py-lg
       LinksTabs
