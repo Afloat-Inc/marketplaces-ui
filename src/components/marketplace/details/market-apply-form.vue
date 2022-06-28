@@ -5,16 +5,16 @@
       .row.justify-between
         .text-h5 {{market.label}}
     q-card-section
-      .text-subtitle2.text-weight-regular.q-py-md Number of participants:
+      .text-subtitle2.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
         .text-body2 {{participantsNumber}}
       .row.q-col-gutter-md
         .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular Administrator
+          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
           account-item(
             :address="market.admin?.address"
           )
         .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular Owner
+          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
           account-item(
             :address="market.owner?.address"
           )    q-separator
@@ -30,13 +30,13 @@
           testid="notes_input"
           class="q-mt-md"
           v-model="form.notes"
-          label="Notes"
-          placeholder="Notes about your application"
+          :label="$t('pages.marketplace.applyForm.notes.label')"
+          :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
           :rules="[rules.required]"
         )
         .row.justify-between
           div(class="q-pt-sm text-subtitle2 text-weight-regular") {{$t('pages.marketplace.applyForm.filesTitle')}}
-          q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") Add Files
+          q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
         .container(v-for="(file, index, key) in form.files" :key="index")
           .row
             ipfs-labeled(
@@ -68,7 +68,7 @@
             class="q-mt-sm"
             data-cy="submit_apply_btn"
             data-testid="submit_apply_btn"
-          ) Submit
+          ) {{ $t('pages.marketplace.applyForm.submitButton') }}
 </template>
 
 <script>

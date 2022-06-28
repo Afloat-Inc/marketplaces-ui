@@ -1,6 +1,6 @@
 <template lang="pug">
 .row.justify-center.text-caption
-  div.text-grey-8.q-pr-sm.contact Contact:
+  div.text-grey-8.q-pr-sm.contact {{ $t('general.footer.contactTitle') }}:
   a(class="contact link" href="mailto:hello@hashed.io" target="_blank") {{'hello@hashed.io'}}
 
 </template>

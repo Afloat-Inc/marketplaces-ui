@@ -1,9 +1,9 @@
 <template lang="pug">
 .row.q-pt-sm.justify-center
   span.copyright.text-uppercase
-    | © 2022 Hashed Network Dao LLC
+    | © 2022 {{ $t('general.footer.copyright') }}
     span.sub ®
-    | , INC. ALL RIGHTS RESERVED
+    | , {{ $t('general.footer.sub') }}
 </template>
 
 <script>

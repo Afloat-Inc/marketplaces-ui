@@ -5,16 +5,16 @@
       .row.justify-between
         .text-h5 {{market.label}}
     q-card-section
-      .text-subtitle2.text-weight-regular.q-my-md Number of participants
+      .text-subtitle2.text-weight-regular.q-my-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}
         .text-body2 {{participants.length}}
       .row.q-col-gutter-md
         .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular Administrator
+          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
           account-item(
             :address="market.admin?.address"
           )
         .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular Owner
+          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
           account-item(
             :address="market.owner?.address"
           )
