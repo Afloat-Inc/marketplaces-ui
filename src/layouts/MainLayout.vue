@@ -14,7 +14,7 @@ q-layout(view="lHh Lpr lFf")
               dense
             )
               q-item-section
-                q-item-label Home
+                q-item-label {{ $t('general.navbar.homeTitle') }}
             q-item.routerItems(
               clickable
               :to="{ name: 'marketplace'}"
@@ -23,14 +23,14 @@ q-layout(view="lHh Lpr lFf")
               dense
             )
               q-item-section
-                q-item-label Marketplace
+                q-item-label {{ $t('general.navbar.marketplaceTitle') }}
             q-item.routerItems(
               clickable
               dense
               @click="signAndVerifyMessage"
             )
               q-item-section
-                q-item-label Sign and Verify Message
+                q-item-label {{ $t('general.navbar.signAndVerifyTitle') }}
             q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
               selected-account-btn(:selectedAccount="selectedAccount")
               accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")

@@ -17,8 +17,8 @@
     align="justify"
     active-class="active-tab"
   )
-    q-tab(:ripple="false" name="market-info" label="Market information")
-    q-tab(:riple="false" name="enrollment" label="Enrollment requests")
+    q-tab(:ripple="false" name="market-info" :label="$t('pages.marketplace.tabs.marketInfo')")
+    q-tab(:riple="false" name="enrollment" :label="$t('pages.marketplace.tabs.enrollmentRequest')")
 
   q-tab-panels(v-model="tab" keep-alive)
     q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")

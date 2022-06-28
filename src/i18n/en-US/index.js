@@ -13,7 +13,20 @@ export default {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     loremShort: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     waitingWeb3: 'Waiting for polkadot web3 extension',
-    waitingSub: 'Waiting for changes on the chain'
+    waitingSub: 'Waiting for changes on the chain',
+    navbar: {
+      homeTitle: 'Home',
+      marketplaceTitle: 'Marketplace',
+      signAndVerifyTitle: 'Sign and Verify Message'
+    },
+    footer: {
+      contactTitle: 'Contact',
+      terms: 'Terms of Use',
+      privacyPolicy: 'Privacy Policy',
+      faq: 'FAQ',
+      copyright: 'Test by Marketplaces',
+      sub: 'INC. ALL RIGHTS RESERVED'
+    }
   },
   forms: {
     errors: {
@@ -30,17 +43,51 @@ export default {
   },
   pages: {
     marketplace: {
+      marketplaceTitle: 'Marketplace',
+      addMarketplaceButton: 'Add Marketplace',
+      tabs: {
+        myMarketplaces: 'My marketplaces',
+        allMarketplaces: 'All marketplaces',
+        marketInfo: 'Market information',
+        enrollmentRequest: 'Enrollment requests'
+      },
       details: {
         participantsTitle: 'Participants',
         noParticipants: 'No participants yet',
+        numberPaparticipantsTitle: 'Number of participants',
+        applicantsTitle: 'Applicants',
         noApplicants: 'No applicants yet',
         pending: 'Your application is under review',
-        noMarketplaces: 'No markets yet'
+        noMarketplaces: 'No markets yet',
+        notesTitle: 'Notes',
+        filesTitle: 'Files',
+        enrollButton: 'Enroll',
+        rejectButton: 'Rejected'
       },
       applyForm: {
         title: 'Apply for Marketplace',
         subtitle: 'Fill in the form to apply for the Marketplace',
-        filesTitle: 'Upload files'
+        filesTitle: 'Upload files',
+        addFilesButton: 'Add Files',
+        notes: {
+          label: 'Notes',
+          placeholder: 'Notes about your application'
+        },
+        submitButton: 'Submit'
+      },
+      createForm: {
+        title: 'Create new marketplace',
+        label: 'Label',
+        placeholder: 'Please write a description',
+        button: 'Create marketplace'
+      },
+      searchInput: {
+        label: 'Search',
+        placeholder: 'Please write a keyword'
+      },
+      role: {
+        administrator: 'Administrator',
+        owner: 'Owner'
       },
       applicants: {
         title: 'Applicants'
