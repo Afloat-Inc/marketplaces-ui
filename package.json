@@ -22,6 +22,7 @@
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.13.6",
     "@smontero/nbv-ur-codec": "^1.0.2",
+    "@smontero/hashed-private-client-api": "0.0.4",
     "axios": "^0.21.1",
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
