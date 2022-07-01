@@ -5,3 +5,7 @@ export function availableAccounts ({ availableAccounts }) {
 export function selectedAccount ({ selectedAccount }) {
   return selectedAccount
 }
+
+export function isLoggedIn ({ isLoggedIn }) {
+  return isLoggedIn
+}
