@@ -36,37 +36,39 @@ jobs:
         run: echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
 
       # Setup quasar
-      # - name: Setup Quasar environment
-      #   run: |
-      #       yarn global add @quasar/cli
-      #       yarn install
+      - name: Setup Quasar environment
+        run: |
+            yarn global add @quasar/cli
+            yarn install
 
       # Build App
-      # - name: Build app
-      #   run: quasar build
-      #   env:
-      #       APP_NAME: 'Hashed Afloat Client'
-      #       WSS: 'wss://n1.hashed.systems'
+      - name: Build app
+        run: quasar build
+        env:
+          APP_NAME: 'Hashed Afloat Client'
+          WSS: 'wss://n1.hashed.systems'
+          IPFS_URL: 'https://ipfs.infura.io:5001/'
+          PRIVATE_URI: 'https://hp-gql-dev.hashed.systems/v1/graphql'
 
-      # Sync App
-      # - name: S3 sync
-      #   uses: jakejarvis/s3-sync-action@v0.5.1
-      #   with:
-      #     args: --delete
-      #   env:
-      #     AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-      #     AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-      #     SOURCE_DIR: 'dist/spa'      # optional: defaults to entire repository
+      #Auth google Could SDK
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.DEV_GC_CREDENTIALS }}'            
+      
+      #Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.DEV_GC_PROJECT_ID }}
+          # service_account_key: ${{ secrets.DEV_GC_CREDENTIALS }}
 
-      # Invalidate Cloudfront (this action)
-      # - name: invalidate
-      #   uses: chetan/invalidate-cloudfront-action@master
-      #   env:
-      #     DISTRIBUTION: ${{ secrets.DEV_DISTRIBUTION_ID }}
-      #     PATHS: '/*'
-      #     AWS_REGION: 'us-east-1'
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-
+      
+      #Sync to Bucket
+      - name: Copy website to bucket
+        run: gsutil -m rsync -R . gs://${{ secrets.DEV_GC_BUCKET_NAME }}
+        working-directory: ./dist/spa
+      
+      #Invalidate CDN Cache
+      - name: Invalidate CDN cache
+        run: gcloud compute url-maps invalidate-cdn-cache ${{ secrets.DEV_GC_URL_MAP }} --path=/*

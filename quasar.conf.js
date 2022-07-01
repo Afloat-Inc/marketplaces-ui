@@ -54,7 +54,11 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        ...require('dotenv').config().parsed
+        ...require('dotenv').config().parsed,
+        APP_NAME: process.env.APP_NAME,
+        WSS: process.env.WSS,
+        IPFS_URL: process.env.IPFS_URL,
+        PRIVATE_URI: process.env.PRIVATE_URI
       },
       // transpile: false,
       // publicPath: '/',
