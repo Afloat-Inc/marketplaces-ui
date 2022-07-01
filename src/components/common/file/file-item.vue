@@ -24,6 +24,10 @@ export default {
       type: String,
       default: undefined
     },
+    payload: {
+      type: File,
+      default: undefined
+    },
     displayName: {
       type: String,
       default: undefined
@@ -36,15 +40,20 @@ export default {
   },
   methods: {
     async openFile () {
-      try {
-        this.loading = true
-        const file = await BrowserIpfs.retrieve(this.cid)
-        window.open(URL.createObjectURL(file.payload))
-      } catch (e) {
-        console.error(e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
-      } finally {
-        this.loading = false
+      if (this.payload instanceof File) {
+        const url = URL.createObjectURL(this.payload)
+        window.open(url, '_blank')
+      } else {
+        try {
+          this.loading = true
+          const file = await BrowserIpfs.retrieve(this.cid)
+          window.open(URL.createObjectURL(file.payload))
+        } catch (e) {
+          console.error(e)
+          this.showNotification({ message: e.message || e, color: 'negative' })
+        } finally {
+          this.loading = false
+        }
       }
     }
   }
