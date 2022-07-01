@@ -24,13 +24,15 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label {{ $t('general.navbar.marketplaceTitle') }}
-            q-item.routerItems(
-              clickable
-              dense
-              @click="signAndVerifyMessage"
-            )
-              q-item-section
-                q-item-label {{ $t('general.navbar.signAndVerifyTitle') }}
+            //- q-item.routerItems(
+            //-   clickable
+            //-   dense
+            //-   @click="signAndVerifyMessage"
+            //- )
+            //-   q-item-section
+            //-     q-item-label {{ $t('general.navbar.signAndVerifyTitle') }}
+            q-btn(v-if="!isLoggedIn" @click="loginHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.login')}}
+            q-btn(v-else @click="logoutHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.logout')}}
             q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
               selected-account-btn(:selectedAccount="selectedAccount")
               accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
@@ -49,7 +51,7 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
+import { defineComponent, ref, computed, onMounted, watchEffect, watch } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -74,11 +76,16 @@ export default defineComponent({
     const $store = useStore()
     const $route = useRoute()
     const api = $store.$polkadotApi
+    const hpApi = $store.$hashedPrivateApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
+    const isLoggedIn = computed(() => $store.getters['polkadotWallet/isLoggedIn'])
     const accounts = ref(undefined)
     const breadcrumbList = ref(undefined)
+    watch(selectedAccount, (newValue, oldValue) => {
+      logoutHP()
+    })
     watchEffect(() => updateBreadcrumbs($route))
 
     onMounted(async () => {
@@ -150,7 +157,33 @@ export default defineComponent({
         hideLoading()
       }
     }
-
+    async function loginHP () {
+      try {
+        showLoading({ message: 'Trying to login using Hashed private, please review polkadot{js} extension' })
+        const isLoggedIn = await hpApi.isLoggedIn()
+        console.log('isLoggedIn', isLoggedIn)
+        $store.commit('polkadotWallet/setIsLoggedIn', isLoggedIn)
+        if (!isLoggedIn && selectedAccount.value) {
+          await hpApi.login(selectedAccount.value.address)
+          await $store.commit('polkadotWallet/setIsLoggedIn', true)
+        }
+      } catch (e) {
+        $store.commit('polkadotWallet/setIsLoggedIn', false)
+        console.log('An error ocurred while trying to login using Hashed Private Server ', e)
+        showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        hideLoading()
+      }
+    }
+    async function logoutHP () {
+      try {
+        await hpApi.logout()
+        $store.commit('polkadotWallet/setIsLoggedIn', false)
+      } catch (e) {
+        console.error('onLogout', e)
+        showNotification({ message: e.message || e, color: 'negative' })
+      }
+    }
     return {
       availableAccounts,
       onSelectAccount,
@@ -158,7 +191,10 @@ export default defineComponent({
       breadcrumbList,
       isActive,
       signAndVerifyMessage,
-      isConnectedToServer
+      isConnectedToServer,
+      isLoggedIn,
+      loginHP,
+      logoutHP
     }
   }
 })
