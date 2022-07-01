@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
@@ -53,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('polkadotWallet', ['selectedAccount', 'isLoggedIn']),
     isEnrolled () {
       return !!this.participants?.find(participant => {
         return participant === this.selectedAccount.address
@@ -93,6 +93,7 @@ export default {
     this.getMarketplaceInfo()
   },
   methods: {
+    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     syncParams () {
       const queries = this.$route.query
       if (queries && queries.marketId) {
@@ -108,7 +109,8 @@ export default {
         const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
-        this.applicants = applicants
+        const applicantsHP = await this.getFromHP(applicants)
+        this.applicants = applicantsHP
         this.participants = participants
         await this.getApplication()
         this.market = market
@@ -192,6 +194,59 @@ export default {
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
+      }
+    },
+    async getFromHP (applicants) {
+      const promisesNotes = []
+      const promisesFiles = []
+      let tmpApplicants = applicants
+      console.log('applicants', applicants)
+      const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
+      this.setIsLoggedIn(isLogged)
+      console.log('isLogged', isLogged)
+      if (!isLogged) {
+        await this.loginUser()
+      }
+      try {
+        tmpApplicants.forEach(applicant => {
+          promisesNotes.push(this.$store.$hashedPrivateApi.sharedViewByCID(applicant.notes))
+          applicant.files.forEach(file => {
+            promisesFiles.push(this.$store.$hashedPrivateApi.sharedViewByCID(file.displayName))
+          })
+        })
+        const resolvedNotes = await Promise.all(promisesNotes)
+        const resolvedFiles = await Promise.all(promisesFiles)
+        console.log('resolvedNotes', resolvedNotes)
+        console.log('resolvedFiles', resolvedFiles)
+        // process data from the HP & match it with the applicants
+        tmpApplicants.forEach((applicant, index) => {
+          const notesHP = resolvedNotes[index].payload.notes
+          applicant.notes = notesHP
+          applicant.files = applicant.files.map((file, index) => {
+            const displayNameHP = resolvedFiles[index].name
+            file.displayName = displayNameHP
+            file.payload = resolvedFiles[index].payload
+            return file
+          })
+        })
+      } catch (error) {
+        console.error('error', error)
+        tmpApplicants = applicants
+      }
+
+      return tmpApplicants
+    },
+    async loginUser () {
+      try {
+        this.showLoading({ message: 'You must be logged in to submit an application' })
+        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
+        this.setIsLoggedIn(true)
+      } catch (error) {
+        console.error(error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+        this.setIsLoggedIn(false)
+      } finally {
+        this.hideLoading()
       }
     }
   }
