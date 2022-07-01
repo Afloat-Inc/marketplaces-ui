@@ -2,6 +2,7 @@ export default function () {
   return {
     wssURL: undefined,
     availableAccounts: [],
-    selectedAccount: undefined
+    selectedAccount: undefined,
+    isLoggedIn: undefined
   }
 }

@@ -13,3 +13,7 @@ export function setAvailableAccounts (state, availableAccounts) {
 export function setSelectedAccount (state, selectedAccount) {
   state.selectedAccount = selectedAccount
 }
+
+export function setIsLoggedIn (state, loggedIn) {
+  state.isLoggedIn = loggedIn
+}
