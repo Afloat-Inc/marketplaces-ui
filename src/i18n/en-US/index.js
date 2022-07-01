@@ -17,7 +17,9 @@ export default {
     navbar: {
       homeTitle: 'Home',
       marketplaceTitle: 'Marketplace',
-      signAndVerifyTitle: 'Sign and Verify Message'
+      signAndVerifyTitle: 'Sign and Verify Message',
+      login: 'Login',
+      logout: 'Logout'
     },
     footer: {
       contactTitle: 'Contact',
