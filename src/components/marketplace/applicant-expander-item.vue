@@ -23,6 +23,7 @@ q-expansion-item(group="applicants")
               //- q-tooltip Click to open file
     .row.q-mt-sm.justify-end.q-gutter-x-sm
       q-btn(
+        v-if="status !== 'Approved'"
         :label="$t('pages.marketplace.details.enrollButton')"
         color="secondary"
         size="md"
@@ -31,7 +32,7 @@ q-expansion-item(group="applicants")
         @click="enroll"
       )
       q-btn(
-        v-if="status !== 'Rejected'"
+        v-if="status !== 'Rejected' && status !== 'Approved'"
         :label="$t('pages.marketplace.details.rejectButton')"
         color="negative"
         class="btn-reject"
@@ -82,6 +83,8 @@ export default {
         return 'primary'
       case 'Rejected':
         return 'negative'
+      case 'Approved':
+        return 'blue'
       default:
         return 'primary'
       }
