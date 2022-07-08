@@ -11,11 +11,32 @@
             label="Upload File"
             outlined
           )
+        .col-12(v-if="isChecked")
+          q-input(
+            v-model="accountToShare"
+            :rules="[rules.isValidPolkadotAddress]"
+            label="Account to share"
+            outlined
+          )
         .col-12
           q-btn(
+            class="q-mr-md"
             @click="uploadFile"
             color="primary"
           ) Save
+          q-btn(
+            @click="clearUpload"
+            color="primary"
+          ) Clear
+
+          q-toggle(
+            v-model="isChecked"
+            label="Share file with other"
+            color="primary"
+            label-position="left"
+            label-width="100px"
+            outlined
+          )
         .col-12 response: {{responseUpload}}
     .col-6
       .text-h6.q-py-md Download file
@@ -29,8 +50,13 @@
         .col-12
           q-btn(
             @click="downloadFile"
+            class="q-mr-md"
             color="primary"
           ) Download
+          q-btn(
+            @click="clearDownload"
+            color="primary"
+          ) Clear
           q-toggle(
             v-model="toggleDownload"
             label="Shared data?"
@@ -47,14 +73,18 @@
 </template>
 
 <script>
+import { validation } from '~/mixins/validation'
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default defineComponent({
   name: 'PageIndex',
+  mixins: [validation],
   data () {
     return {
+      isChecked: false,
       toggle: false,
       file: undefined,
+      accountToShare: undefined,
       responseUpload: {
         cid: undefined,
         name: undefined,
@@ -76,22 +106,45 @@ export default defineComponent({
   computed: {
     ...mapGetters('polkadotWallet', ['isLoggedIn', 'selectedAccount'])
   },
+  async beforeMount () {
+    const isLoggedIn = this.$store.$hashedPrivateApi.isLoggedIn()
+    if (isLoggedIn) {
+      await this.loginUser()
+    }
+  },
   methods: {
+    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     async uploadFile () {
       if (this.isLoggedIn && this.selectedAccount) {
         const hpApi = this.$store.$hashedPrivateApi
-        console.log('uploadFile', this.file)
-        try {
-          const response = await hpApi.upsert({
-            name: 'name2',
-            description: 'desc1',
-            payload: this.file
-          })
-          console.log(response)
-          this.matchDataUpsert(response)
-        } catch (error) {
-          console.error('uploadFile', error)
-          this.showNotification({ message: error.message || error, color: 'negative' })
+        if (this.isChecked && this.accountToShare) {
+          try {
+            const response = await hpApi.shareNew({
+              toUserAddress: this.accountToShare,
+              name: 'demo name',
+              description: 'demo description',
+              payload: this.file
+            })
+            console.log(response)
+            this.matchDataShare(response)
+          } catch (error) {
+            console.error('uploadFile', error)
+            this.showNotification({ message: error.message || error, color: 'negative' })
+          }
+        } else {
+          console.log('uploadFile', this.file)
+          try {
+            const response = await hpApi.upsert({
+              name: 'name2',
+              description: 'desc1',
+              payload: this.file
+            })
+            console.log(response)
+            this.matchDataUpsert(response)
+          } catch (error) {
+            console.error('uploadFile', error)
+            this.showNotification({ message: error.message || error, color: 'negative' })
+          }
         }
       } else {
         this.showNotification({ message: 'You need to be logged in to upload a file', color: 'negative' })
@@ -141,6 +194,42 @@ export default defineComponent({
       this.responseUpload.description = response.description
       this.responseUpload.payload = response.payload
       this.responseUpload.type = response.type
+    },
+    matchDataShare (response) {
+      this.responseUpload.cid = response.sharedData.cid
+      this.responseUpload.name = response.sharedData.name
+      this.responseUpload.description = response.sharedData.description
+      this.responseUpload.payload = response.sharedData.payload
+      this.responseUpload.type = response.sharedData.type
+    },
+    clearUpload () {
+      this.file = undefined
+      this.responseUpload.cid = undefined
+      this.responseUpload.name = undefined
+      this.responseUpload.description = undefined
+      this.responseUpload.payload = undefined
+      this.responseUpload.type = undefined
+    },
+    clearDownload () {
+      this.query = undefined
+      this.getUploadResponse.cid = undefined
+      this.getUploadResponse.name = undefined
+      this.getUploadResponse.description = undefined
+      this.getUploadResponse.payload = undefined
+      this.getUploadResponse.type = undefined
+    },
+    async loginUser () {
+      try {
+        this.showLoading({ message: 'You must be logged in to submit an application' })
+        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
+        this.setIsLoggedIn(true)
+      } catch (error) {
+        console.error(error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+        this.setIsLoggedIn(false)
+      } finally {
+        this.hideLoading()
+      }
     }
   }
 })
