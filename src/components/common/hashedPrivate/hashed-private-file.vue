@@ -8,7 +8,7 @@
     outlined
     color="primary"
     placeholder="Name of the file"
-    :rules="rules"
+    :rules="[rules]"
     class="borderRight"
     @keyup="onTypeTagFile"
     data-cy="name_file"
@@ -145,10 +145,12 @@ export default {
         console.log('Results', results[0])
         const CID = results[0].sharedData.cid
         // const label = results[0].sharedData.name
+        const id = results[0].ownedData.id
         const description = results[0].sharedData.description
         const resultWithName = {
           display: description,
-          value: CID + ':' + e.name
+          value: CID + ':' + e.name,
+          id
         }
         this.files = [resultWithName]
         const data = {
