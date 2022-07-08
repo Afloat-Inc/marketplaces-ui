@@ -17,7 +17,8 @@ export const validation = {
         required: val => !!val || this.$t('forms.errors.required'),
         isValidXPub: val => /([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub'),
         isValidFullXpub: val => /(\[[0-Z]{8}\/[0-9]{1,2}(')(\/)[0-9]{1,2}(')\/[0-9]{1,2}(')\/[0-9](')(]){1,30})([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub'),
-        isValidMainetBTC: val => /([13][a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[ac-hj-np-zAC-HJ-NP-Z02-9]{11,71})/.test(val) || this.$t('forms.errors.isNotValidMainetBTC')
+        isValidMainetBTC: val => /([13][a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[ac-hj-np-zAC-HJ-NP-Z02-9]{11,71})/.test(val) || this.$t('forms.errors.isNotValidMainetBTC'),
+        isValidPolkadotAddress: val => this.$store.$polkadotApi?.isValidPolkadotAddress(val) || this.$t('forms.errors.isNotValidPolkadotAddress')
       }
     }
   },
