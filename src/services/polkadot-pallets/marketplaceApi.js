@@ -185,7 +185,7 @@ class MarketplaceApi extends BasePolkadotApi {
 
     // Applicants address to call in multiquery
     let applicantsAddress = []
-    applicantsByState.filter(e => e.status !== 'Approved').forEach(ap => {
+    applicantsByState.forEach(ap => {
       applicantsAddress = applicantsAddress.concat(ap.addresses.map(e => {
         return [
           e,
@@ -213,9 +213,9 @@ class MarketplaceApi extends BasePolkadotApi {
     return details
   }
 
-  async applyFor ({ marketId, user, notes, files }, subTrigger) {
-    console.log('submitApplicationForm', marketId, user, files, notes, subTrigger)
-    return this.callTx('apply', user, [marketId, notes, files])
+  async applyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
+    console.log('submitApplicationForm', marketId, user, custodianFields, fields, subTrigger)
+    return this.callTx('apply', user, [marketId, fields, custodianFields])
   }
 
   async createMarketplace ({ admin, user, label }, subTrigger) {
