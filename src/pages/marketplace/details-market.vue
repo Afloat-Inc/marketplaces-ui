@@ -123,16 +123,20 @@ export default {
       }
     },
     async onSubmitApplyForm (form) {
-      console.log('form to apply: ', form)
       try {
         this.showLoading()
+        if (form?.custodian) {
+          form = await this.shareWithCustodian(form)
+        }
+        const { fields, custodianFields } = this.getStructureToSend(form)
+        console.log('form to apply: ', form)
         await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.marketId,
-          notes: form.notes,
-          files: form.files
+          fields,
+          custodianFields
         })
-        this.showNotification({ message: 'Application was submitted', color: 'positive' })
+        this.showNotification({ message: 'Application was submitted', color: 'primary' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -248,6 +252,67 @@ export default {
       } finally {
         this.hideLoading()
       }
+    },
+    async shareWithCustodian (form) {
+      const { custodian, files, notes } = form
+      const hpService = this.$store.$hashedPrivateApi
+      const promisesFiles = []
+      const promisesNotes = []
+      try {
+        files.forEach(file => {
+          promisesFiles.push(hpService.shareExisting({
+            toUserAddress: custodian,
+            originalOwnedDataId: file.ownedId
+          }))
+        })
+        const notesShared = hpService.shareExisting({
+          toUserAddress: custodian,
+          originalOwnedDataId: notes.ownedId
+        })
+        promisesNotes.push(notesShared)
+        const resolvedFiles = await Promise.all(promisesFiles)
+        const resolvedNotes = await Promise.all(promisesNotes)
+        console.log('resolvedNotes', resolvedNotes)
+        console.log('resolvedFiles', resolvedFiles)
+        form.notes.custodianCid = resolvedNotes[0].cid
+        delete form.notes.ownedId
+        form.files = resolvedFiles.map((file, index) => {
+          const fileName = form.files[index].cid.split(':')[1]
+          const ownerAdminCid = form.files[index].cid
+          const ownerCustodianCid = file.cid
+          return {
+            displayName: 'File:' + fileName,
+            cid: ownerAdminCid,
+            custodianCid: ownerCustodianCid + ':' + fileName
+          }
+        })
+      } catch (error) {
+        console.error('error', error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+      }
+      return form || undefined
+    },
+    getStructureToSend (form) {
+      const { files, notes, custodian } = form
+      const filesToSend = files.map(file => {
+        return {
+          displayName: file.displayName,
+          cid: file.cid
+        }
+      })
+      filesToSend.push({
+        displayName: notes.displayName,
+        cid: notes.custodianCid
+      })
+      const custodianFiles = files.map(file => {
+        return {
+          cid: file.custodianCid
+        }
+      })
+      custodianFiles.push({
+        cid: notes.custodianCid
+      })
+      return { files: filesToSend, custodianFields: { custodian, custodianFiles } }
     }
   }
 
