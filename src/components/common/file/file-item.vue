@@ -8,7 +8,7 @@ q-item.no-padding(dense @click="openFile" clickable)
       size="sm"
     )
   q-item-section
-    .text-caption {{ displayName }}
+    .text-caption {{ description }}
   q-item-section(avatar)
     .text-caption.q-mr-xs 2mb
   slot
@@ -29,6 +29,10 @@ export default {
       default: undefined
     },
     displayName: {
+      type: String,
+      default: undefined
+    },
+    description: {
       type: String,
       default: undefined
     }
