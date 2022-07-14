@@ -29,7 +29,16 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label {{ $t('general.navbar.marketplaceTitle') }}
-          q-toolbar(class="bg-white text-primary" class="bottomLine")
+            q-item.routerItems(
+              clickable
+              :to="{ name: 'custodian'}"
+              active-class="activeRouter"
+              :class="{ 'activeRouter': isActive('Custodian')}"
+              dense
+            )
+              q-item-section
+                q-item-label {{ $t('general.navbar.custodianTitle') }}
+          q-toolbar(class="bg-white text-primary bottomLine")
             q-breadcrumbs(active-color="primary" style="font-size: 16px")
               q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
     q-page-container
