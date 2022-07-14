@@ -26,7 +26,7 @@
       .container(v-else)
         q-form(ref="applyForm" @submit="onSubmit")
           .text-subtitle1 {{$t('pages.marketplace.applyForm.title')}}
-          .text-subtitle2.text-weight-regular(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
+          .text-subtitle2.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
           q-toggle(
             v-model="isCustodian"
             :label="$t('pages.marketplace.applyForm.custodian.checkboxLabel')"
