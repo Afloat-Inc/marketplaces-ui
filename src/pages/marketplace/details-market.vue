@@ -24,7 +24,7 @@
     q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
       market-info-card(:market="{...market, admin, owner}" :participants="participants")
     q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
-      applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
+      applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
 <script>
@@ -110,6 +110,7 @@ export default {
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
         const applicantsHP = await this.getFromHP(applicants)
+        console.log('App HP', applicantsHP)
         this.applicants = applicantsHP
         this.participants = participants
         await this.getApplication()
@@ -129,12 +130,11 @@ export default {
           form = await this.shareWithCustodian(form)
         }
         const { fields, custodianFields } = this.getStructureToSend(form)
-        console.log('form to apply: ', form)
         await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.marketId,
           fields,
-          custodianFields
+          custodianFields: form?.custodian ? custodianFields : undefined
         })
         this.showNotification({ message: 'Application was submitted', color: 'primary' })
       } catch (e) {
@@ -157,7 +157,7 @@ export default {
         })
         this.showNotification({
           message: 'Application approved.',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -179,7 +179,7 @@ export default {
         })
         this.showNotification({
           message: 'Application rejected. ',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -201,43 +201,50 @@ export default {
       }
     },
     async getFromHP (applicants) {
-      const promisesNotes = []
-      const promisesFiles = []
+      const promisesFields = []
       let tmpApplicants = applicants
-      console.log('applicants', applicants)
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
       this.setIsLoggedIn(isLogged)
-      console.log('isLogged', isLogged)
       if (!isLogged) {
         await this.loginUser()
       }
       try {
-        tmpApplicants.forEach(applicant => {
-          promisesNotes.push(this.$store.$hashedPrivateApi.sharedViewByCID(applicant.notes))
-          applicant.files.forEach(file => {
-            promisesFiles.push(this.$store.$hashedPrivateApi.sharedViewByCID(file.displayName))
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          applicant.fields.forEach(privateFields => {
+            const identifier = 'File:'
+            let cid = privateFields.displayName.includes(identifier)
+              ? privateFields.cid.split(':')[0]
+              : privateFields.cid
+            if (cid.split(':').length > 1) {
+              cid = cid.split(':')[0]
+            }
+            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
           })
         })
-        const resolvedNotes = await Promise.all(promisesNotes)
-        const resolvedFiles = await Promise.all(promisesFiles)
-        console.log('resolvedNotes', resolvedNotes)
-        console.log('resolvedFiles', resolvedFiles)
-        // process data from the HP & match it with the applicants
-        tmpApplicants.forEach((applicant, index) => {
-          const notesHP = resolvedNotes[index].payload.notes
-          applicant.notes = notesHP
-          applicant.files = applicant.files.map((file, index) => {
-            const displayNameHP = resolvedFiles[index].name
-            file.displayName = displayNameHP
-            file.payload = resolvedFiles[index].payload
-            return file
+        const resolvedFields = await Promise.all(promisesFields)
+        console.log('resolvedNotes', resolvedFields)
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          const lengthFields = applicant.fields.length
+          applicant.fields = applicant.fields.map((file, index) => {
+            const _index = (indexApplicant * lengthFields) + index
+            // console.log('Resolved Fields', resolvedFields[_index])
+            const displayName = resolvedFields[_index]?.name
+            const description = resolvedFields[_index]?.description
+            const cid = resolvedFields[_index]?.cid
+            const payload = resolvedFields[_index]?.payload
+            return {
+              description,
+              displayName,
+              payload,
+              cid
+            }
           })
+          return applicant
         })
       } catch (error) {
         console.error('error', error)
         tmpApplicants = applicants
       }
-
       return tmpApplicants
     },
     async loginUser () {
@@ -272,8 +279,6 @@ export default {
         promisesNotes.push(notesShared)
         const resolvedFiles = await Promise.all(promisesFiles)
         const resolvedNotes = await Promise.all(promisesNotes)
-        console.log('resolvedNotes', resolvedNotes)
-        console.log('resolvedFiles', resolvedFiles)
         form.notes.custodianCid = resolvedNotes[0].cid
         delete form.notes.ownedId
         form.files = resolvedFiles.map((file, index) => {
@@ -295,24 +300,24 @@ export default {
     getStructureToSend (form) {
       const { files, notes, custodian } = form
       const filesToSend = files.map(file => {
-        return {
-          displayName: file.displayName,
-          cid: file.cid
-        }
+        return [
+          file.displayName,
+          file.cid
+        ]
       })
-      filesToSend.push({
-        displayName: notes.displayName,
-        cid: notes.custodianCid
-      })
+      filesToSend.push([
+        notes.displayName,
+        notes.cid
+      ])
       const custodianFiles = files.map(file => {
-        return {
-          cid: file.custodianCid
-        }
+        return file.custodianCid
       })
-      custodianFiles.push({
-        cid: notes.custodianCid
-      })
-      return { files: filesToSend, custodianFields: { custodian, custodianFiles } }
+      custodianFiles.push(notes.custodianCid)
+      const custodianFields = [
+        custodian,
+        custodianFiles
+      ]
+      return { fields: filesToSend, custodianFields }
     }
   }
 
