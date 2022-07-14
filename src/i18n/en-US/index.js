@@ -17,6 +17,7 @@ export default {
     navbar: {
       homeTitle: 'Home',
       marketplaceTitle: 'Marketplace',
+      custodianTitle: 'Custody',
       signAndVerifyTitle: 'Sign and Verify Message',
       login: 'Login',
       logout: 'Logout'
