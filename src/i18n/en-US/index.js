@@ -15,7 +15,7 @@ export default {
     waitingWeb3: 'Waiting for polkadot web3 extension',
     waitingSub: 'Waiting for changes on the chain',
     navbar: {
-      homeTitle: 'Home',
+      homeTitle: 'Private Service',
       marketplaceTitle: 'Marketplace',
       custodianTitle: 'Custody',
       signAndVerifyTitle: 'Sign and Verify Message',
