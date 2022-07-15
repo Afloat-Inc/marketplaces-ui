@@ -12,7 +12,7 @@
             outlined
           )
         .col-12(v-if="isChecked")
-          q-input(
+          account-input(
             v-model="accountToShare"
             :rules="[rules.isValidPolkadotAddress]"
             label="Account to share"
@@ -37,7 +37,8 @@
             label-width="100px"
             outlined
           )
-        .col-12 response: {{responseUpload}}
+        .col-12
+          pre response: {{responseUpload}}
     .col-6
       .text-h6.q-py-md Download file
       .row.q-gutter-md
@@ -74,10 +75,14 @@
 
 <script>
 import { validation } from '~/mixins/validation'
+import AccountInput from '~/components/common/account-input.vue'
 import { defineComponent } from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 export default defineComponent({
   name: 'PageIndex',
+  components: {
+    AccountInput
+  },
   mixins: [validation],
   data () {
     return {
@@ -108,7 +113,7 @@ export default defineComponent({
   },
   async beforeMount () {
     const isLoggedIn = this.$store.$hashedPrivateApi.isLoggedIn()
-    if (isLoggedIn) {
+    if (!isLoggedIn) {
       await this.loginUser()
     }
   },
