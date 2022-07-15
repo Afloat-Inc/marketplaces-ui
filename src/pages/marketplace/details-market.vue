@@ -24,7 +24,7 @@
     q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
       market-info-card(:market="{...market, admin, owner}" :participants="participants")
     q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
-      applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
+      applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
 <script>
@@ -81,11 +81,14 @@ export default {
     }
   },
   watch: {
-    selectedAccount () {
+    async selectedAccount () {
       if (this.tab === 'enrollment') {
         this.tab = 'market-info'
       }
-      this.getMarketplaceInfo()
+      this.application = undefined
+      this.participants = []
+      this.applicants = []
+      await this.getMarketplaceInfo()
     }
   },
   async beforeMount () {
@@ -110,6 +113,7 @@ export default {
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
         const applicantsHP = await this.getFromHP(applicants)
+        console.log('App HP', applicantsHP)
         this.applicants = applicantsHP
         this.participants = participants
         await this.getApplication()
@@ -123,16 +127,19 @@ export default {
       }
     },
     async onSubmitApplyForm (form) {
-      console.log('form to apply: ', form)
       try {
         this.showLoading()
+        if (form?.custodian) {
+          form = await this.shareWithCustodian(form)
+        }
+        const { fields, custodianFields } = this.getStructureToSend(form)
         await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.marketId,
-          notes: form.notes,
-          files: form.files
+          fields,
+          custodianFields: form?.custodian ? custodianFields : undefined
         })
-        this.showNotification({ message: 'Application was submitted', color: 'positive' })
+        this.showNotification({ message: 'Application was submitted', color: 'primary' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -153,7 +160,7 @@ export default {
         })
         this.showNotification({
           message: 'Application approved.',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -175,7 +182,7 @@ export default {
         })
         this.showNotification({
           message: 'Application rejected. ',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -197,43 +204,50 @@ export default {
       }
     },
     async getFromHP (applicants) {
-      const promisesNotes = []
-      const promisesFiles = []
+      const promisesFields = []
       let tmpApplicants = applicants
-      console.log('applicants', applicants)
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
       this.setIsLoggedIn(isLogged)
-      console.log('isLogged', isLogged)
       if (!isLogged) {
         await this.loginUser()
       }
       try {
-        tmpApplicants.forEach(applicant => {
-          promisesNotes.push(this.$store.$hashedPrivateApi.sharedViewByCID(applicant.notes))
-          applicant.files.forEach(file => {
-            promisesFiles.push(this.$store.$hashedPrivateApi.sharedViewByCID(file.displayName))
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          applicant.fields.forEach(privateFields => {
+            const identifier = 'File:'
+            let cid = privateFields.displayName.includes(identifier)
+              ? privateFields.cid.split(':')[0]
+              : privateFields.cid
+            if (cid.split(':').length > 1) {
+              cid = cid.split(':')[0]
+            }
+            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
           })
         })
-        const resolvedNotes = await Promise.all(promisesNotes)
-        const resolvedFiles = await Promise.all(promisesFiles)
-        console.log('resolvedNotes', resolvedNotes)
-        console.log('resolvedFiles', resolvedFiles)
-        // process data from the HP & match it with the applicants
-        tmpApplicants.forEach((applicant, index) => {
-          const notesHP = resolvedNotes[index].payload.notes
-          applicant.notes = notesHP
-          applicant.files = applicant.files.map((file, index) => {
-            const displayNameHP = resolvedFiles[index].name
-            file.displayName = displayNameHP
-            file.payload = resolvedFiles[index].payload
-            return file
+        const resolvedFields = await Promise.all(promisesFields)
+        console.log('resolvedNotes', resolvedFields)
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          const lengthFields = applicant.fields.length
+          applicant.fields = applicant.fields.map((file, index) => {
+            const _index = (indexApplicant * lengthFields) + index
+            // console.log('Resolved Fields', resolvedFields[_index])
+            const displayName = resolvedFields[_index]?.name
+            const description = resolvedFields[_index]?.description
+            const cid = resolvedFields[_index]?.cid
+            const payload = resolvedFields[_index]?.payload
+            return {
+              description,
+              displayName,
+              payload,
+              cid
+            }
           })
+          return applicant
         })
       } catch (error) {
         console.error('error', error)
         tmpApplicants = applicants
       }
-
       return tmpApplicants
     },
     async loginUser () {
@@ -248,6 +262,65 @@ export default {
       } finally {
         this.hideLoading()
       }
+    },
+    async shareWithCustodian (form) {
+      const { custodian, files, notes } = form
+      const hpService = this.$store.$hashedPrivateApi
+      const promisesFiles = []
+      const promisesNotes = []
+      try {
+        files.forEach(file => {
+          promisesFiles.push(hpService.shareExisting({
+            toUserAddress: custodian,
+            originalOwnedDataId: file.ownedId
+          }))
+        })
+        const notesShared = hpService.shareExisting({
+          toUserAddress: custodian,
+          originalOwnedDataId: notes.ownedId
+        })
+        promisesNotes.push(notesShared)
+        const resolvedFiles = await Promise.all(promisesFiles)
+        const resolvedNotes = await Promise.all(promisesNotes)
+        form.notes.custodianCid = resolvedNotes[0].cid
+        delete form.notes.ownedId
+        form.files = resolvedFiles.map((file, index) => {
+          const fileName = form.files[index].cid.split(':')[1]
+          const ownerAdminCid = form.files[index].cid
+          const ownerCustodianCid = file.cid
+          return {
+            displayName: 'File:' + fileName,
+            cid: ownerAdminCid,
+            custodianCid: ownerCustodianCid + ':' + fileName
+          }
+        })
+      } catch (error) {
+        console.error('error', error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+      }
+      return form || undefined
+    },
+    getStructureToSend (form) {
+      const { files, notes, custodian } = form
+      const filesToSend = files.map(file => {
+        return [
+          file.displayName,
+          file.cid
+        ]
+      })
+      filesToSend.push([
+        notes.displayName,
+        notes.cid
+      ])
+      const custodianFiles = files.map(file => {
+        return file.custodianCid
+      })
+      custodianFiles.push(notes.custodianCid)
+      const custodianFields = [
+        custodian,
+        custodianFiles
+      ]
+      return { fields: filesToSend, custodianFields }
     }
   }
 

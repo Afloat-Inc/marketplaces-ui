@@ -15,6 +15,17 @@ const routes = [
           ]
         }
       },
+      // Custodian page
+      {
+        path: '/custody',
+        name: 'custodian',
+        component: () => import('pages/custodian/index.vue'),
+        meta: {
+          breadcrumb: [
+            { name: 'Custodian', icon: 'shield' }
+          ]
+        }
+      },
       // Marketplace
       {
         path: '/marketplace',

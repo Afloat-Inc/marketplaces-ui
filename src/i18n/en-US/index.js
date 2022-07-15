@@ -15,8 +15,9 @@ export default {
     waitingWeb3: 'Waiting for polkadot web3 extension',
     waitingSub: 'Waiting for changes on the chain',
     navbar: {
-      homeTitle: 'Home',
+      homeTitle: 'Private Service',
       marketplaceTitle: 'Marketplace',
+      custodianTitle: 'Custody',
       signAndVerifyTitle: 'Sign and Verify Message',
       login: 'Login',
       logout: 'Logout'
@@ -40,7 +41,8 @@ export default {
       containAtLeastCosigners: 'This field must contain at least {value} cosigners address',
       containLessThanCosigners: 'This field must contain at less than {value} cosigners address',
       isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
-      fileRequired: 'This field is required'
+      fileRequired: 'This field is required',
+      isNotValidPolkadotAddress: 'Is not a valid polkadot address'
     }
   },
   pages: {
@@ -69,6 +71,11 @@ export default {
       applyForm: {
         title: 'Apply for Marketplace',
         subtitle: 'Fill in the form to apply for the Marketplace',
+        custodian: {
+          label: 'Custodian',
+          placeholder: 'Custodian address',
+          checkboxLabel: 'Add a third-party custodian (optional)'
+        },
         filesTitle: 'Upload files',
         addFilesButton: 'Add Files',
         notes: {

@@ -26,7 +26,23 @@
       .container(v-else)
         q-form(ref="applyForm" @submit="onSubmit")
           .text-subtitle1 {{$t('pages.marketplace.applyForm.title')}}
-          .text-subtitle2.text-weight-regular(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
+          .text-subtitle2.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
+          q-toggle(
+            v-model="isCustodian"
+            :label="$t('pages.marketplace.applyForm.custodian.checkboxLabel')"
+            color="primary"
+            dense
+          )
+          account-input(
+            v-if="isCustodian"
+            v-model="custodianAddress"
+            data-cy="custodian_input"
+            testid="custodian_input"
+            class="q-mt-md"
+            :label="$t('pages.marketplace.applyForm.custodian.label')"
+            outlined
+            :rules="[rules.isValidPolkadotAddress]"
+          )
           t-input(
             data-cy="notes_input"
             testid="notes_input"
@@ -47,7 +63,7 @@
                 :index="index"
                 :administrator-address="market.admin?.address"
                 @onDelete="onDeleteFile"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.greaterOrEqualThan(6)]"
                 showDelete
                 )
               q-icon(
@@ -76,12 +92,13 @@
 
 <script>
 import AccountItem from '~/components/common/account-item.vue'
+import AccountInput from '~/components/common/account-input.vue'
 import { validation } from '~/mixins/validation'
 import HashedPrivateFile from '~/components/common/hashedPrivate/hashed-private-file.vue'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'MarketApplyForm',
-  components: { AccountItem, HashedPrivateFile },
+  components: { AccountItem, HashedPrivateFile, AccountInput },
   mixins: [validation],
   props: {
     /**
@@ -114,6 +131,8 @@ export default {
   emits: ['submit'],
   data () {
     return {
+      isCustodian: false,
+      custodianAddress: undefined,
       form: {
         notes: undefined,
         files: [
@@ -142,12 +161,14 @@ export default {
     ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     onSubmit () {
       this.$refs.applyForm.validate().then(async () => {
-        const files = this.form.files.map(file => {
+        const files = this.form.files.map((file, index) => {
           console.log(file)
-          const cid = file.files[0].value.split(':')[0]
+          const fileName = file.files[0].value.split(':')[1]
           return {
-            displayName: cid,
-            cid: file.files[0].value
+            displayName: fileName,
+            cid: file.files[0].value,
+            custodianCid: undefined,
+            ownedId: file.files[0].id
           }
         })
         const hpNotes = await this.$store.$hashedPrivateApi.shareNew({
@@ -158,10 +179,19 @@ export default {
             notes: this.form.notes
           }
         })
+        console.log('hashed notes', hpNotes)
+        const notesData = {
+          displayName: 'Notes',
+          cid: hpNotes.sharedData.cid,
+          custodianCid: undefined,
+          ownedId: this.isCustodian ? hpNotes.ownedData.id : undefined
+        }
         const data = {
-          notes: hpNotes.sharedData.cid,
+          custodian: this.isCustodian ? this.custodianAddress : undefined,
+          notes: notesData,
           files
         }
+        console.log('data submitted', data)
         this.$emit('submit', data)
       })
     },

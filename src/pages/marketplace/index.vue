@@ -9,7 +9,7 @@
       unelevated
       color="secondary"
       outline
-      @click="modals.isShowingAddMarketplace = true"
+      @click="onAddMarketplace"
     )
   //- Tabs
   q-tabs.q-mt-lg(
@@ -132,6 +132,14 @@ export default {
         name: 'marketplace-details',
         query: { marketId: marketplace.id }
       })
+    },
+    async onAddMarketplace () {
+      const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
+      if (isLoggedIn) {
+        this.modals.isShowingAddMarketplace = true
+      } else {
+        this.showNotification({ message: 'You must be logged in to create a marketplace', color: 'negative' })
+      }
     }
   }
 }

@@ -3,8 +3,13 @@ q-layout(view="lHh Lpr lFf")
     q-header(class="bg-primary")
       .row.justify-center
         .col-xs-12.col-sm-12.col-md-12
-          q-toolbar(class="bg-primary text-white" inset)
-            q-toolbar-title Hashed Network
+          q-toolbar(class="bg-primary text-white")
+            q-toolbar-title
+              q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
+                selected-account-btn(:selectedAccount="selectedAccount")
+                accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+              q-btn(v-if="!isLoggedIn" @click="loginHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.login')}}
+              q-btn(v-else @click="logoutHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.logout')}}
             q-item.routerItems(
               clickable
               :to="{ name: 'home'}"
@@ -24,19 +29,16 @@ q-layout(view="lHh Lpr lFf")
             )
               q-item-section
                 q-item-label {{ $t('general.navbar.marketplaceTitle') }}
-            //- q-item.routerItems(
-            //-   clickable
-            //-   dense
-            //-   @click="signAndVerifyMessage"
-            //- )
-            //-   q-item-section
-            //-     q-item-label {{ $t('general.navbar.signAndVerifyTitle') }}
-            q-btn(v-if="!isLoggedIn" @click="loginHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.login')}}
-            q-btn(v-else @click="logoutHP" flat padding="0px 0px 0px 0px" no-caps) {{$t('general.navbar.logout')}}
-            q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="primary")
-              selected-account-btn(:selectedAccount="selectedAccount")
-              accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-          q-toolbar(class="bg-white text-primary" class="bottomLine")
+            q-item.routerItems(
+              clickable
+              :to="{ name: 'custodian'}"
+              active-class="activeRouter"
+              :class="{ 'activeRouter': isActive('Custodian')}"
+              dense
+            )
+              q-item-section
+                q-item-label {{ $t('general.navbar.custodianTitle') }}
+          q-toolbar(class="bg-white text-primary bottomLine")
             q-breadcrumbs(active-color="primary" style="font-size: 16px")
               q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
     q-page-container
@@ -47,7 +49,7 @@ q-layout(view="lHh Lpr lFf")
             not-accounts(v-else-if="!selectedAccount")
             router-view(v-else)
     //- q-footer
-    custom-footer.atBottom
+    //- custom-footer.atBottom
 </template>
 
 <script>

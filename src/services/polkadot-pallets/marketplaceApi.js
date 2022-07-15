@@ -185,7 +185,7 @@ class MarketplaceApi extends BasePolkadotApi {
 
     // Applicants address to call in multiquery
     let applicantsAddress = []
-    applicantsByState.filter(e => e.status !== 'Approved').forEach(ap => {
+    applicantsByState.forEach(ap => {
       applicantsAddress = applicantsAddress.concat(ap.addresses.map(e => {
         return [
           e,
@@ -193,7 +193,6 @@ class MarketplaceApi extends BasePolkadotApi {
         ]
       }))
     })
-
     // 2 Get applicants Ids
     const applicantsIds = await this.exMultiQuery('applicationsByAccount', applicantsAddress, subTrigger)
     console.log('applicantsIds', applicantsIds.map(v => v.toHuman()))
@@ -204,18 +203,19 @@ class MarketplaceApi extends BasePolkadotApi {
 
     // Add address to applicant details
     const details = applicantsDetails.map((v, i) => {
-      return {
+      const auxObj = {
         ...v.toHuman(),
         address: applicantsAddress[i][0]
       }
+      return auxObj
     })
     console.log('details', details)
     return details
   }
 
-  async applyFor ({ marketId, user, notes, files }, subTrigger) {
-    console.log('submitApplicationForm', marketId, user, files, notes, subTrigger)
-    return this.callTx('apply', user, [marketId, notes, files])
+  async applyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
+    console.log('submitApplicationForm', marketId, user, custodianFields, fields, subTrigger)
+    return this.callTx('apply', user, [marketId, fields, custodianFields])
   }
 
   async createMarketplace ({ admin, user, label }, subTrigger) {
@@ -265,6 +265,61 @@ class MarketplaceApi extends BasePolkadotApi {
     return marketplaceAuthority.toHuman()
   }
 
+  /**
+   * The following function is used by the Custodian Page
+   * The functionality is to get the files guarded by the account
+   * @param {Address} Account
+   * @param {*} subTrigger
+   */
+  async getApplicationsByCustodian ({ account }, subTrigger) {
+    console.log('getApplicationsByCustodian', account, subTrigger)
+    // 1. Get accounts ids by Custodian
+    const accountsIds = await this.exEntriesQuery('custodians', [account])
+    console.log('applicationsIds', accountsIds)
+    // There is no custodian files
+    if (accountsIds.length === 0) return []
+    // 2. Map entries of the response of the query
+    const mapEntries = this.mapEntries(accountsIds)
+    console.log('mapEntries', mapEntries)
+    // 3. Map response by Account id [Applicant]. The response contains more information (filtering)
+    const applicantIdsArray = mapEntries.map(v => v.value)
+    console.log('applicationsIdsArray', applicantIdsArray)
+    // 4. Execute entries query to get applications details
+    const promises = []
+    // Loop through each market
+    applicantIdsArray?.forEach((applicantId, index) => {
+      applicantId.forEach((applicantByMarket, marketIndex) => {
+        // Loop through each applicant by market
+        promises.push(this.exEntriesQuery('applicationsByAccount', [applicantByMarket]))
+      })
+    })
+    // Wait for all promises to be resolved
+    const applications = await Promise.all(promises)
+    // 5. Map applications by market
+    const mapApplications = applications.map((app, index) => {
+      const mappedEntries = this.mapEntries(app)
+      return {
+        address: mappedEntries[0].id[0],
+        marketId: mappedEntries[0].id[1],
+        applicantionId: mappedEntries[0].value
+      }
+    })
+
+    // 6, Get the applications details
+    const applicationsDetails = await this.exMultiQuery('applications', mapApplications.map(v => v.applicantionId), subTrigger)
+    // 7. Map applications details
+    const mapApplicationsDetails = applicationsDetails.map((v, index) => {
+      const address = mapApplications[index].address
+      const marketId = mapApplications[index].marketId
+      return {
+        address,
+        marketId,
+        ...v.toHuman()
+      }
+    })
+
+    return mapApplicationsDetails
+  }
   // /**
   //  * @name getXpubByUser
   //  * @description Get Xpub by user
