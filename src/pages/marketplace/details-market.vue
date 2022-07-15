@@ -81,11 +81,14 @@ export default {
     }
   },
   watch: {
-    selectedAccount () {
+    async selectedAccount () {
       if (this.tab === 'enrollment') {
         this.tab = 'market-info'
       }
-      this.getMarketplaceInfo()
+      this.application = undefined
+      this.participants = []
+      this.applicants = []
+      await this.getMarketplaceInfo()
     }
   },
   async beforeMount () {
