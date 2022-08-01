@@ -1,6 +1,5 @@
-# Hashed template quasar vue 3 (hashed-template-quasar-vue3)
+# Quasar template in Vue 3 (hashed-template-quasar-vue3)
 
-This is a template developed by HASHED
 
 ## Install the dependencies
 ```bash
